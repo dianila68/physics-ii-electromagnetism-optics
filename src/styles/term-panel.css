@@ -1,0 +1,239 @@
+/* ── Term links (inline) ── */
+.term-link {
+  color: var(--accent-blue);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--accent-blue);
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.12s;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.term-link:hover {
+  color: var(--accent-blue);
+  background: rgba(137, 180, 250, 0.12);
+  text-decoration-style: solid;
+}
+
+.term-link:focus {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* ── Term panel ── */
+#term-panel {
+  position: fixed;
+  right: 0;
+  top: var(--topbar-h);
+  width: 360px;
+  max-width: 92vw;
+  height: calc(100vh - var(--topbar-h));
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+  overflow: hidden;
+}
+
+#term-panel.open {
+  transform: translateX(0);
+}
+
+#term-panel.expanded {
+  width: min(680px, 90vw);
+  top: 10vh;
+  height: 80vh;
+  right: 50%;
+  transform: translateX(50%);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── Panel header ── */
+.term-panel-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--bg3);
+}
+
+.term-panel-title {
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.term-panel-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.term-panel-actions button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text3);
+  border-radius: 4px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.term-panel-actions button:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+/* ── Panel body ── */
+.term-panel-body {
+  padding: 20px 20px 8px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.term-short {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 12px;
+}
+
+.term-long {
+  font-size: 0.88rem;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.term-formula {
+  background: var(--formula-bg);
+  border-left: 3px solid var(--formula-border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  margin: 12px 0;
+  overflow-x: auto;
+}
+
+.term-wiki-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  margin-top: 12px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.term-wiki-link:hover {
+  border-color: var(--accent-blue);
+  background: rgba(137, 180, 250, 0.08);
+}
+
+/* ── See also ── */
+.term-panel-see-also {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.see-also-label {
+  color: var(--text3);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  margin-right: 2px;
+}
+
+.term-see-also-link {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--accent-blue);
+  background: transparent;
+  color: var(--accent-blue);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.term-see-also-link:hover {
+  background: var(--accent-blue);
+  color: white;
+}
+
+/* ── Overlay (expanded mode backdrop) ── */
+#term-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 190;
+  backdrop-filter: blur(2px);
+}
+
+#term-overlay.active {
+  display: block;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  #term-panel {
+    width: 100vw;
+    top: auto;
+    bottom: 0;
+    height: 60vh;
+    transform: translateY(100%);
+    border-left: none;
+    border-top: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+  }
+
+  #term-panel.open {
+    transform: translateY(0);
+  }
+
+  #term-panel.expanded {
+    height: 90vh;
+    top: 10vh;
+    right: 0;
+    width: 100vw;
+    transform: none;
+    border-radius: 0;
+  }
+}

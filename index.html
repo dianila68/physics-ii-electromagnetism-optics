@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics II — Electromagnetism &amp; Optics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="topbar">
+        <button id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+        <span class="book-title" data-en="Physics II: Electromagnetism &amp; Optics" data-it="Fisica II: Elettromagnetismo &amp; Ottica">
+          Physics II: Electromagnetism &amp; Optics
+        </span>
+        <div class="topbar-controls">
+          <button id="lang-toggle" title="Switch language">EN | IT</button>
+          <button id="theme-toggle" title="Toggle dark/light mode">&#9790;</button>
+        </div>
+      </header>
+
+      <nav id="sidebar">
+        <div class="sidebar-inner">
+          <div class="toc-title" data-en="Contents" data-it="Indice">Contents</div>
+          <ul id="toc"></ul>
+        </div>
+      </nav>
+
+      <main id="content">
+        <div id="chapter-view"></div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
