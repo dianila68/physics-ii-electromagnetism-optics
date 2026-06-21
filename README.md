@@ -106,22 +106,35 @@ later without touching the UI:
 
 ```
 src/editor/
-├── core/        ← engine-agnostic model: World, Entity, Link, units, serialize
+├── core/        ← engine-agnostic model: World, Entity, Link, serialize
 ├── engine/
 │   ├── PhysicsEngine.ts   ← the pluggable simulation interface
 │   ├── cpu/               ← default: symplectic-Euler integrator + force registry
-│   └── gpu/               ← WebGPU backend stub (Phase 5), same interface
+│   └── gpu/               ← WebGPU compute backend, same interface
 ├── render/
 │   ├── Renderer.ts        ← viewport interface
 │   └── Canvas2DRenderer.ts← 2D viewport (a Three.js 3D renderer can follow)
 ├── ui/          ← Palette, Timeline, Inspector, EditorApp orchestrator
-└── presets.ts   ← demo scenes (spring pendulum, spring chain, bouncing masses)
+└── presets.ts   ← demo scenes across all four scales
 ```
 
-**Phasing:** Phase 1 ships macro mechanics (masses, springs, gravity,
-damping, wall collisions). The model already carries `charge` for the EM
-scale, and the engine/renderer interfaces are the boundary where the EM,
-atomic, subatomic, and GPU phases plug in.
+**Scales (all implemented):**
+
+| Scale | Bodies | Force model |
+|-------|--------|-------------|
+| Macro | masses, anchors, springs | gravity, damped Hooke, walls |
+| EM | charges | Coulomb, Lorentz (uniform E/B), field overlay |
+| Molecular | atoms | Lennard-Jones (truncated) |
+| Subatomic | quarks | toy confining "strong force" (illustrative, **not** QCD) |
+
+**Pluggable engine:** pick **CPU** or **GPU (WebGPU)** from the Engine
+dropdown at runtime. The CPU engine is a symplectic-Euler integrator; the
+GPU engine runs all per-particle and pairwise forces plus integration in a
+WGSL compute shader over ping-pong storage buffers (springs are a CPU
+pre-pass uploaded as a per-particle force). Both satisfy the same
+`PhysicsEngine` interface, so neither the UI nor the renderer changes when
+you switch. GPU requires a WebGPU-capable browser; the option disables
+itself otherwise.
 
 ### Swapping the GUI
 

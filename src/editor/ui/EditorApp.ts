@@ -2,6 +2,7 @@ import { World } from '../core/world.js';
 import type { Entity, Link, SceneData } from '../core/types.js';
 import type { PhysicsEngine } from '../engine/PhysicsEngine.js';
 import { CpuEngine } from '../engine/cpu/CpuEngine.js';
+import { GpuEngine } from '../engine/gpu/GpuEngine.js';
 import type { Renderer } from '../render/Renderer.js';
 import { Canvas2DRenderer } from '../render/Canvas2DRenderer.js';
 import { Palette, type Tool } from './Palette.js';
@@ -75,7 +76,10 @@ export class EditorApp {
 
     const topbar = document.createElement('div');
     topbar.className = 'editor-topbar';
-    topbar.append(this.buildPresetSelect(), this.buildFileControls());
+    const leftControls = document.createElement('div');
+    leftControls.className = 'editor-topbar-group';
+    leftControls.append(this.buildPresetSelect(), this.buildEngineSelect());
+    topbar.append(leftControls, this.buildFileControls());
 
     const body = document.createElement('div');
     body.className = 'editor-body';
@@ -129,6 +133,53 @@ export class EditorApp {
     });
     wrap.append(label, select);
     return wrap;
+  }
+
+  // Engine selector — the user-facing proof of the pluggable backend.
+  private buildEngineSelect(): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'editor-presets';
+    const label = document.createElement('span');
+    label.textContent = t('Engine:', 'Motore:');
+    const select = document.createElement('select');
+
+    const cpuOpt = document.createElement('option');
+    cpuOpt.value = 'cpu';
+    cpuOpt.textContent = t('CPU', 'CPU');
+    select.appendChild(cpuOpt);
+
+    const gpuOpt = document.createElement('option');
+    gpuOpt.value = 'gpu';
+    const gpuOk = GpuEngine.isSupported();
+    gpuOpt.textContent = gpuOk ? t('GPU (WebGPU)', 'GPU (WebGPU)') : t('GPU (unavailable)', 'GPU (non disp.)');
+    gpuOpt.disabled = !gpuOk;
+    select.appendChild(gpuOpt);
+
+    select.addEventListener('change', () => {
+      void this.switchEngine(select.value as 'cpu' | 'gpu', select);
+    });
+    wrap.append(label, select);
+    return wrap;
+  }
+
+  private async switchEngine(kind: 'cpu' | 'gpu', select: HTMLSelectElement): Promise<void> {
+    const wasRunning = this.running;
+    this.setRunning(false);
+    try {
+      const next = kind === 'gpu' ? await GpuEngine.create(this.world) : (() => {
+        const e = new CpuEngine();
+        e.init(this.world);
+        return e;
+      })();
+      this.engine.dispose();
+      this.engine = next;
+      this.updateStatus();
+      this.requestRender();
+    } catch (err) {
+      alert(t('Could not start GPU engine: ', 'Impossibile avviare il motore GPU: ') + (err as Error).message);
+      select.value = 'cpu'; // revert the dropdown
+    }
+    if (wasRunning) this.setRunning(true);
   }
 
   private buildFileControls(): HTMLElement {
