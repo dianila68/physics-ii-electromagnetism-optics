@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local packages (node_modules + build artifacts)
+packages/
+
+# Design assets (large binaries)
+*.zip

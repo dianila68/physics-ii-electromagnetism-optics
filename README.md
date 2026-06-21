@@ -95,6 +95,52 @@ src/
 └── main.ts               ← boot: theme, lang, router
 ```
 
+### Physics Lab (interactive editor)
+
+The **Lab** chapter (`src/editor/`) is an interactive multi-scale physics
+sandbox: place masses, anchors and springs on a canvas, edit their
+properties, and press **Play** to simulate. Save/load scenes as JSON.
+
+It is built around two swappable seams so heavier backends can drop in
+later without touching the UI:
+
+```
+src/editor/
+├── core/        ← engine-agnostic model: World, Entity, Link, serialize
+├── engine/
+│   ├── PhysicsEngine.ts   ← the pluggable simulation interface
+│   ├── cpu/               ← default: symplectic-Euler integrator + force registry
+│   └── gpu/               ← WebGPU compute backend, same interface
+├── render/
+│   ├── Renderer.ts        ← viewport interface
+│   ├── Canvas2DRenderer.ts← 2D viewport
+│   └── ThreeRenderer.ts   ← 3D viewport (Three.js)
+├── ui/          ← Palette, Timeline, Inspector, EditorApp orchestrator
+└── presets.ts   ← demo scenes across all four scales
+```
+
+**Scales (all implemented):**
+
+| Scale | Bodies | Force model |
+|-------|--------|-------------|
+| Macro | masses, anchors, springs | gravity, damped Hooke, walls |
+| EM | charges | Coulomb, Lorentz (uniform E/B), field overlay |
+| Molecular | atoms | Lennard-Jones (truncated) |
+| Subatomic | quarks | toy confining "strong force" (illustrative, **not** QCD) |
+
+**Pluggable engine:** pick **CPU** or **GPU (WebGPU)** from the Engine
+dropdown at runtime. The CPU engine is a symplectic-Euler integrator; the
+GPU engine runs all per-particle and pairwise forces plus integration in a
+WGSL compute shader over ping-pong storage buffers (springs are a CPU
+pre-pass uploaded as a per-particle force). Both satisfy the same
+`PhysicsEngine` interface, so neither the UI nor the renderer changes when
+you switch. GPU requires a WebGPU-capable browser; the option disables
+itself otherwise.
+
+**Viewport:** switch between **2D** (Canvas) and **3D** (Three.js) from the
+View dropdown. Both implement the `Renderer` interface; picking/dragging
+works in 3D via raycasting against the simulation plane.
+
 ### Swapping the GUI
 
 Content and presentation are fully separated:

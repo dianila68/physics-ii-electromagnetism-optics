@@ -14,7 +14,7 @@ export interface BiText { en: string; it: string; }
 export type ContentBlock =
   | { type: 'paragraph'; text: BiText }
   | { type: 'formula'; label?: BiText; latex: string; note?: BiText }
-  | { type: 'callout'; variant: 'prereq' | 'note' | 'key' | 'warning'; title: BiText; text: BiText }
+  | { type: 'callout'; variant: 'prereq' | 'note' | 'key' | 'warning' | 'insight' | 'law'; title: BiText; text: BiText }
   | { type: 'table'; headers: BiText[]; rows: (string | BiText)[][] }
   | { type: 'derivation'; title: BiText; blocks: ContentBlock[] }
   | { type: 'diagram'; id: string; title: BiText; caption: BiText; hasControls?: boolean; hasLayers?: string[] }
@@ -45,16 +45,33 @@ function bi(t: BiText): string { return t[lang()]; }
 
 function calloutTitle(variant: string, l: Lang): string {
   const titles: Record<string, Record<Lang, string>> = {
-    prereq: { en: 'Prerequisites', it: 'Prerequisiti' },
-    note: { en: 'Note', it: 'Nota' },
-    key: { en: 'Key concept', it: 'Concetto chiave' },
+    prereq:  { en: 'Prerequisites', it: 'Prerequisiti' },
+    note:    { en: 'Note', it: 'Nota' },
+    key:     { en: 'Key concept', it: 'Concetto chiave' },
     warning: { en: 'Warning', it: 'Attenzione' },
+    insight: { en: 'Key idea', it: 'Idea chiave' },
+    law:     { en: 'Law', it: 'Legge' },
   };
   return titles[variant]?.[l] ?? variant;
 }
 
 /** Replace [[term-id]] and $$latex$$ with interactive/rendered HTML */
 export function processText(text: string): string {
+  // Replace [[chapter:target|Label]] with crossref links
+  text = text.replace(/\[\[chapter:([^|\]]+)\|([^\]]+)\]\]/g, (_, target, label) => {
+    const parts = target.split('#');
+    const chId = parts[0];
+    const hash = parts[1] ? `#${parts[1]}` : '';
+    return `<a href="#${chId}${hash}" class="crossref" data-chapter="${chId}">${label}</a>`;
+  });
+
+  // Replace [[termId|Custom Label]]
+  text = text.replace(/\[\[([a-z0-9-]+)\|([^\]]+)\]\]/g, (_, termId, customLabel) => {
+    const term = TERMS[termId];
+    if (!term) return customLabel;
+    return `<span class="term-link" data-term="${termId}" role="button" tabindex="0">${customLabel}</span>`;
+  });
+
   // Replace [[term-id]] with term link spans
   text = text.replace(/\[\[([a-z0-9-]+)\]\]/g, (_, termId) => {
     const term = TERMS[termId];
@@ -85,7 +102,7 @@ function renderBlock(block: ContentBlock): string {
 
     case 'formula': {
       const label = block.label ? `<div class="formula-label">${bi(block.label)}</div>` : '';
-      const note = block.note ? `<p style="font-size:0.82rem;margin-top:8px;color:var(--text2)">${processText(bi(block.note))}</p>` : '';
+      const note = block.note ? `<p style="font-size:var(--t-caption);margin-top:8px;color:var(--text-muted)">${processText(bi(block.note))}</p>` : '';
       return `<div class="formula-block">${label}${M(block.latex)}${note}</div>`;
     }
 
@@ -144,7 +161,7 @@ function renderBlock(block: ContentBlock): string {
 
     case 'list': {
       const items = block.items.map(item => `<li>${processText(bi(item))}</li>`).join('');
-      return `<ul style="margin-left:1.5em;margin-bottom:16px;line-height:1.8">${items}</ul>`;
+      return `<ul class="body-list">${items}</ul>`;
     }
 
     case 'html':
@@ -177,9 +194,9 @@ export function renderChapter(data: ChapterData): string {
 
   return `
 <div class="chapter-header">
-  <div class="part-label">${bi(data.part)}</div>
+  <div class="eyebrow" style="margin-bottom:8px">${bi(data.part)}</div>
   <h1>${bi(data.title)}</h1>
-  <p>${bi(data.subtitle)}</p>
+  <p class="prose" style="margin-top:10px;font-family:var(--font-serif);color:var(--text-muted)">${bi(data.subtitle)}</p>
 </div>
 ${prereqHtml}
 ${sectionsHtml}

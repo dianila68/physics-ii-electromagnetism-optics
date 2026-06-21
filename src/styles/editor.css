@@ -1,0 +1,217 @@
+/* Physics Lab editor — styled with the Principia design system.
+   Uses semantic tokens from themes.css so it follows light/ink themes and
+   matches the component language used across the book. */
+
+/* Let the Lab break out of the 860px reading column. */
+#chapter-view:has(.lab-chapter) {
+  max-width: 1200px;
+}
+
+.lab-editor-host {
+  margin: var(--sp-6) 0;
+}
+
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-hair);
+  border-radius: var(--r-3);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+
+/* ── top bar ── */
+.editor-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--paper-1);
+  border-bottom: 1px solid var(--line-hair);
+}
+.editor-topbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-5);
+}
+.editor-control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.editor-file {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* Native selects dressed to match .input-field */
+.editor-select {
+  font-family: var(--font-sans);
+  font-size: var(--t-caption);
+  padding: 7px 10px;
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-hair);
+  background: var(--surface-card);
+  color: var(--text-strong);
+  box-shadow: var(--shadow-1);
+}
+.editor-select:focus {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--blue-100);
+}
+
+/* ── body: tools | viewport | inspector ── */
+.editor-body {
+  display: grid;
+  grid-template-columns: 168px 1fr 248px;
+  min-height: 520px;
+}
+
+.editor-sidebar {
+  padding: var(--sp-5);
+  background: var(--paper-1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+.editor-sidebar-left { border-right: 1px solid var(--line-hair); }
+.editor-sidebar-right { border-left: 1px solid var(--line-hair); }
+
+.editor-viewport {
+  position: relative;
+  background: var(--surface-page);
+  min-height: 520px;
+}
+.editor-canvas {
+  display: block;
+  touch-action: none; /* we own pointer gestures for drag/place */
+  cursor: crosshair;
+}
+
+/* ── palette ── */
+.editor-palette { display: flex; flex-direction: column; gap: var(--sp-3); }
+.editor-tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+}
+.editor-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--sp-3) var(--sp-2);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-hair);
+  background: var(--surface-card);
+  color: var(--text-body);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.editor-tool:hover { background: var(--paper-2); }
+.editor-tool.active {
+  background: var(--surface-selected);
+  color: var(--text-on-selected);
+  border-color: var(--surface-selected);
+}
+.tool-icon { font-size: 1.15rem; line-height: 1; }
+.tool-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* ── timeline ── */
+.editor-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border-top: 1px solid var(--line-hair);
+  padding-top: var(--sp-5);
+}
+.editor-timeline-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* ── inspector ── */
+.editor-inspector { display: flex; flex-direction: column; gap: var(--sp-3); }
+.insp-heading { padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line-hair); }
+.insp-subheading {
+  color: var(--accent-blue);
+  margin-top: var(--sp-2);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--line-hair);
+}
+.insp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.insp-row > span {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.insp-row .input-field {
+  width: 92px;
+  padding: 6px 8px;
+  min-height: 0;
+  text-align: right;
+}
+.insp-row input[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--line-hair);
+  border-radius: var(--r-1);
+  background: var(--surface-card);
+}
+.insp-row-switch { justify-content: flex-start; }
+.insp-note {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* ── status bar ── */
+.editor-status {
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--paper-1);
+  border-top: 1px solid var(--line-hair);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
+}
+
+.lab-hint {
+  font-size: var(--t-caption);
+  color: var(--text-faint);
+  font-family: var(--font-serif);
+  font-style: italic;
+  line-height: var(--lh-reading);
+}
+
+/* ── responsive: stack panels under the viewport on narrow screens ── */
+@media (max-width: 900px) {
+  .editor-body { grid-template-columns: 1fr; }
+  .editor-sidebar-left,
+  .editor-sidebar-right {
+    border: none;
+    border-top: 1px solid var(--line-hair);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .editor-palette { flex: 1 1 100%; }
+  .editor-timeline { border-top: none; padding-top: 0; }
+}
