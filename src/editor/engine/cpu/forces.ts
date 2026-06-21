@@ -83,6 +83,50 @@ export function applyCoulomb(world: World, forces: ForceMap): void {
   }
 }
 
+// Lennard-Jones interaction among 'atom' entities (molecular scale).
+//   V(r) = 4ε[(σ/r)^12 - (σ/r)^6]
+//   F(r) = 24ε/r [2(σ/r)^12 - (σ/r)^6]  along r̂  (away from neighbor)
+// Truncated at r = 2.5σ. Distance is clamped at 0.8σ and the force
+// magnitude is capped so the steep repulsive wall can't blow up the
+// explicit integrator.
+export function applyLennardJones(world: World, forces: ForceMap): void {
+  const eps = world.params.ljEpsilon;
+  const sigma = world.params.ljSigma;
+  if (eps <= 0 || sigma <= 0) return;
+  const cutoff = 2.5 * sigma;
+  const cutoff2 = cutoff * cutoff;
+  const minR = 0.8 * sigma;
+  const maxForce = 200 * eps;
+
+  const atoms = [...world.entities.values()].filter(e => e.kind === 'atom');
+  for (let i = 0; i < atoms.length; i++) {
+    const a = atoms[i];
+    for (let j = i + 1; j < atoms.length; j++) {
+      const b = atoms[j];
+      const dx = b.pos.x - a.pos.x;
+      const dy = b.pos.y - a.pos.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 > cutoff2) continue;
+      let r = Math.sqrt(d2);
+      if (r < minR) r = minR;
+      const sr = sigma / r;
+      const sr6 = sr * sr * sr * sr * sr * sr;
+      const sr12 = sr6 * sr6;
+      let fMag = (24 * eps / r) * (2 * sr12 - sr6); // >0 repulsive, <0 attractive
+      if (fMag > maxForce) fMag = maxForce;
+      else if (fMag < -maxForce) fMag = -maxForce;
+      // fMag along r̂ (a->b) pushes b away from a when positive.
+      const inv = 1 / r;
+      const fx = dx * inv * fMag;
+      const fy = dy * inv * fMag;
+      const fa = forces.get(a.id);
+      const fb = forces.get(b.id);
+      if (fa) { fa.x -= fx; fa.y -= fy; }
+      if (fb) { fb.x += fx; fb.y += fy; }
+    }
+  }
+}
+
 // Lorentz force from uniform external fields: F = q (E + v × B).
 // In 2D, B is out-of-plane (+z), so v × B = (v_y B, -v_x B).
 export function applyLorentz(world: World, forces: ForceMap): void {

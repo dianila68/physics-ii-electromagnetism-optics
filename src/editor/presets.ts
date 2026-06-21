@@ -11,6 +11,8 @@ const baseParams = () => ({
   coulombK: 5,
   efield: { x: 0, y: 0 },
   bfield: 0,
+  ljEpsilon: 0,
+  ljSigma: 0.8,
 });
 
 export interface Preset {
@@ -92,6 +94,53 @@ const cyclotron = (): SceneData => ({
   links: [],
 });
 
+// --- Atomic / molecular scale (Phase 3) ---
+
+// A loose grid of atoms that condenses into a close-packed cluster under
+// the Lennard-Jones attraction.
+const ljCluster = (): SceneData => {
+  const entities: Entity[] = [];
+  const cols = 6;
+  const rows = 4;
+  const spacing = 1.05;
+  const x0 = 6 - ((cols - 1) * spacing) / 2;
+  const y0 = 4 - ((rows - 1) * spacing) / 2;
+  let n = 1;
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < cols; i++) {
+      entities.push({
+        id: `e${n++}`,
+        kind: 'atom',
+        pos: { x: x0 + i * spacing, y: y0 + j * spacing },
+        vel: { x: 0, y: 0 },
+        mass: 1,
+        radius: 0.28,
+        fixed: false,
+        charge: 0,
+        color: '#27ae60',
+      });
+    }
+  }
+  return {
+    version: 1,
+    params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.05, ljEpsilon: 2, ljSigma: 0.9 },
+    entities,
+    links: [],
+  };
+};
+
+// Two atoms placed below their equilibrium separation so the pair
+// vibrates like a diatomic molecule.
+const diatomic = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0, ljEpsilon: 3, ljSigma: 1 },
+  entities: [
+    { id: 'e1', kind: 'atom', pos: { x: 5.5, y: 4 }, vel: { x: 0, y: 0 }, mass: 1, radius: 0.3, fixed: false, charge: 0, color: '#27ae60', label: 'A' },
+    { id: 'e2', kind: 'atom', pos: { x: 6.5, y: 4 }, vel: { x: 0, y: 0 }, mass: 1, radius: 0.3, fixed: false, charge: 0, color: '#16a34a', label: 'B' },
+  ],
+  links: [],
+});
+
 export const PRESETS: Preset[] = [
   { id: 'pendulum', nameEn: 'Spring Pendulum', nameIt: 'Pendolo a Molla', build: springPendulum },
   { id: 'chain', nameEn: 'Spring Chain', nameIt: 'Catena di Molle', build: springChain },
@@ -99,6 +148,8 @@ export const PRESETS: Preset[] = [
   { id: 'coulomb-orbit', nameEn: 'Coulomb Orbit', nameIt: 'Orbita di Coulomb', build: coulombOrbit },
   { id: 'like-charges', nameEn: 'Like Charges Repel', nameIt: 'Cariche Uguali', build: likeCharges },
   { id: 'cyclotron', nameEn: 'Cyclotron (B field)', nameIt: 'Ciclotrone (campo B)', build: cyclotron },
+  { id: 'lj-cluster', nameEn: 'Atomic Cluster (LJ)', nameIt: 'Cluster Atomico (LJ)', build: ljCluster },
+  { id: 'diatomic', nameEn: 'Diatomic Molecule', nameIt: 'Molecola Biatomica', build: diatomic },
 ];
 
 export const defaultScene = springPendulum;

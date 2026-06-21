@@ -257,6 +257,15 @@ export class EditorApp {
         this.updateStatus();
         break;
       }
+      case 'atom': {
+        const ent = this.world.addEntity({ kind: 'atom', pos: world });
+        // Make the LJ interaction visible the moment atoms exist.
+        if (this.world.params.ljEpsilon <= 0) this.world.params.ljEpsilon = 1;
+        this.engine.sync();
+        this.select({ type: 'entity', entity: ent });
+        this.updateStatus();
+        break;
+      }
       case 'charge-pos':
       case 'charge-neg': {
         const positive = this.tool === 'charge-pos';

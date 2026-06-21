@@ -4,6 +4,12 @@ import { zero, clone } from './vec2.js';
 let _nextId = 1;
 const uid = (prefix: string): string => `${prefix}${_nextId++}`;
 
+function entityDefaultColor(kind: 'mass' | 'anchor' | 'atom'): string {
+  if (kind === 'anchor') return '#94a3b8';
+  if (kind === 'atom') return '#27ae60';
+  return '#e74c3c';
+}
+
 export const DEFAULT_PARAMS: WorldParams = {
   gravity: { x: 0, y: 9.81 },
   linearDamping: 0.02,
@@ -12,6 +18,8 @@ export const DEFAULT_PARAMS: WorldParams = {
   coulombK: 5,
   efield: { x: 0, y: 0 },
   bfield: 0,
+  ljEpsilon: 0,
+  ljSigma: 0.8,
 };
 
 // Clone params with all nested vectors copied, tolerating older scenes
@@ -25,6 +33,8 @@ function cloneParams(p: WorldParams): WorldParams {
     coulombK: p.coulombK ?? DEFAULT_PARAMS.coulombK,
     efield: p.efield ? clone(p.efield) : { x: 0, y: 0 },
     bfield: p.bfield ?? 0,
+    ljEpsilon: p.ljEpsilon ?? 0,
+    ljSigma: p.ljSigma ?? DEFAULT_PARAMS.ljSigma,
   };
 }
 
@@ -51,10 +61,10 @@ export class World {
       pos: partial.pos ? clone(partial.pos) : zero(),
       vel: partial.vel ? clone(partial.vel) : zero(),
       mass: partial.mass ?? 1,
-      radius: partial.radius ?? 0.25,
+      radius: partial.radius ?? (partial.kind === 'atom' ? 0.3 : 0.25),
       fixed: partial.fixed ?? partial.kind === 'anchor',
       charge: partial.charge ?? 0,
-      color: partial.color ?? (partial.kind === 'anchor' ? '#94a3b8' : '#e74c3c'),
+      color: partial.color ?? entityDefaultColor(partial.kind),
       label: partial.label,
     };
     this.entities.set(e.id, e);

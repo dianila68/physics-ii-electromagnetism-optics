@@ -17,7 +17,7 @@ export interface Entity {
   label?: string;
 }
 
-export type EntityKind = 'mass' | 'anchor';
+export type EntityKind = 'mass' | 'anchor' | 'atom';
 
 // A two-body link. Currently a damped Hooke spring; the type tag leaves
 // room for rods / rigid constraints later.
@@ -45,6 +45,12 @@ export interface WorldParams {
   coulombK: number;
   efield: Vec2; // uniform external electric field
   bfield: number; // uniform external magnetic field, out-of-plane (+z)
+
+  // --- Atomic / molecular scale (Phase 3) ---
+  // Lennard-Jones interaction between 'atom' entities:
+  //   V(r) = 4ε[(σ/r)^12 - (σ/r)^6].
+  ljEpsilon: number; // well depth ε (interaction strength)
+  ljSigma: number; // distance σ at which V = 0
 }
 
 // A scene as persisted to / loaded from JSON.

@@ -92,7 +92,8 @@ export class Inspector {
   }
 
   private renderEntity(e: Entity): void {
-    this.heading(e.fixed ? t('Anchor', 'Ancora') : t('Mass', 'Massa'));
+    const heading = e.kind === 'atom' ? t('Atom', 'Atomo') : e.fixed ? t('Anchor', 'Ancora') : t('Mass', 'Massa');
+    this.heading(heading);
     if (!e.fixed) {
       this.numberField(t('Mass (kg)', 'Massa (kg)'), e.mass, v => (e.mass = Math.max(0.01, v)), { min: 0.01, step: 0.1 });
     }
@@ -138,5 +139,12 @@ export class Inspector {
     this.numberField(t('E field x', 'Campo E x'), p.efield.x, v => (p.efield.x = v), { step: 0.5 });
     this.numberField(t('E field y', 'Campo E y'), p.efield.y, v => (p.efield.y = v), { step: 0.5 });
     this.numberField(t('B field (z)', 'Campo B (z)'), p.bfield, v => (p.bfield = v), { step: 0.2 });
+
+    const mol = document.createElement('div');
+    mol.className = 'insp-subheading';
+    mol.textContent = t('Molecular (Lennard-Jones)', 'Molecolare (Lennard-Jones)');
+    this.element.appendChild(mol);
+    this.numberField(t('LJ ε (depth)', 'LJ ε (profondità)'), p.ljEpsilon, v => (p.ljEpsilon = Math.max(0, v)), { min: 0, step: 0.5 });
+    this.numberField(t('LJ σ (size)', 'LJ σ (dimensione)'), p.ljSigma, v => (p.ljSigma = Math.max(0.1, v)), { min: 0.1, step: 0.1 });
   }
 }
