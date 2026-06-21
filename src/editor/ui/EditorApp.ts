@@ -5,6 +5,7 @@ import { CpuEngine } from '../engine/cpu/CpuEngine.js';
 import { GpuEngine } from '../engine/gpu/GpuEngine.js';
 import type { Renderer } from '../render/Renderer.js';
 import { Canvas2DRenderer } from '../render/Canvas2DRenderer.js';
+import { ThreeRenderer } from '../render/ThreeRenderer.js';
 import { Palette, type Tool } from './Palette.js';
 import { Timeline } from './Timeline.js';
 import { Inspector, type Selection } from './Inspector.js';
@@ -43,6 +44,16 @@ export class EditorApp {
   // Snapshot to restore on Reset.
   private resetSnapshot: SceneData;
 
+  // View state shared across renderer swaps.
+  private viewportEl!: HTMLElement;
+  private fieldOn = false;
+
+  // Stable pointer-handler refs so listeners can be moved when the
+  // renderer (and thus its canvas) is swapped.
+  private pdHandler = (e: PointerEvent) => this.onPointerDown(e);
+  private pmHandler = (e: PointerEvent) => this.onPointerMove(e);
+  private puHandler = () => this.onPointerUp();
+
   private resizeObserver?: ResizeObserver;
   private boundOnResize = () => this.renderer.resize();
   private root: HTMLElement;
@@ -78,7 +89,7 @@ export class EditorApp {
     topbar.className = 'editor-topbar';
     const leftControls = document.createElement('div');
     leftControls.className = 'editor-topbar-group';
-    leftControls.append(this.buildPresetSelect(), this.buildEngineSelect());
+    leftControls.append(this.buildPresetSelect(), this.buildEngineSelect(), this.buildViewSelect());
     topbar.append(leftControls, this.buildFileControls());
 
     const body = document.createElement('div');
@@ -90,6 +101,7 @@ export class EditorApp {
 
     const viewport = document.createElement('div');
     viewport.className = 'editor-viewport';
+    this.viewportEl = viewport;
 
     const right = document.createElement('div');
     right.className = 'editor-sidebar editor-sidebar-right';
@@ -103,7 +115,8 @@ export class EditorApp {
     this.root.append(topbar, body, this.statusBar);
 
     this.renderer.mount(viewport);
-    this.bindPointer();
+    this.bindPointer(this.renderer.canvas);
+    window.addEventListener('pointerup', this.puHandler);
 
     this.resizeObserver = new ResizeObserver(() => {
       this.renderer.resize();
@@ -182,6 +195,43 @@ export class EditorApp {
     if (wasRunning) this.setRunning(true);
   }
 
+  // Viewport selector — 2D canvas or 3D Three.js, same Renderer interface.
+  private buildViewSelect(): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'editor-presets';
+    const label = document.createElement('span');
+    label.textContent = t('View:', 'Vista:');
+    const select = document.createElement('select');
+    for (const [value, en, it] of [['2d', '2D', '2D'], ['3d', '3D', '3D']] as const) {
+      const opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = t(en, it);
+      select.appendChild(opt);
+    }
+    select.addEventListener('change', () => this.switchRenderer(select.value as '2d' | '3d', select));
+    wrap.append(label, select);
+    return wrap;
+  }
+
+  private switchRenderer(kind: '2d' | '3d', select: HTMLSelectElement): void {
+    let next: Renderer;
+    try {
+      next = kind === '3d' ? new ThreeRenderer() : new Canvas2DRenderer();
+    } catch (err) {
+      alert(t('Could not start 3D view: ', 'Impossibile avviare la vista 3D: ') + (err as Error).message);
+      select.value = '2d';
+      return;
+    }
+    this.unbindPointer(this.renderer.canvas);
+    this.renderer.dispose();
+    this.renderer = next;
+    this.renderer.mount(this.viewportEl);
+    this.renderer.setFieldOverlay(this.fieldOn);
+    this.bindPointer(this.renderer.canvas);
+    this.renderer.resize();
+    this.renderer.render(this.world);
+  }
+
   private buildFileControls(): HTMLElement {
     const wrap = document.createElement('div');
     wrap.className = 'editor-file';
@@ -213,12 +263,11 @@ export class EditorApp {
     const field = document.createElement('button');
     field.className = 'editor-btn';
     field.textContent = t('Field: off', 'Campo: off');
-    let fieldOn = false;
     field.addEventListener('click', () => {
-      fieldOn = !fieldOn;
-      this.renderer.setFieldOverlay(fieldOn);
-      field.classList.toggle('active', fieldOn);
-      field.textContent = fieldOn ? t('Field: on', 'Campo: on') : t('Field: off', 'Campo: off');
+      this.fieldOn = !this.fieldOn;
+      this.renderer.setFieldOverlay(this.fieldOn);
+      field.classList.toggle('active', this.fieldOn);
+      field.textContent = this.fieldOn ? t('Field: on', 'Campo: on') : t('Field: off', 'Campo: off');
       this.requestRender();
     });
 
@@ -275,11 +324,14 @@ export class EditorApp {
 
   // ---- pointer interaction ----
 
-  private bindPointer(): void {
-    const canvas = this.renderer.canvas;
-    canvas.addEventListener('pointerdown', e => this.onPointerDown(e));
-    canvas.addEventListener('pointermove', e => this.onPointerMove(e));
-    window.addEventListener('pointerup', () => this.onPointerUp());
+  private bindPointer(canvas: HTMLCanvasElement): void {
+    canvas.addEventListener('pointerdown', this.pdHandler);
+    canvas.addEventListener('pointermove', this.pmHandler);
+  }
+
+  private unbindPointer(canvas: HTMLCanvasElement): void {
+    canvas.removeEventListener('pointerdown', this.pdHandler);
+    canvas.removeEventListener('pointermove', this.pmHandler);
   }
 
   private pointerScreen(e: PointerEvent): { x: number; y: number } {
@@ -489,6 +541,7 @@ export class EditorApp {
     cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
     window.removeEventListener('resize', this.boundOnResize);
+    window.removeEventListener('pointerup', this.puHandler);
     this.engine.dispose();
     this.renderer.dispose();
   }

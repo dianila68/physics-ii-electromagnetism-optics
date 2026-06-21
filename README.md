@@ -113,7 +113,8 @@ src/editor/
 │   └── gpu/               ← WebGPU compute backend, same interface
 ├── render/
 │   ├── Renderer.ts        ← viewport interface
-│   └── Canvas2DRenderer.ts← 2D viewport (a Three.js 3D renderer can follow)
+│   ├── Canvas2DRenderer.ts← 2D viewport
+│   └── ThreeRenderer.ts   ← 3D viewport (Three.js)
 ├── ui/          ← Palette, Timeline, Inspector, EditorApp orchestrator
 └── presets.ts   ← demo scenes across all four scales
 ```
@@ -135,6 +136,10 @@ pre-pass uploaded as a per-particle force). Both satisfy the same
 `PhysicsEngine` interface, so neither the UI nor the renderer changes when
 you switch. GPU requires a WebGPU-capable browser; the option disables
 itself otherwise.
+
+**Viewport:** switch between **2D** (Canvas) and **3D** (Three.js) from the
+View dropdown. Both implement the `Renderer` interface; picking/dragging
+works in 3D via raycasting against the simulation plane.
 
 ### Swapping the GUI
 
