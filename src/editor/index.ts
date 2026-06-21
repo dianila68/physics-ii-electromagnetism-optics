@@ -11,7 +11,7 @@ export function renderLab(): string {
   return `
     <article class="chapter lab-chapter">
       <div class="chapter-header">
-        <div class="part-label" data-en="Lab" data-it="Laboratorio">${t('Lab', 'Laboratorio')}</div>
+        <div class="eyebrow" data-en="Lab" data-it="Laboratorio">${t('Lab', 'Laboratorio')}</div>
         <h1 data-en="Physics Sandbox" data-it="Sandbox di Fisica">${t('Physics Sandbox', 'Sandbox di Fisica')}</h1>
         <p data-en="Build masses, springs and electric charges, set gravity or E/B fields, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend." data-it="Costruisci masse, molle e cariche elettriche, imposta gravità o campi E/B, poi premi Play. Un motore GPU sarà collegabile in seguito — la simulazione gira dietro un backend sostituibile.">${t(
           'Build masses, springs and electric charges, set gravity or E/B fields, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend.',

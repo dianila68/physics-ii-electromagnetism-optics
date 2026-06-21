@@ -12,6 +12,7 @@ import { Inspector, type Selection } from './Inspector.js';
 import { downloadScene, parseScene } from '../core/serialize.js';
 import { PRESETS, defaultScene } from '../presets.js';
 import { t } from '../../utils/lang.js';
+import { makeTabs, makeSwitch } from '../../ui/components.js';
 
 // Top-level controller for the physics Lab. Owns the World, the active
 // PhysicsEngine and Renderer (both swappable via their interfaces), the
@@ -47,6 +48,8 @@ export class EditorApp {
   // View state shared across renderer swaps.
   private viewportEl!: HTMLElement;
   private fieldOn = false;
+  private engineTabsHost!: HTMLElement;
+  private viewTabsHost!: HTMLElement;
 
   // Stable pointer-handler refs so listeners can be moved when the
   // renderer (and thus its canvas) is swapped.
@@ -130,10 +133,12 @@ export class EditorApp {
 
   private buildPresetSelect(): HTMLElement {
     const wrap = document.createElement('div');
-    wrap.className = 'editor-presets';
+    wrap.className = 'editor-control';
     const label = document.createElement('span');
-    label.textContent = t('Scene:', 'Scena:');
+    label.className = 'eyebrow';
+    label.textContent = t('Scene', 'Scena');
     const select = document.createElement('select');
+    select.className = 'editor-select';
     for (const p of PRESETS) {
       const opt = document.createElement('option');
       opt.value = p.id;
@@ -151,31 +156,34 @@ export class EditorApp {
   // Engine selector — the user-facing proof of the pluggable backend.
   private buildEngineSelect(): HTMLElement {
     const wrap = document.createElement('div');
-    wrap.className = 'editor-presets';
+    wrap.className = 'editor-control';
     const label = document.createElement('span');
-    label.textContent = t('Engine:', 'Motore:');
-    const select = document.createElement('select');
-
-    const cpuOpt = document.createElement('option');
-    cpuOpt.value = 'cpu';
-    cpuOpt.textContent = t('CPU', 'CPU');
-    select.appendChild(cpuOpt);
-
-    const gpuOpt = document.createElement('option');
-    gpuOpt.value = 'gpu';
-    const gpuOk = GpuEngine.isSupported();
-    gpuOpt.textContent = gpuOk ? t('GPU (WebGPU)', 'GPU (WebGPU)') : t('GPU (unavailable)', 'GPU (non disp.)');
-    gpuOpt.disabled = !gpuOk;
-    select.appendChild(gpuOpt);
-
-    select.addEventListener('change', () => {
-      void this.switchEngine(select.value as 'cpu' | 'gpu', select);
-    });
-    wrap.append(label, select);
+    label.className = 'eyebrow';
+    label.textContent = t('Engine', 'Motore');
+    this.engineTabsHost = document.createElement('div');
+    wrap.append(label, this.engineTabsHost);
+    this.renderEngineTabs('cpu');
     return wrap;
   }
 
-  private async switchEngine(kind: 'cpu' | 'gpu', select: HTMLSelectElement): Promise<void> {
+  private renderEngineTabs(active: 'cpu' | 'gpu'): void {
+    const gpuOk = GpuEngine.isSupported();
+    this.engineTabsHost.innerHTML = '';
+    this.engineTabsHost.appendChild(makeTabs({
+      items: [
+        { label: 'CPU', value: 'cpu' },
+        { label: gpuOk ? 'GPU' : t('GPU (n/a)', 'GPU (n/d)'), value: 'gpu' },
+      ],
+      active,
+      accent: 'blue',
+      onChange: v => {
+        if (v === 'gpu' && !gpuOk) { this.renderEngineTabs('cpu'); return; }
+        void this.switchEngine(v as 'cpu' | 'gpu');
+      },
+    }));
+  }
+
+  private async switchEngine(kind: 'cpu' | 'gpu'): Promise<void> {
     const wasRunning = this.running;
     this.setRunning(false);
     try {
@@ -190,7 +198,7 @@ export class EditorApp {
       this.requestRender();
     } catch (err) {
       alert(t('Could not start GPU engine: ', 'Impossibile avviare il motore GPU: ') + (err as Error).message);
-      select.value = 'cpu'; // revert the dropdown
+      this.renderEngineTabs('cpu'); // revert the tabs
     }
     if (wasRunning) this.setRunning(true);
   }
@@ -198,28 +206,33 @@ export class EditorApp {
   // Viewport selector — 2D canvas or 3D Three.js, same Renderer interface.
   private buildViewSelect(): HTMLElement {
     const wrap = document.createElement('div');
-    wrap.className = 'editor-presets';
+    wrap.className = 'editor-control';
     const label = document.createElement('span');
-    label.textContent = t('View:', 'Vista:');
-    const select = document.createElement('select');
-    for (const [value, en, it] of [['2d', '2D', '2D'], ['3d', '3D', '3D']] as const) {
-      const opt = document.createElement('option');
-      opt.value = value;
-      opt.textContent = t(en, it);
-      select.appendChild(opt);
-    }
-    select.addEventListener('change', () => this.switchRenderer(select.value as '2d' | '3d', select));
-    wrap.append(label, select);
+    label.className = 'eyebrow';
+    label.textContent = t('View', 'Vista');
+    this.viewTabsHost = document.createElement('div');
+    wrap.append(label, this.viewTabsHost);
+    this.renderViewTabs('2d');
     return wrap;
   }
 
-  private switchRenderer(kind: '2d' | '3d', select: HTMLSelectElement): void {
+  private renderViewTabs(active: '2d' | '3d'): void {
+    this.viewTabsHost.innerHTML = '';
+    this.viewTabsHost.appendChild(makeTabs({
+      items: [{ label: '2D', value: '2d' }, { label: '3D', value: '3d' }],
+      active,
+      accent: 'blue',
+      onChange: v => this.switchRenderer(v as '2d' | '3d'),
+    }));
+  }
+
+  private switchRenderer(kind: '2d' | '3d'): void {
     let next: Renderer;
     try {
       next = kind === '3d' ? new ThreeRenderer() : new Canvas2DRenderer();
     } catch (err) {
       alert(t('Could not start 3D view: ', 'Impossibile avviare la vista 3D: ') + (err as Error).message);
-      select.value = '2d';
+      this.renderViewTabs('2d');
       return;
     }
     this.unbindPointer(this.renderer.canvas);
@@ -237,12 +250,14 @@ export class EditorApp {
     wrap.className = 'editor-file';
 
     const save = document.createElement('button');
-    save.className = 'editor-btn';
+    save.type = 'button';
+    save.className = 'btn btn-secondary btn-sm';
     save.textContent = t('Save', 'Salva');
     save.addEventListener('click', () => downloadScene(this.world.toScene()));
 
     const load = document.createElement('button');
-    load.className = 'editor-btn';
+    load.type = 'button';
+    load.className = 'btn btn-secondary btn-sm';
     load.textContent = t('Load', 'Carica');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -260,19 +275,19 @@ export class EditorApp {
       fileInput.value = '';
     });
 
-    const field = document.createElement('button');
-    field.className = 'editor-btn';
-    field.textContent = t('Field: off', 'Campo: off');
-    field.addEventListener('click', () => {
-      this.fieldOn = !this.fieldOn;
-      this.renderer.setFieldOverlay(this.fieldOn);
-      field.classList.toggle('active', this.fieldOn);
-      field.textContent = this.fieldOn ? t('Field: on', 'Campo: on') : t('Field: off', 'Campo: off');
-      this.requestRender();
+    const field = makeSwitch({
+      label: t('Field', 'Campo'),
+      checked: this.fieldOn,
+      onChange: on => {
+        this.fieldOn = on;
+        this.renderer.setFieldOverlay(on);
+        this.requestRender();
+      },
     });
 
     const clear = document.createElement('button');
-    clear.className = 'editor-btn';
+    clear.type = 'button';
+    clear.className = 'btn btn-secondary btn-sm';
     clear.textContent = t('Clear', 'Svuota');
     clear.addEventListener('click', () => {
       this.world.clear();

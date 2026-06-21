@@ -1,6 +1,7 @@
 import type { World } from '../core/world.js';
 import type { Entity, Link } from '../core/types.js';
 import { t } from '../../utils/lang.js';
+import { makeSwitch } from '../../ui/components.js';
 
 export type Selection =
   | { type: 'entity'; entity: Entity }
@@ -36,7 +37,14 @@ export class Inspector {
 
   private heading(text: string): void {
     const h = document.createElement('div');
-    h.className = 'insp-heading';
+    h.className = 'eyebrow insp-heading';
+    h.textContent = text;
+    this.element.appendChild(h);
+  }
+
+  private subheading(text: string): void {
+    const h = document.createElement('div');
+    h.className = 'eyebrow insp-subheading';
     h.textContent = text;
     this.element.appendChild(h);
   }
@@ -53,6 +61,7 @@ export class Inspector {
     span.textContent = label;
     const input = document.createElement('input');
     input.type = 'number';
+    input.className = 'input-field input-mono';
     if (opts.min !== undefined) input.min = String(opts.min);
     if (opts.max !== undefined) input.max = String(opts.max);
     input.step = String(opts.step ?? 0.1);
@@ -65,16 +74,15 @@ export class Inspector {
     this.element.appendChild(row);
   }
 
-  private checkboxField(label: string, value: boolean, set: (v: boolean) => void): void {
-    const row = document.createElement('label');
-    row.className = 'insp-row insp-row-check';
-    const span = document.createElement('span');
-    span.textContent = label;
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.checked = value;
-    input.addEventListener('change', () => { set(input.checked); this.onChange(); });
-    row.append(span, input);
+  private switchField(label: string, value: boolean, set: (v: boolean) => void): void {
+    const row = document.createElement('div');
+    row.className = 'insp-row insp-row-switch';
+    const sw = makeSwitch({
+      label,
+      checked: value,
+      onChange: v => { set(v); this.onChange(); },
+    });
+    row.appendChild(sw);
     this.element.appendChild(row);
   }
 
@@ -103,7 +111,7 @@ export class Inspector {
     }
     this.numberField(t('Radius (m)', 'Raggio (m)'), e.radius, v => (e.radius = Math.max(0.05, v)), { min: 0.05, step: 0.05 });
     this.numberField(t('Charge (C)', 'Carica (C)'), e.charge, v => (e.charge = v), { step: 0.1 });
-    this.checkboxField(t('Pinned', 'Fissato'), e.fixed, v => {
+    this.switchField(t('Pinned', 'Fissato'), e.fixed, v => {
       e.fixed = v;
       if (v) { e.vel.x = 0; e.vel.y = 0; }
     });
@@ -134,27 +142,17 @@ export class Inspector {
     this.numberField(t('Linear damping', 'Smorzamento lineare'), p.linearDamping, v => (p.linearDamping = Math.max(0, v)), { min: 0, step: 0.01 });
     this.numberField(t('Restitution', 'Restituzione'), p.restitution, v => (p.restitution = Math.min(1, Math.max(0, v))), { min: 0, max: 1, step: 0.05 });
 
-    const em = document.createElement('div');
-    em.className = 'insp-subheading';
-    em.textContent = t('Electromagnetism', 'Elettromagnetismo');
-    this.element.appendChild(em);
-
+    this.subheading(t('Electromagnetism', 'Elettromagnetismo'));
     this.numberField(t('Coulomb k', 'Coulomb k'), p.coulombK, v => (p.coulombK = Math.max(0, v)), { min: 0, step: 1 });
     this.numberField(t('E field x', 'Campo E x'), p.efield.x, v => (p.efield.x = v), { step: 0.5 });
     this.numberField(t('E field y', 'Campo E y'), p.efield.y, v => (p.efield.y = v), { step: 0.5 });
     this.numberField(t('B field (z)', 'Campo B (z)'), p.bfield, v => (p.bfield = v), { step: 0.2 });
 
-    const mol = document.createElement('div');
-    mol.className = 'insp-subheading';
-    mol.textContent = t('Molecular (Lennard-Jones)', 'Molecolare (Lennard-Jones)');
-    this.element.appendChild(mol);
+    this.subheading(t('Molecular (Lennard-Jones)', 'Molecolare (Lennard-Jones)'));
     this.numberField(t('LJ ε (depth)', 'LJ ε (profondità)'), p.ljEpsilon, v => (p.ljEpsilon = Math.max(0, v)), { min: 0, step: 0.5 });
     this.numberField(t('LJ σ (size)', 'LJ σ (dimensione)'), p.ljSigma, v => (p.ljSigma = Math.max(0.1, v)), { min: 0.1, step: 0.1 });
 
-    const sub = document.createElement('div');
-    sub.className = 'insp-subheading';
-    sub.textContent = t('Subatomic (strong force)', 'Subatomico (forza forte)');
-    this.element.appendChild(sub);
+    this.subheading(t('Subatomic (strong force)', 'Subatomico (forza forte)'));
     this.numberField(t('Confinement', 'Confinamento'), p.strongTension, v => (p.strongTension = Math.max(0, v)), { min: 0, step: 0.5 });
     this.numberField(t('Core repulsion', 'Repulsione nucleo'), p.strongCore, v => (p.strongCore = Math.max(0, v)), { min: 0, step: 0.1 });
   }

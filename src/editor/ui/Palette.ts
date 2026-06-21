@@ -31,8 +31,18 @@ export class Palette {
     this.element = document.createElement('div');
     this.element.className = 'editor-palette';
 
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'eyebrow';
+    eyebrow.textContent = t('Tools', 'Strumenti');
+    this.element.appendChild(eyebrow);
+
+    const grid = document.createElement('div');
+    grid.className = 'editor-tool-grid';
+    this.element.appendChild(grid);
+
     for (const def of TOOLS) {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'editor-tool';
       btn.innerHTML = `<span class="tool-icon">${def.icon}</span><span class="tool-label">${t(def.labelEn, def.labelIt)}</span>`;
       btn.title = t(def.labelEn, def.labelIt);
@@ -41,7 +51,7 @@ export class Palette {
         onSelect(def.tool);
       });
       this.buttons.set(def.tool, btn);
-      this.element.appendChild(btn);
+      grid.appendChild(btn);
     }
     this.setActive(initial);
   }

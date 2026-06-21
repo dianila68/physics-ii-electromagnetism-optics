@@ -1,4 +1,5 @@
 import { t } from '../../utils/lang.js';
+import { makeFigureSlider } from '../../ui/components.js';
 
 export interface TimelineCallbacks {
   onPlayPause: (playing: boolean) => void;
@@ -7,7 +8,8 @@ export interface TimelineCallbacks {
   onSpeed: (multiplier: number) => void;
 }
 
-// Playback controls: play/pause, single-step, reset, and a speed slider.
+// Playback controls styled with the Principia design system: Play/Step/Reset
+// as .btn buttons and a FigureSlider for speed.
 export class Timeline {
   readonly element: HTMLElement;
   private playBtn: HTMLButtonElement;
@@ -17,8 +19,16 @@ export class Timeline {
     this.element = document.createElement('div');
     this.element.className = 'editor-timeline';
 
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'eyebrow';
+    eyebrow.textContent = t('Playback', 'Riproduzione');
+
+    const row = document.createElement('div');
+    row.className = 'editor-timeline-row';
+
     this.playBtn = document.createElement('button');
-    this.playBtn.className = 'tl-btn tl-play';
+    this.playBtn.type = 'button';
+    this.playBtn.className = 'btn btn-primary btn-sm';
     this.updatePlayLabel();
     this.playBtn.addEventListener('click', () => {
       this.playing = !this.playing;
@@ -27,39 +37,34 @@ export class Timeline {
     });
 
     const stepBtn = document.createElement('button');
-    stepBtn.className = 'tl-btn';
-    stepBtn.textContent = t('Step ⏭', 'Passo ⏭');
+    stepBtn.type = 'button';
+    stepBtn.className = 'btn btn-secondary btn-sm';
+    stepBtn.textContent = t('Step', 'Passo');
     stepBtn.addEventListener('click', () => cb.onStep());
 
     const resetBtn = document.createElement('button');
-    resetBtn.className = 'tl-btn';
-    resetBtn.textContent = t('Reset ↺', 'Reset ↺');
+    resetBtn.type = 'button';
+    resetBtn.className = 'btn btn-secondary btn-sm';
+    resetBtn.textContent = t('Reset', 'Reset');
     resetBtn.addEventListener('click', () => {
       this.setPlaying(false);
       cb.onReset();
     });
 
-    const speedWrap = document.createElement('label');
-    speedWrap.className = 'tl-speed';
-    const speedLabel = document.createElement('span');
-    const speedVal = document.createElement('span');
-    speedVal.className = 'tl-speed-val';
-    speedVal.textContent = '1.0×';
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = '0.1';
-    slider.max = '3';
-    slider.step = '0.1';
-    slider.value = '1';
-    speedLabel.textContent = t('Speed', 'Velocità');
-    slider.addEventListener('input', () => {
-      const m = parseFloat(slider.value);
-      speedVal.textContent = `${m.toFixed(1)}×`;
-      cb.onSpeed(m);
-    });
-    speedWrap.append(speedLabel, slider, speedVal);
+    row.append(this.playBtn, stepBtn, resetBtn);
 
-    this.element.append(this.playBtn, stepBtn, resetBtn, speedWrap);
+    const speed = makeFigureSlider({
+      label: t('Speed', 'Velocità'),
+      value: 1,
+      min: 0.1,
+      max: 3,
+      step: 0.1,
+      unit: '×',
+      accent: 'blue',
+      onChange: m => cb.onSpeed(m),
+    });
+
+    this.element.append(eyebrow, row, speed);
   }
 
   setPlaying(playing: boolean): void {
@@ -68,6 +73,6 @@ export class Timeline {
   }
 
   private updatePlayLabel(): void {
-    this.playBtn.textContent = this.playing ? t('Pause ⏸', 'Pausa ⏸') : t('Play ▶', 'Play ▶');
+    this.playBtn.textContent = this.playing ? t('Pause', 'Pausa') : t('Play', 'Play');
   }
 }
