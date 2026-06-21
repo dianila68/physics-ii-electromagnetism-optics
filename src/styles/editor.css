@@ -1,0 +1,233 @@
+/* Physics Lab editor — uses the book's theme variables so it follows
+   light/dark mode automatically. */
+
+.lab-editor-host {
+  margin: 1.5rem 0;
+}
+
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--diagram-border);
+  border-radius: var(--radius);
+  background: var(--diagram-bg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ---- top bar ---- */
+.editor-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.editor-presets,
+.editor-file {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.editor-presets span {
+  font-size: 0.85rem;
+  color: var(--text2);
+  font-family: var(--font-sans);
+}
+.editor-presets select {
+  font-family: var(--font-sans);
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+}
+.editor-btn {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+.editor-btn:hover { background: var(--bg3); }
+
+/* ---- body: left tools | viewport | right inspector ---- */
+.editor-body {
+  display: grid;
+  grid-template-columns: 150px 1fr 230px;
+  min-height: 480px;
+}
+
+.editor-sidebar {
+  padding: 0.7rem;
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.editor-sidebar-left { border-right: 1px solid var(--border); }
+.editor-sidebar-right { border-left: 1px solid var(--border); }
+
+.editor-viewport {
+  position: relative;
+  background: var(--diagram-bg);
+  min-height: 480px;
+}
+.editor-canvas {
+  display: block;
+  touch-action: none; /* let us own pointer gestures for drag/place */
+  cursor: crosshair;
+}
+
+/* ---- palette ---- */
+.editor-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.editor-tool {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+.editor-tool:hover { background: var(--bg3); }
+.editor-tool.active {
+  border-color: var(--accent);
+  background: var(--bg3);
+  font-weight: 600;
+}
+.tool-icon {
+  width: 1.2em;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+/* ---- timeline ---- */
+.editor-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+}
+.tl-btn {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+.tl-btn:hover { background: var(--bg3); }
+.tl-play {
+  font-weight: 600;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.tl-speed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+  color: var(--text2);
+  font-family: var(--font-sans);
+}
+.tl-speed input[type="range"] { width: 100%; }
+.tl-speed-val { font-family: var(--font-mono); }
+
+/* ---- inspector ---- */
+.editor-inspector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.insp-heading {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3rem;
+}
+.insp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text2);
+}
+.insp-row input[type="number"] {
+  width: 84px;
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+.insp-row input[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.insp-row-check { cursor: pointer; }
+.insp-note {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+/* ---- status bar ---- */
+.editor-status {
+  padding: 0.45rem 0.9rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text3);
+}
+
+.lab-hint {
+  font-size: 0.85rem;
+  color: var(--text3);
+  font-style: italic;
+}
+
+/* ---- responsive: stack panels under the viewport on narrow screens ---- */
+@media (max-width: 820px) {
+  .editor-body {
+    grid-template-columns: 1fr;
+  }
+  .editor-sidebar-left,
+  .editor-sidebar-right {
+    border: none;
+    border-top: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .editor-palette { flex-direction: row; flex-wrap: wrap; }
+  .editor-timeline { border-top: none; padding-top: 0; flex-direction: row; flex-wrap: wrap; align-items: center; }
+}

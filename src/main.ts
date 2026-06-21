@@ -16,8 +16,9 @@ import { renderInduction, initInductionDiagrams } from './chapters/04-induction/
 import { renderMaxwell, initMaxwellDiagrams } from './chapters/05-maxwell/index.js';
 import { renderGeoOptics, initGeoOpticsDiagrams } from './chapters/06-geo-optics/index.js';
 import { renderWaveOptics, initWaveOpticsDiagrams } from './chapters/07-wave-optics/index.js';
+import { renderLab, initLabDiagrams } from './editor/index.js';
 
-type ChapterId = 'home' | '00-matter' | '01-electrostatics' | '02-circuits' | '03-magnetism' | '04-induction' | '05-maxwell' | '06-geo-optics' | '07-wave-optics';
+type ChapterId = 'home' | '00-matter' | '01-electrostatics' | '02-circuits' | '03-magnetism' | '04-induction' | '05-maxwell' | '06-geo-optics' | '07-wave-optics' | 'lab';
 
 const chapterRenderers: Record<ChapterId, () => string> = {
   'home': renderHome,
@@ -29,6 +30,7 @@ const chapterRenderers: Record<ChapterId, () => string> = {
   '05-maxwell': renderMaxwell,
   '06-geo-optics': renderGeoOptics,
   '07-wave-optics': renderWaveOptics,
+  'lab': renderLab,
 };
 
 const chapterInits: Record<ChapterId, () => void> = {
@@ -41,6 +43,7 @@ const chapterInits: Record<ChapterId, () => void> = {
   '05-maxwell': initMaxwellDiagrams,
   '06-geo-optics': initGeoOpticsDiagrams,
   '07-wave-optics': initWaveOpticsDiagrams,
+  'lab': initLabDiagrams,
 };
 
 let currentChapter: ChapterId = 'home';

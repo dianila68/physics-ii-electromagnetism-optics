@@ -95,6 +95,34 @@ src/
 └── main.ts               ← boot: theme, lang, router
 ```
 
+### Physics Lab (interactive editor)
+
+The **Lab** chapter (`src/editor/`) is an interactive multi-scale physics
+sandbox: place masses, anchors and springs on a canvas, edit their
+properties, and press **Play** to simulate. Save/load scenes as JSON.
+
+It is built around two swappable seams so heavier backends can drop in
+later without touching the UI:
+
+```
+src/editor/
+├── core/        ← engine-agnostic model: World, Entity, Link, units, serialize
+├── engine/
+│   ├── PhysicsEngine.ts   ← the pluggable simulation interface
+│   ├── cpu/               ← default: symplectic-Euler integrator + force registry
+│   └── gpu/               ← WebGPU backend stub (Phase 5), same interface
+├── render/
+│   ├── Renderer.ts        ← viewport interface
+│   └── Canvas2DRenderer.ts← 2D viewport (a Three.js 3D renderer can follow)
+├── ui/          ← Palette, Timeline, Inspector, EditorApp orchestrator
+└── presets.ts   ← demo scenes (spring pendulum, spring chain, bouncing masses)
+```
+
+**Phasing:** Phase 1 ships macro mechanics (masses, springs, gravity,
+damping, wall collisions). The model already carries `charge` for the EM
+scale, and the engine/renderer interfaces are the boundary where the EM,
+atomic, subatomic, and GPU phases plug in.
+
 ### Swapping the GUI
 
 Content and presentation are fully separated:

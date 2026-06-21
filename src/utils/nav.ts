@@ -81,6 +81,14 @@ export const CHAPTERS: ChapterMeta[] = [
     subtitleEn: 'Huygens\' principle, interference, diffraction, and polarization',
     subtitleIt: 'Principio di Huygens, interferenza, diffrazione e polarizzazione',
   },
+  {
+    id: 'lab',
+    part: 'Lab', partIt: 'Laboratorio',
+    titleEn: 'Physics Sandbox',
+    titleIt: 'Sandbox di Fisica',
+    subtitleEn: 'Interactive multi-scale physics editor with a pluggable engine',
+    subtitleIt: 'Editor di fisica multi-scala interattivo con motore sostituibile',
+  },
 ];
 
 export function buildTOC() {
