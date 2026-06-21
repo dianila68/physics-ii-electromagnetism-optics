@@ -20,5 +20,8 @@ export interface Renderer {
   screenToWorld(px: number, py: number): Vec2;
   worldToScreen(p: Vec2): { x: number; y: number };
 
+  // Toggle the electric-field vector overlay (EM scale visualization).
+  setFieldOverlay(visible: boolean): void;
+
   dispose(): void;
 }

@@ -56,6 +56,11 @@
   cursor: pointer;
 }
 .editor-btn:hover { background: var(--bg3); }
+.editor-btn.active {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  font-weight: 600;
+}
 
 /* ---- body: left tools | viewport | right inspector ---- */
 .editor-body {
@@ -165,6 +170,15 @@
   color: var(--text);
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.3rem;
+}
+.insp-subheading {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--accent-blue);
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed var(--border);
 }
 .insp-row {
   display: flex;

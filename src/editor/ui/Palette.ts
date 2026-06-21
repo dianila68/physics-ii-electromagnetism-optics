@@ -1,6 +1,6 @@
 import { t } from '../../utils/lang.js';
 
-export type Tool = 'select' | 'mass' | 'anchor' | 'spring' | 'erase';
+export type Tool = 'select' | 'mass' | 'anchor' | 'spring' | 'charge-pos' | 'charge-neg' | 'erase';
 
 interface ToolDef {
   tool: Tool;
@@ -14,6 +14,8 @@ const TOOLS: ToolDef[] = [
   { tool: 'mass', icon: '●', labelEn: 'Mass', labelIt: 'Massa' },
   { tool: 'anchor', icon: '◼', labelEn: 'Anchor', labelIt: 'Ancora' },
   { tool: 'spring', icon: '∿', labelEn: 'Spring', labelIt: 'Molla' },
+  { tool: 'charge-pos', icon: '⊕', labelEn: 'Charge +', labelIt: 'Carica +' },
+  { tool: 'charge-neg', icon: '⊖', labelEn: 'Charge −', labelIt: 'Carica −' },
   { tool: 'erase', icon: '✕', labelEn: 'Erase', labelIt: 'Cancella' },
 ];
 

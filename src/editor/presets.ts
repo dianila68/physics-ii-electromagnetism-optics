@@ -8,6 +8,9 @@ const baseParams = () => ({
   linearDamping: 0.02,
   restitution: 0.6,
   bounds: { w: 12, h: 8 },
+  coulombK: 5,
+  efield: { x: 0, y: 0 },
+  bfield: 0,
 });
 
 export interface Preset {
@@ -55,10 +58,47 @@ const bouncingMasses = (): SceneData => ({
   links: [],
 });
 
+// --- EM scale (Phase 2) ---
+
+// A light negative charge orbiting a fixed positive charge (Coulomb "orbit").
+const coulombOrbit = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0, coulombK: 12 },
+  entities: [
+    { id: 'e1', kind: 'anchor', pos: { x: 6, y: 4 }, vel: { x: 0, y: 0 }, mass: 1, radius: 0.3, fixed: true, charge: 3, color: '#e74c3c', label: '+' },
+    { id: 'e2', kind: 'mass', pos: { x: 9, y: 4 }, vel: { x: 0, y: -2.0 }, mass: 0.3, radius: 0.18, fixed: false, charge: -1, color: '#2980b9', label: '−' },
+  ],
+  links: [],
+});
+
+// Two like charges repelling — they fly apart and bounce off the walls.
+const likeCharges = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.01, coulombK: 8 },
+  entities: [
+    { id: 'e1', kind: 'mass', pos: { x: 5.2, y: 4 }, vel: { x: 0, y: 0 }, mass: 1, radius: 0.3, fixed: false, charge: 2, color: '#e74c3c', label: '+' },
+    { id: 'e2', kind: 'mass', pos: { x: 6.8, y: 4 }, vel: { x: 0, y: 0 }, mass: 1, radius: 0.3, fixed: false, charge: 2, color: '#e74c3c', label: '+' },
+  ],
+  links: [],
+});
+
+// Cyclotron: a charge in a uniform out-of-plane B field circles steadily.
+const cyclotron = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0, coulombK: 0, bfield: 1.5 },
+  entities: [
+    { id: 'e1', kind: 'mass', pos: { x: 4, y: 4 }, vel: { x: 3, y: 0 }, mass: 1, radius: 0.25, fixed: false, charge: 1, color: '#2980b9', label: 'q' },
+  ],
+  links: [],
+});
+
 export const PRESETS: Preset[] = [
   { id: 'pendulum', nameEn: 'Spring Pendulum', nameIt: 'Pendolo a Molla', build: springPendulum },
   { id: 'chain', nameEn: 'Spring Chain', nameIt: 'Catena di Molle', build: springChain },
   { id: 'bounce', nameEn: 'Bouncing Masses', nameIt: 'Masse Rimbalzanti', build: bouncingMasses },
+  { id: 'coulomb-orbit', nameEn: 'Coulomb Orbit', nameIt: 'Orbita di Coulomb', build: coulombOrbit },
+  { id: 'like-charges', nameEn: 'Like Charges Repel', nameIt: 'Cariche Uguali', build: likeCharges },
+  { id: 'cyclotron', nameEn: 'Cyclotron (B field)', nameIt: 'Ciclotrone (campo B)', build: cyclotron },
 ];
 
 export const defaultScene = springPendulum;

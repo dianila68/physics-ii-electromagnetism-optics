@@ -156,6 +156,18 @@ export class EditorApp {
       fileInput.value = '';
     });
 
+    const field = document.createElement('button');
+    field.className = 'editor-btn';
+    field.textContent = t('Field: off', 'Campo: off');
+    let fieldOn = false;
+    field.addEventListener('click', () => {
+      fieldOn = !fieldOn;
+      this.renderer.setFieldOverlay(fieldOn);
+      field.classList.toggle('active', fieldOn);
+      field.textContent = fieldOn ? t('Field: on', 'Campo: on') : t('Field: off', 'Campo: off');
+      this.requestRender();
+    });
+
     const clear = document.createElement('button');
     clear.className = 'editor-btn';
     clear.textContent = t('Clear', 'Svuota');
@@ -168,7 +180,7 @@ export class EditorApp {
       this.requestRender();
     });
 
-    wrap.append(save, load, clear, fileInput);
+    wrap.append(field, save, load, clear, fileInput);
     return wrap;
   }
 
@@ -240,6 +252,21 @@ export class EditorApp {
       case 'mass':
       case 'anchor': {
         const ent = this.world.addEntity({ kind: this.tool, pos: world });
+        this.engine.sync();
+        this.select({ type: 'entity', entity: ent });
+        this.updateStatus();
+        break;
+      }
+      case 'charge-pos':
+      case 'charge-neg': {
+        const positive = this.tool === 'charge-pos';
+        const ent = this.world.addEntity({
+          kind: 'mass',
+          pos: world,
+          charge: positive ? 1 : -1,
+          color: positive ? '#e74c3c' : '#2980b9',
+          label: positive ? '+' : '−',
+        });
         this.engine.sync();
         this.select({ type: 'entity', entity: ent });
         this.updateStatus();

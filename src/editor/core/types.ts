@@ -39,6 +39,12 @@ export interface WorldParams {
   linearDamping: number; // per-second velocity damping (drag)
   restitution: number; // wall bounce factor [0..1]
   bounds: { w: number; h: number }; // world extent
+
+  // --- EM scale (Phase 2) ---
+  // Sandbox Coulomb constant (not SI): F = coulombK * q1*q2 / r^2.
+  coulombK: number;
+  efield: Vec2; // uniform external electric field
+  bfield: number; // uniform external magnetic field, out-of-plane (+z)
 }
 
 // A scene as persisted to / loaded from JSON.

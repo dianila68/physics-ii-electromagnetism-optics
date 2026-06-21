@@ -17,6 +17,7 @@ export class Canvas2DRenderer implements Renderer {
   private offsetY = 0;
   private worldW = 12;
   private worldH = 8;
+  private fieldOverlay = false;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -56,6 +57,10 @@ export class Canvas2DRenderer implements Renderer {
     return { x: (px - this.offsetX) / this.scale, y: (py - this.offsetY) / this.scale };
   }
 
+  setFieldOverlay(visible: boolean): void {
+    this.fieldOverlay = visible;
+  }
+
   render(world: World): void {
     // Keep the transform in sync with the world's bounds.
     if (world.params.bounds.w !== this.worldW || world.params.bounds.h !== this.worldH) {
@@ -72,6 +77,7 @@ export class Canvas2DRenderer implements Renderer {
     ctx.clearRect(0, 0, rect.width, rect.height);
 
     this.drawWorldFrame();
+    if (this.fieldOverlay) this.drawFieldOverlay(world);
     this.drawLinks(world);
     this.drawEntities(world);
 
@@ -104,6 +110,61 @@ export class Canvas2DRenderer implements Renderer {
     ctx.strokeStyle = 'rgba(148,163,184,0.6)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(tl.x, tl.y, w, h);
+  }
+
+  // Net electric-field direction on a coarse grid: E = E_external + Σ k q r̂/r².
+  // Arrow direction shows field direction; opacity encodes magnitude.
+  private drawFieldOverlay(world: World): void {
+    const ctx = this.ctx;
+    const k = world.params.coulombK;
+    const ext = world.params.efield;
+    const cols = 16;
+    const rows = Math.max(4, Math.round(cols * (this.worldH / this.worldW)));
+    const charged = [...world.entities.values()].filter(e => e.charge !== 0);
+    const arrowLen = (this.worldW / cols) * this.scale * 0.42;
+
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const wx = ((i + 0.5) / cols) * this.worldW;
+        const wy = ((j + 0.5) / rows) * this.worldH;
+        let ex = ext.x;
+        let ey = ext.y;
+        for (const c of charged) {
+          const dx = wx - c.pos.x;
+          const dy = wy - c.pos.y;
+          const r2 = dx * dx + dy * dy + c.radius * c.radius;
+          const r = Math.sqrt(r2);
+          const mag = (k * c.charge) / r2;
+          ex += (dx / r) * mag;
+          ey += (dy / r) * mag;
+        }
+        const m = Math.hypot(ex, ey);
+        if (m < 1e-4) continue;
+        const ux = ex / m;
+        const uy = ey / m;
+        const p = this.worldToScreen({ x: wx, y: wy });
+        const alpha = Math.min(0.5, 0.08 + m * 0.04);
+        const ax = p.x - ux * arrowLen * 0.5;
+        const ay = p.y - uy * arrowLen * 0.5;
+        const bx = p.x + ux * arrowLen * 0.5;
+        const by = p.y + uy * arrowLen * 0.5;
+        ctx.strokeStyle = `rgba(41,128,185,${alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+        // Arrowhead.
+        const ah = arrowLen * 0.3;
+        const angle = Math.atan2(uy, ux);
+        ctx.beginPath();
+        ctx.moveTo(bx, by);
+        ctx.lineTo(bx - ah * Math.cos(angle - 0.5), by - ah * Math.sin(angle - 0.5));
+        ctx.moveTo(bx, by);
+        ctx.lineTo(bx - ah * Math.cos(angle + 0.5), by - ah * Math.sin(angle + 0.5));
+        ctx.stroke();
+      }
+    }
   }
 
   private drawLinks(world: World): void {

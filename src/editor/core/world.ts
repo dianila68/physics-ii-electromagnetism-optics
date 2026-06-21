@@ -9,7 +9,24 @@ export const DEFAULT_PARAMS: WorldParams = {
   linearDamping: 0.02,
   restitution: 0.6,
   bounds: { w: 12, h: 8 },
+  coulombK: 5,
+  efield: { x: 0, y: 0 },
+  bfield: 0,
 };
+
+// Clone params with all nested vectors copied, tolerating older scenes
+// that predate the EM fields by filling in defaults.
+function cloneParams(p: WorldParams): WorldParams {
+  return {
+    gravity: clone(p.gravity),
+    linearDamping: p.linearDamping,
+    restitution: p.restitution,
+    bounds: { ...p.bounds },
+    coulombK: p.coulombK ?? DEFAULT_PARAMS.coulombK,
+    efield: p.efield ? clone(p.efield) : { x: 0, y: 0 },
+    bfield: p.bfield ?? 0,
+  };
+}
 
 // The World is the single source of truth for scene structure and state.
 // The PhysicsEngine mutates entity pos/vel in place; the Renderer reads
@@ -24,7 +41,7 @@ export class World {
   structureRevision = 0;
 
   constructor(params: WorldParams = DEFAULT_PARAMS) {
-    this.params = { ...params, gravity: clone(params.gravity), bounds: { ...params.bounds } };
+    this.params = cloneParams(params);
   }
 
   addEntity(partial: Partial<Entity> & { kind: Entity['kind'] }): Entity {
@@ -84,7 +101,7 @@ export class World {
   toScene(): SceneData {
     return {
       version: 1,
-      params: { ...this.params, gravity: clone(this.params.gravity), bounds: { ...this.params.bounds } },
+      params: cloneParams(this.params),
       entities: [...this.entities.values()].map(e => ({ ...e, pos: clone(e.pos), vel: clone(e.vel) })),
       links: [...this.links.values()].map(l => ({ ...l })),
     };
@@ -92,11 +109,7 @@ export class World {
 
   loadScene(scene: SceneData): void {
     this.clear();
-    this.params = {
-      ...scene.params,
-      gravity: clone(scene.params.gravity),
-      bounds: { ...scene.params.bounds },
-    };
+    this.params = cloneParams(scene.params);
     for (const e of scene.entities) {
       this.entities.set(e.id, { ...e, pos: clone(e.pos), vel: clone(e.vel) });
       // Keep the id counter ahead of any loaded ids to avoid collisions.

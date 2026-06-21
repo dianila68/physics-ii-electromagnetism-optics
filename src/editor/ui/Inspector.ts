@@ -128,5 +128,15 @@ export class Inspector {
     this.numberField(t('Gravity (m/s²)', 'Gravità (m/s²)'), p.gravity.y, v => (p.gravity.y = v), { step: 0.5 });
     this.numberField(t('Linear damping', 'Smorzamento lineare'), p.linearDamping, v => (p.linearDamping = Math.max(0, v)), { min: 0, step: 0.01 });
     this.numberField(t('Restitution', 'Restituzione'), p.restitution, v => (p.restitution = Math.min(1, Math.max(0, v))), { min: 0, max: 1, step: 0.05 });
+
+    const em = document.createElement('div');
+    em.className = 'insp-subheading';
+    em.textContent = t('Electromagnetism', 'Elettromagnetismo');
+    this.element.appendChild(em);
+
+    this.numberField(t('Coulomb k', 'Coulomb k'), p.coulombK, v => (p.coulombK = Math.max(0, v)), { min: 0, step: 1 });
+    this.numberField(t('E field x', 'Campo E x'), p.efield.x, v => (p.efield.x = v), { step: 0.5 });
+    this.numberField(t('E field y', 'Campo E y'), p.efield.y, v => (p.efield.y = v), { step: 0.5 });
+    this.numberField(t('B field (z)', 'Campo B (z)'), p.bfield, v => (p.bfield = v), { step: 0.2 });
   }
 }

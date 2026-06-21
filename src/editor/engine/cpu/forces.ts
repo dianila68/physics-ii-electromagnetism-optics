@@ -52,3 +52,47 @@ export function applySpring(world: World, link: Link, forces: ForceMap): void {
   if (fa) { fa.x += fx; fa.y += fy; }
   if (fb) { fb.x -= fx; fb.y -= fy; }
 }
+
+// Pairwise Coulomb interaction among charged entities (EM scale).
+//   F = k q_i q_j / r^2  along r̂  (repulsive for like signs)
+// A softening term (sum of radii) keeps the force finite at contact so
+// the explicit integrator stays stable. O(n^2) — fine for sandbox sizes;
+// the GPU backend is where large-n spatial hashing will live.
+export function applyCoulomb(world: World, forces: ForceMap): void {
+  const k = world.params.coulombK;
+  if (k === 0) return;
+  const charged = [...world.entities.values()].filter(e => e.charge !== 0);
+  for (let i = 0; i < charged.length; i++) {
+    const a = charged[i];
+    for (let j = i + 1; j < charged.length; j++) {
+      const b = charged[j];
+      const dx = b.pos.x - a.pos.x;
+      const dy = b.pos.y - a.pos.y;
+      const soft = a.radius + b.radius;
+      const r2 = dx * dx + dy * dy + soft * soft;
+      const r = Math.sqrt(r2);
+      // Positive product -> repulsion (push apart along a->b on b).
+      const mag = (k * a.charge * b.charge) / r2;
+      const fx = (dx / r) * mag;
+      const fy = (dy / r) * mag;
+      const fa = forces.get(a.id);
+      const fb = forces.get(b.id);
+      if (fa) { fa.x -= fx; fa.y -= fy; }
+      if (fb) { fb.x += fx; fb.y += fy; }
+    }
+  }
+}
+
+// Lorentz force from uniform external fields: F = q (E + v × B).
+// In 2D, B is out-of-plane (+z), so v × B = (v_y B, -v_x B).
+export function applyLorentz(world: World, forces: ForceMap): void {
+  const { efield, bfield } = world.params;
+  if (efield.x === 0 && efield.y === 0 && bfield === 0) return;
+  for (const e of world.entities.values()) {
+    if (e.charge === 0 || e.fixed) continue;
+    const f = forces.get(e.id);
+    if (!f) continue;
+    f.x += e.charge * (efield.x + e.vel.y * bfield);
+    f.y += e.charge * (efield.y - e.vel.x * bfield);
+  }
+}

@@ -13,9 +13,9 @@ export function renderLab(): string {
       <div class="chapter-header">
         <div class="part-label" data-en="Lab" data-it="Laboratorio">${t('Lab', 'Laboratorio')}</div>
         <h1 data-en="Physics Sandbox" data-it="Sandbox di Fisica">${t('Physics Sandbox', 'Sandbox di Fisica')}</h1>
-        <p data-en="Build masses, anchors and springs, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend." data-it="Costruisci masse, ancore e molle, poi premi Play. Un motore GPU sarà collegabile in seguito — la simulazione gira dietro un backend sostituibile.">${t(
-          'Build masses, anchors and springs, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend.',
-          'Costruisci masse, ancore e molle, poi premi Play. Un motore GPU sarà collegabile in seguito — la simulazione gira dietro un backend sostituibile.',
+        <p data-en="Build masses, springs and electric charges, set gravity or E/B fields, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend." data-it="Costruisci masse, molle e cariche elettriche, imposta gravità o campi E/B, poi premi Play. Un motore GPU sarà collegabile in seguito — la simulazione gira dietro un backend sostituibile.">${t(
+          'Build masses, springs and electric charges, set gravity or E/B fields, then press Play. Drop in a GPU engine later — the simulation runs behind a pluggable backend.',
+          'Costruisci masse, molle e cariche elettriche, imposta gravità o campi E/B, poi premi Play. Un motore GPU sarà collegabile in seguito — la simulazione gira dietro un backend sostituibile.',
         )}</p>
       </div>
       <div id="lab-editor" class="lab-editor-host"></div>
