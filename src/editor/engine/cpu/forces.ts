@@ -127,6 +127,41 @@ export function applyLennardJones(world: World, forces: ForceMap): void {
   }
 }
 
+// Toy "strong force" among 'quark' entities (subatomic, illustrative).
+//   F(r) = strongCore/r^2 (short-range repulsion) − strongTension (constant
+//   attraction). The constant attraction never vanishes with distance, so
+//   quarks stay confined — pulling one away meets a steady restoring force,
+//   the qualitative signature of QCD confinement (not a real QCD solver).
+export function applyStrongForce(world: World, forces: ForceMap): void {
+  const tension = world.params.strongTension;
+  const core = world.params.strongCore;
+  if (tension <= 0 && core <= 0) return;
+  const quarks = [...world.entities.values()].filter(e => e.kind === 'quark');
+  const minR = 0.2;
+  const maxForce = 500;
+
+  for (let i = 0; i < quarks.length; i++) {
+    const a = quarks[i];
+    for (let j = i + 1; j < quarks.length; j++) {
+      const b = quarks[j];
+      const dx = b.pos.x - a.pos.x;
+      const dy = b.pos.y - a.pos.y;
+      let r = Math.sqrt(dx * dx + dy * dy);
+      if (r < minR) r = minR;
+      let fMag = core / (r * r) - tension; // >0 repel, <0 attract
+      if (fMag > maxForce) fMag = maxForce;
+      else if (fMag < -maxForce) fMag = -maxForce;
+      const inv = 1 / r;
+      const fx = dx * inv * fMag;
+      const fy = dy * inv * fMag;
+      const fa = forces.get(a.id);
+      const fb = forces.get(b.id);
+      if (fa) { fa.x -= fx; fa.y -= fy; }
+      if (fb) { fb.x += fx; fb.y += fy; }
+    }
+  }
+}
+
 // Lorentz force from uniform external fields: F = q (E + v × B).
 // In 2D, B is out-of-plane (+z), so v × B = (v_y B, -v_x B).
 export function applyLorentz(world: World, forces: ForceMap): void {

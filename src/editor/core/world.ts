@@ -4,9 +4,10 @@ import { zero, clone } from './vec2.js';
 let _nextId = 1;
 const uid = (prefix: string): string => `${prefix}${_nextId++}`;
 
-function entityDefaultColor(kind: 'mass' | 'anchor' | 'atom'): string {
+function entityDefaultColor(kind: 'mass' | 'anchor' | 'atom' | 'quark'): string {
   if (kind === 'anchor') return '#94a3b8';
   if (kind === 'atom') return '#27ae60';
+  if (kind === 'quark') return '#9b59b6';
   return '#e74c3c';
 }
 
@@ -20,6 +21,8 @@ export const DEFAULT_PARAMS: WorldParams = {
   bfield: 0,
   ljEpsilon: 0,
   ljSigma: 0.8,
+  strongTension: 0,
+  strongCore: 0.5,
 };
 
 // Clone params with all nested vectors copied, tolerating older scenes
@@ -35,6 +38,8 @@ function cloneParams(p: WorldParams): WorldParams {
     bfield: p.bfield ?? 0,
     ljEpsilon: p.ljEpsilon ?? 0,
     ljSigma: p.ljSigma ?? DEFAULT_PARAMS.ljSigma,
+    strongTension: p.strongTension ?? 0,
+    strongCore: p.strongCore ?? DEFAULT_PARAMS.strongCore,
   };
 }
 

@@ -17,7 +17,7 @@ export interface Entity {
   label?: string;
 }
 
-export type EntityKind = 'mass' | 'anchor' | 'atom';
+export type EntityKind = 'mass' | 'anchor' | 'atom' | 'quark';
 
 // A two-body link. Currently a damped Hooke spring; the type tag leaves
 // room for rods / rigid constraints later.
@@ -51,6 +51,15 @@ export interface WorldParams {
   //   V(r) = 4ε[(σ/r)^12 - (σ/r)^6].
   ljEpsilon: number; // well depth ε (interaction strength)
   ljSigma: number; // distance σ at which V = 0
+
+  // --- Subatomic scale (Phase 4, illustrative only) ---
+  // A toy "strong force" between 'quark' entities, capturing the two
+  // qualitative features of confinement rather than real QCD:
+  //   F(r) = strongCore / r^2  (short-range repulsion)
+  //        − strongTension     (constant attraction at all ranges)
+  // The constant term means quarks can't be pulled apart (a "string").
+  strongTension: number;
+  strongCore: number;
 }
 
 // A scene as persisted to / loaded from JSON.

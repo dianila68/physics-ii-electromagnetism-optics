@@ -1,7 +1,7 @@
 import type { PhysicsEngine } from '../PhysicsEngine.js';
 import type { World } from '../../core/world.js';
 import type { Vec2 } from '../../core/vec2.js';
-import { applyGravity, applySpring, applyCoulomb, applyLorentz, applyLennardJones, type ForceMap } from './forces.js';
+import { applyGravity, applySpring, applyCoulomb, applyLorentz, applyLennardJones, applyStrongForce, type ForceMap } from './forces.js';
 
 // Default backend: a semi-implicit (symplectic) Euler integrator running
 // on the main thread. Symplectic Euler is chosen over explicit Euler
@@ -60,6 +60,7 @@ export class CpuEngine implements PhysicsEngine {
     applyCoulomb(this.world, this.forces);
     applyLorentz(this.world, this.forces);
     applyLennardJones(this.world, this.forces);
+    applyStrongForce(this.world, this.forces);
     for (const link of this.world.links.values()) applySpring(this.world, link, this.forces);
 
     // 3. Integrate (semi-implicit: update velocity, then position).

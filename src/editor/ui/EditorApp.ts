@@ -35,6 +35,9 @@ export class EditorApp {
   // Interaction state.
   private draggingId: string | null = null;
   private springStartId: string | null = null;
+  // Cycles the three QCD "color charges" so a placed triplet reads as a
+  // (color-neutral) baryon — illustrative only.
+  private quarkColorIndex = 0;
 
   // Snapshot to restore on Reset.
   private resetSnapshot: SceneData;
@@ -261,6 +264,26 @@ export class EditorApp {
         const ent = this.world.addEntity({ kind: 'atom', pos: world });
         // Make the LJ interaction visible the moment atoms exist.
         if (this.world.params.ljEpsilon <= 0) this.world.params.ljEpsilon = 1;
+        this.engine.sync();
+        this.select({ type: 'entity', entity: ent });
+        this.updateStatus();
+        break;
+      }
+      case 'quark': {
+        const colors = ['#e74c3c', '#27ae60', '#3b82f6']; // R / G / B color charge
+        const labels = ['r', 'g', 'b'];
+        const idx = this.quarkColorIndex % 3;
+        this.quarkColorIndex++;
+        const ent = this.world.addEntity({
+          kind: 'quark',
+          pos: world,
+          mass: 0.5,
+          radius: 0.18,
+          color: colors[idx],
+          label: labels[idx],
+        });
+        // Switch on the confining force once quarks exist.
+        if (this.world.params.strongTension <= 0) this.world.params.strongTension = 2;
         this.engine.sync();
         this.select({ type: 'entity', entity: ent });
         this.updateStatus();

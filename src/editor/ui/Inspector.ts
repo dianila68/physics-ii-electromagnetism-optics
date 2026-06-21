@@ -92,7 +92,11 @@ export class Inspector {
   }
 
   private renderEntity(e: Entity): void {
-    const heading = e.kind === 'atom' ? t('Atom', 'Atomo') : e.fixed ? t('Anchor', 'Ancora') : t('Mass', 'Massa');
+    const heading =
+      e.kind === 'atom' ? t('Atom', 'Atomo')
+      : e.kind === 'quark' ? t('Quark', 'Quark')
+      : e.fixed ? t('Anchor', 'Ancora')
+      : t('Mass', 'Massa');
     this.heading(heading);
     if (!e.fixed) {
       this.numberField(t('Mass (kg)', 'Massa (kg)'), e.mass, v => (e.mass = Math.max(0.01, v)), { min: 0.01, step: 0.1 });
@@ -146,5 +150,12 @@ export class Inspector {
     this.element.appendChild(mol);
     this.numberField(t('LJ ε (depth)', 'LJ ε (profondità)'), p.ljEpsilon, v => (p.ljEpsilon = Math.max(0, v)), { min: 0, step: 0.5 });
     this.numberField(t('LJ σ (size)', 'LJ σ (dimensione)'), p.ljSigma, v => (p.ljSigma = Math.max(0.1, v)), { min: 0.1, step: 0.1 });
+
+    const sub = document.createElement('div');
+    sub.className = 'insp-subheading';
+    sub.textContent = t('Subatomic (strong force)', 'Subatomico (forza forte)');
+    this.element.appendChild(sub);
+    this.numberField(t('Confinement', 'Confinamento'), p.strongTension, v => (p.strongTension = Math.max(0, v)), { min: 0, step: 0.5 });
+    this.numberField(t('Core repulsion', 'Repulsione nucleo'), p.strongCore, v => (p.strongCore = Math.max(0, v)), { min: 0, step: 0.1 });
   }
 }

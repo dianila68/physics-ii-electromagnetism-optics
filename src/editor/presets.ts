@@ -13,6 +13,8 @@ const baseParams = () => ({
   bfield: 0,
   ljEpsilon: 0,
   ljSigma: 0.8,
+  strongTension: 0,
+  strongCore: 0.5,
 });
 
 export interface Preset {
@@ -141,6 +143,33 @@ const diatomic = (): SceneData => ({
   links: [],
 });
 
+// --- Subatomic scale (Phase 4, illustrative) ---
+
+// Three color-charged quarks bound into a baryon ("proton") by the toy
+// strong force; they settle into a small bound triangle.
+const proton = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.08, strongTension: 2.5, strongCore: 0.6 },
+  entities: [
+    { id: 'e1', kind: 'quark', pos: { x: 5.7, y: 3.8 }, vel: { x: 0, y: 0 }, mass: 0.5, radius: 0.18, fixed: false, charge: 0, color: '#e74c3c', label: 'r' },
+    { id: 'e2', kind: 'quark', pos: { x: 6.3, y: 3.8 }, vel: { x: 0, y: 0 }, mass: 0.5, radius: 0.18, fixed: false, charge: 0, color: '#27ae60', label: 'g' },
+    { id: 'e3', kind: 'quark', pos: { x: 6.0, y: 4.3 }, vel: { x: 0, y: 0 }, mass: 0.5, radius: 0.18, fixed: false, charge: 0, color: '#3b82f6', label: 'b' },
+  ],
+  links: [],
+});
+
+// Two quarks: one is given a velocity to fly off, but the constant
+// confining force pulls it back — they oscillate like a flux "string".
+const confinement = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0, strongTension: 2, strongCore: 0.5 },
+  entities: [
+    { id: 'e1', kind: 'quark', pos: { x: 6, y: 4 }, vel: { x: 0, y: 0 }, mass: 0.5, radius: 0.18, fixed: false, charge: 0, color: '#e74c3c', label: 'r' },
+    { id: 'e2', kind: 'quark', pos: { x: 6.6, y: 4 }, vel: { x: 4, y: 0 }, mass: 0.5, radius: 0.18, fixed: false, charge: 0, color: '#3b82f6', label: 'b' },
+  ],
+  links: [],
+});
+
 export const PRESETS: Preset[] = [
   { id: 'pendulum', nameEn: 'Spring Pendulum', nameIt: 'Pendolo a Molla', build: springPendulum },
   { id: 'chain', nameEn: 'Spring Chain', nameIt: 'Catena di Molle', build: springChain },
@@ -150,6 +179,8 @@ export const PRESETS: Preset[] = [
   { id: 'cyclotron', nameEn: 'Cyclotron (B field)', nameIt: 'Ciclotrone (campo B)', build: cyclotron },
   { id: 'lj-cluster', nameEn: 'Atomic Cluster (LJ)', nameIt: 'Cluster Atomico (LJ)', build: ljCluster },
   { id: 'diatomic', nameEn: 'Diatomic Molecule', nameIt: 'Molecola Biatomica', build: diatomic },
+  { id: 'proton', nameEn: 'Proton (3 quarks)', nameIt: 'Protone (3 quark)', build: proton },
+  { id: 'confinement', nameEn: 'Quark Confinement', nameIt: 'Confinamento Quark', build: confinement },
 ];
 
 export const defaultScene = springPendulum;

@@ -19,9 +19,9 @@ export function renderLab(): string {
         )}</p>
       </div>
       <div id="lab-editor" class="lab-editor-host"></div>
-      <p class="lab-hint" data-en="Tip: pick a tool on the left, click the canvas to place. With the Spring tool, click two bodies to connect them. Select a body to edit its properties on the right." data-it="Suggerimento: scegli uno strumento a sinistra e clicca sulla tela per posizionare. Con lo strumento Molla, clicca due corpi per collegarli. Seleziona un corpo per modificarne le proprietà a destra.">${t(
-        'Tip: pick a tool on the left, click the canvas to place. With the Spring tool, click two bodies to connect them. Select a body to edit its properties on the right.',
-        'Suggerimento: scegli uno strumento a sinistra e clicca sulla tela per posizionare. Con lo strumento Molla, clicca due corpi per collegarli. Seleziona un corpo per modificarne le proprietà a destra.',
+      <p class="lab-hint" data-en="Tip: pick a tool on the left, click the canvas to place. With the Spring tool, click two bodies to connect them. Scales span masses & springs, electric charges, Lennard-Jones atoms, and confined quarks. The subatomic strong force is an illustrative model, not a QCD solver." data-it="Suggerimento: scegli uno strumento a sinistra e clicca sulla tela per posizionare. Con lo strumento Molla, clicca due corpi per collegarli. Le scale vanno da masse e molle a cariche elettriche, atomi di Lennard-Jones e quark confinati. La forza forte subatomica è un modello illustrativo, non un risolutore QCD.">${t(
+        'Tip: pick a tool on the left, click the canvas to place. With the Spring tool, click two bodies to connect them. Scales span masses & springs, electric charges, Lennard-Jones atoms, and confined quarks. The subatomic strong force is an illustrative model, not a QCD solver.',
+        'Suggerimento: scegli uno strumento a sinistra e clicca sulla tela per posizionare. Con lo strumento Molla, clicca due corpi per collegarli. Le scale vanno da masse e molle a cariche elettriche, atomi di Lennard-Jones e quark confinati. La forza forte subatomica è un modello illustrativo, non un risolutore QCD.',
       )}</p>
     </article>
   `;
