@@ -1,0 +1,148 @@
+/* ── Bookmarks panel (Principia Bookmarks.jsx adaptation) ── */
+
+#bookmarks-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 299;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+#bookmarks-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#bookmarks-panel {
+  position: fixed;
+  top: var(--topbar-h);
+  right: 0;
+  height: calc(100dvh - var(--topbar-h));
+  width: 360px;
+  max-width: 100vw;
+  background: var(--surface-card);
+  border-left: 1px solid var(--line-hair);
+  box-shadow: var(--shadow-float);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+#bookmarks-panel.open {
+  transform: translateX(0);
+}
+
+/* ── Panel header ── */
+.bm-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-hair);
+  flex: none;
+  color: var(--text-body);
+}
+
+.bm-title {
+  font-size: var(--t-body);
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-strong);
+  flex: 1;
+}
+
+/* ── Panel body ── */
+.bm-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-300) transparent;
+}
+
+.bm-section {
+  padding: 20px;
+}
+
+/* ── Empty state ── */
+.bm-empty {
+  font-size: var(--t-caption);
+  font-family: var(--font-serif);
+  color: var(--text-faint);
+  line-height: var(--lh-reading);
+  margin: 0;
+}
+
+/* ── Bookmark list item ── */
+.bm-chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-2);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+  margin-bottom: 4px;
+}
+
+.bm-chapter-item:hover {
+  background: var(--surface-selected);
+}
+
+.bm-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bm-item-part {
+  font-size: var(--t-micro);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+
+.bm-item-title {
+  font-size: var(--t-body);
+  font-family: var(--font-serif);
+  color: var(--text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bm-remove {
+  color: var(--text-faint) !important;
+  flex: none;
+}
+
+.bm-remove:hover {
+  background: var(--red-100) !important;
+  color: var(--red-700) !important;
+}
+
+/* ── Margin bookmark card ── */
+.margin-bookmark-card {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line-hair);
+}
+
+#margin-bookmark-btn.active {
+  background: var(--blue-050);
+  color: var(--blue-700);
+  border-color: var(--blue-100);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  #bookmarks-panel {
+    width: 100vw;
+    top: var(--topbar-h);
+  }
+}

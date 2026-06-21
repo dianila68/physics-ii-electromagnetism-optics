@@ -1,0 +1,490 @@
+{
+  "quark": {
+    "labelEn": "Quark",
+    "labelIt": "Quark",
+    "shortEn": "Elementary particle and fundamental constituent of matter, bound by the strong force.",
+    "shortIt": "Particella elementare e costituente fondamentale della materia, legata dalla forza forte.",
+    "longEn": "A quark is a type of elementary particle and a fundamental constituent of matter. Quarks combine to form composite particles called hadrons, the most stable of which are protons and neutrons, the components of atomic nuclei. All commonly observable matter is composed of up quarks, down quarks and electrons. Quarks have various intrinsic properties, including electric charge, mass, color charge, and spin. They are the only elementary particles in the Standard Model of particle physics to experience all four fundamental interactions, and the only known particles whose electric charges are not integer multiples of the elementary charge.",
+    "longIt": "Un quark è un tipo di particella elementare e un costituente fondamentale della materia. I quark si combinano per formare particelle composite chiamate adroni, i cui rappresentanti più stabili sono i protoni e i neutroni, i componenti dei nuclei atomici. Tutta la materia comunemente osservabile è composta da quark up, quark down ed elettroni. I quark presentano varie proprietà intrinseche, tra cui carica elettrica, massa, carica di colore e spin. Sono le uniche particelle nel Modello Standard della fisica delle particelle a subire tutte e quattro le interazioni fondamentali.",
+    "seeAlso": [
+      "proton",
+      "neutron",
+      "gluon"
+    ],
+    "wikipedia": "Quark"
+  },
+  "electron": {
+    "labelEn": "Electron",
+    "labelIt": "Elettrone",
+    "shortEn": "Stable lepton with charge −e = −1.602×10⁻¹⁹ C and mass 9.109×10⁻³¹ kg.",
+    "shortIt": "Leptone stabile con carica −e = −1.602×10⁻¹⁹ C e massa 9.109×10⁻³¹ kg.",
+    "longEn": "The electron is a subatomic particle with a negative one elementary electric charge. Electrons belong to the first generation of the lepton particle family, and are generally thought to be elementary particles because they have no known components or substructure. The electron's mass is approximately 1/1836 that of the proton. Quantum mechanical properties of the electron include an intrinsic angular momentum (spin) of a half-integer value, expressed in units of the reduced Planck constant, ħ. Electrons play an essential role in numerous physical phenomena, such as electricity, magnetism, chemistry, and thermal conductivity.",
+    "longIt": "L'elettrone è una particella subatomica con carica elettrica elementare negativa. Gli elettroni appartengono alla prima generazione della famiglia dei leptoni e sono generalmente considerati particelle elementari perché non possiedono componenti o sottostrutture note. La massa dell'elettrone è circa 1/1836 di quella del protone. Le proprietà quantistiche dell'elettrone includono un momento angolare intrinseco (spin) di valore semintero. Gli elettroni svolgono un ruolo essenziale in numerosi fenomeni fisici, come l'elettricità, il magnetismo, la chimica e la conduttività termica.",
+    "latex": "e^- \\quad m_e = 9.109 \\times 10^{-31}\\,\\text{kg}",
+    "seeAlso": [
+      "electric-charge",
+      "conductor"
+    ]
+  },
+  "proton": {
+    "labelEn": "Proton",
+    "labelIt": "Protone",
+    "shortEn": "Positively charged baryon in the atomic nucleus, composed of 2 up quarks + 1 down quark.",
+    "shortIt": "Barione a carica positiva nel nucleo atomico, composto da 2 quark up + 1 quark down.",
+    "longEn": "A proton is a stable subatomic particle, symbol p, H+, or ¹H+, with a positive electric charge of +1 e (elementary charge). Its mass is slightly less than that of a neutron and 1836 times the mass of an electron. Protons and neutrons, each with masses of approximately one atomic mass unit, are collectively referred to as nucleons. One or more protons are present in the nucleus of every atom; they provide the central electrostatic attractive force that binds the atomic electrons.",
+    "longIt": "Un protone è una particella subatomica stabile con una carica elettrica positiva di +1 e (carica elementare). La sua massa è leggermente inferiore a quella di un neutrone e 1836 volte la massa di un elettrone. Protoni e neutroni sono collettivamente indicati come nucleoni. Uno o più protoni sono presenti nel nucleo di ogni atomo; forniscono la forza di attrazione elettrostatica centrale che lega gli elettroni atomici all'interno dell'atomo stesso.",
+    "latex": "p^+ \\quad m_p = 1.673 \\times 10^{-27}\\,\\text{kg}",
+    "seeAlso": [
+      "quark",
+      "neutron",
+      "electric-charge"
+    ]
+  },
+  "neutron": {
+    "labelEn": "Neutron",
+    "labelIt": "Neutrone",
+    "shortEn": "Electrically neutral baryon in the nucleus, composed of 1 up quark + 2 down quarks.",
+    "shortIt": "Barione elettricamente neutro nel nucleo, composto da 1 quark up + 2 quark down.",
+    "longEn": "The neutron is a subatomic particle, symbol n or n⁰, which has a neutral (not positive or negative) charge, and a mass slightly greater than that of a proton. Protons and neutrons constitute the nuclei of atoms. Since protons and neutrons behave similarly within the nucleus, and each has a mass of approximately one atomic mass unit, they are both referred to as nucleons. Their properties and interactions are described by nuclear physics. Free neutrons, not confined within a nucleus, are unstable and subject to beta decay.",
+    "longIt": "Il neutrone è una particella subatomica con carica elettrica netta pari a zero e una massa leggermente superiore a quella di un protone. Insieme ai protoni, i neutroni costituiscono i nuclei degli atomi, venendo entrambi classificati come nucleoni. A differenza dei protoni, che si respingono elettromagneticamente, i neutroni contribuiscono all'attrazione nucleare forte senza aggiungere repulsione elettrostatica, risultando fondamentali per la stabilità nucleare degli elementi più pesanti.",
+    "seeAlso": [
+      "quark",
+      "proton"
+    ]
+  },
+  "gluon": {
+    "labelEn": "Gluon",
+    "labelIt": "Gluone",
+    "shortEn": "Massless boson that mediates the strong nuclear force between quarks.",
+    "shortIt": "Bosone privo di massa che media la forza nucleare forte tra i quark.",
+    "longEn": "A gluon is an elementary particle that acts as the exchange particle (or gauge boson) for the strong force between quarks. It is analogous to the exchange of photons in the electromagnetic force between two charged particles. In layman's terms, they \"glue\" quarks together, forming hadrons such as protons and neutrons. Gluons carry the color charge of the strong interaction. Unlike the photon, which mediates the electromagnetic interaction but lacks an electric charge, gluons themselves participate in the strong interaction.",
+    "longIt": "Un gluone è una particella elementare che funge da particella di scambio (o bosone di gauge) per l'interazione forte tra i quark. Agisce come un collante (\"glue\" in inglese) che tiene uniti i quark per formare gli adroni, inclusi protoni e neutroni. A differenza del fotone, che media la forza elettromagnetica ma è elettricamente neutro, il gluone possiede una propria carica di colore, il che significa che oltre a mediare l'interazione forte, vi partecipa esso stesso in modo diretto.",
+    "seeAlso": [
+      "quark"
+    ]
+  },
+  "electric-charge": {
+    "labelEn": "Electric charge",
+    "labelIt": "Carica elettrica",
+    "shortEn": "Fundamental property of matter causing electromagnetic interactions. Quantized: q = ne.",
+    "shortIt": "Proprietà fondamentale della materia che causa interazioni elettromagnetiche. Quantizzata: q = ne.",
+    "longEn": "Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field. Electric charge can be positive or negative. Like charges repel each other and unlike charges attract each other. An object with an absence of net charge is referred to as neutral. Early knowledge of how charged substances interact is now called classical electrodynamics, and is still accurate for problems that do not require consideration of quantum effects.",
+    "longIt": "La carica elettrica è una grandezza fisica scalare dotata di segno, che indica la predisposizione della materia a subire una forza quando inserita in un campo elettromagnetico. Esistono due tipi di carica elettrica: positiva e negativa. Cariche dello stesso segno si respingono, mentre cariche di segno opposto si attraggono. Un corpo con una quantità uguale di cariche positive e negative ha carica netta nulla ed è definito elettricamente neutro.",
+    "latex": "q = ne, \\quad e = 1.602 \\times 10^{-19}\\,\\text{C}",
+    "seeAlso": [
+      "coulombs-law",
+      "electric-field"
+    ]
+  },
+  "coulombs-law": {
+    "labelEn": "Coulomb's Law",
+    "labelIt": "Legge di Coulomb",
+    "shortEn": "The electrostatic force between two point charges is proportional to their product and inversely proportional to r².",
+    "shortIt": "La forza elettrostatica tra due cariche puntiformi è proporzionale al loro prodotto e inversamente proporzionale a r².",
+    "longEn": "Coulomb's law, or Coulomb's inverse-square law, is an experimental law of physics that quantifies the amount of force between two stationary, electrically charged particles. The electric force between charged bodies at rest is conventionally called electrostatic force or Coulomb force. The law states that the magnitude of the electrostatic force of attraction or repulsion between two point charges is directly proportional to the product of the magnitudes of charges and inversely proportional to the square of the distance between them.",
+    "longIt": "La legge di Coulomb, formulata nel 1785 dal fisico francese Charles-Augustin de Coulomb, stabilisce che la forza elettrica esercitata tra due cariche puntiformi in quiete è direttamente proporzionale al prodotto delle cariche stesse e inversamente proporzionale al quadrato della loro distanza. Questa forza agisce lungo la retta congiungente le due cariche: risulta attrattiva se le cariche hanno segno opposto, e repulsiva se hanno lo stesso segno.",
+    "latex": "\\vec{F} = k_e \\frac{q_1 q_2}{r^2}\\hat{r}, \\quad k_e = 8.988\\times10^9\\,\\text{N·m}^2/\\text{C}^2",
+    "seeAlso": [
+      "electric-field",
+      "electric-charge",
+      "permittivity"
+    ]
+  },
+  "electric-field": {
+    "labelEn": "Electric field",
+    "labelIt": "Campo elettrico",
+    "shortEn": "Vector field E giving the force per unit positive test charge at each point in space.",
+    "shortIt": "Campo vettoriale E che dà la forza per unità di carica di prova positiva in ogni punto dello spazio.",
+    "longEn": "An electric field is a physical field that surrounds electrically charged particles and exerts force on all other charged particles in the field, either attracting or repelling them. It also refers to the physical field for a system of charged particles. Electric fields originate from electric charges, or from time-varying magnetic fields. Electric fields and magnetic fields are both manifestations of the electromagnetic field, one of the four fundamental interactions of nature.",
+    "longIt": "Un campo elettrico è un campo vettoriale che descrive la forza elettrica che una carica di prova subirebbe in ogni punto dello spazio. Il campo elettrico è generato da cariche elettriche o da campi magnetici variabili nel tempo, come descritto dalle equazioni di Maxwell. Insieme al campo magnetico, il campo elettrico costituisce il campo elettromagnetico, responsabile di una delle quattro interazioni fondamentali della natura.",
+    "latex": "\\vec{E} = k_e \\frac{Q}{r^2}\\hat{r}, \\quad \\vec{E} = -\\nabla V",
+    "seeAlso": [
+      "coulombs-law",
+      "electric-potential",
+      "gauss-law"
+    ]
+  },
+  "gauss-law": {
+    "labelEn": "Gauss's Law",
+    "labelIt": "Legge di Gauss",
+    "shortEn": "The total electric flux through any closed surface equals the enclosed charge divided by ε₀.",
+    "shortIt": "Il flusso elettrico totale attraverso qualsiasi superficie chiusa è uguale alla carica racchiusa divisa per ε₀.",
+    "longEn": "In physics, Gauss's law, also known as Gauss's flux theorem, relates the distribution of electric charge to the resulting electric field. In its integral form, it states that the flux of the electric field out of an arbitrary closed surface is proportional to the electric charge enclosed by the surface, irrespective of how that charge is distributed. Even though the law alone is insufficient to determine the electric field across a surface enclosing any charge distribution, this may be possible in cases where symmetry mandates uniformity of the field.",
+    "longIt": "In fisica, la legge di Gauss, nota anche come teorema del flusso di Gauss, mette in relazione la distribuzione di carica elettrica con il campo elettrico generato. Nella sua forma integrale, afferma che il flusso netto del campo elettrico attraverso una superficie chiusa arbitraria è direttamente proporzionale alla carica totale racchiusa all'interno della superficie stessa. La legge è una delle quattro equazioni di Maxwell ed è particolarmente utile per determinare il campo elettrico prodotto da distribuzioni di carica altamente simmetriche.",
+    "latex": "\\oint \\vec{E}\\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\varepsilon_0}",
+    "seeAlso": [
+      "electric-field",
+      "permittivity",
+      "maxwell-equations"
+    ]
+  },
+  "electric-potential": {
+    "labelEn": "Electric potential",
+    "labelIt": "Potenziale elettrico",
+    "shortEn": "Scalar field V: work per unit charge to bring a test charge from infinity to a point. Units: volt (V).",
+    "shortIt": "Campo scalare V: lavoro per unità di carica per portare una carica di prova dall'infinito a un punto. Unità: volt (V).",
+    "longEn": "An electric potential is the amount of work energy needed to move a unit of electric charge from a reference point to the specific point in an electric field. More precisely, it is the energy per unit charge for a test charge that is so small that the disturbance of the field under consideration is negligible. The reference point is typically Earth, although any point beyond the influence of the electric field charge can be used.",
+    "longIt": "Il potenziale elettrico è una grandezza scalare che rappresenta il lavoro per unità di carica necessario per spostare una carica di prova da un punto di riferimento, generalmente posto all'infinito, a un punto specifico all'interno di un campo elettrico. La differenza di potenziale elettrico tra due punti è comunemente nota come tensione elettrica e si misura in volt. Il concetto di potenziale permette di trattare i problemi di elettrostatica mediante un campo scalare anziché vettoriale.",
+    "latex": "V = k_e \\frac{Q}{r}, \\quad \\vec{E} = -\\nabla V",
+    "seeAlso": [
+      "electric-field",
+      "capacitance"
+    ]
+  },
+  "capacitance": {
+    "labelEn": "Capacitance",
+    "labelIt": "Capacità",
+    "shortEn": "C = Q/V. Ability of a system to store electric charge per volt. Unit: farad (F).",
+    "shortIt": "C = Q/V. Capacità di un sistema di immagazzinare carica elettrica per volt. Unità: farad (F).",
+    "longEn": "Capacitance is the capability of a material object or device to store electric charge. It is measured by the change in charge in response to a difference in electric potential, expressed as the ratio of those quantities. There are two closely related notions of capacitance: self capacitance and mutual capacitance. Any object that can be electrically charged exhibits self capacitance. In electronic circuits, components called capacitors are designed to add mutual capacitance to the circuit.",
+    "longIt": "La capacità elettrica è la grandezza fisica che indica la propensione di un corpo conduttore o di un sistema di conduttori (come un condensatore) a immagazzinare carica elettrica in relazione al potenziale o alla differenza di potenziale cui è sottoposto. Viene misurata in farad (F) nel Sistema Internazionale. Un condensatore tipico immagazzina energia nel campo elettrico che si instaura tra le sue armature quando viene applicata una tensione.",
+    "latex": "C = \\frac{Q}{V} = \\varepsilon_0\\frac{A}{d}, \\quad U = \\frac{1}{2}CV^2",
+    "seeAlso": [
+      "electric-potential",
+      "permittivity",
+      "dielectric"
+    ]
+  },
+  "permittivity": {
+    "labelEn": "Permittivity (ε₀)",
+    "labelIt": "Permettività (ε₀)",
+    "shortEn": "ε₀ = 8.854×10⁻¹² C²/(N·m²). Constant relating electric field to charge density in vacuum.",
+    "shortIt": "ε₀ = 8.854×10⁻¹² C²/(N·m²). Costante che lega il campo elettrico alla densità di carica nel vuoto.",
+    "longEn": "In electromagnetism, the absolute permittivity, often simply called permittivity, is the measure of capacitance that is encountered when forming an electric field in a particular medium. More specifically, permittivity describes the amount of charge needed to generate one unit of electric flux in a particular medium. The permittivity of free space, also called vacuum permittivity, is an ideal, baseline physical constant, represented by ε₀. It relates the units for electric charge to mechanical quantities such as length and force.",
+    "longIt": "In elettromagnetismo, la permettività elettrica è una grandezza fisica che esprime l'attitudine di un materiale a polarizzarsi in presenza di un campo elettrico, descrivendo quanta opposizione esso offra alla formazione del campo stesso. La permettività del vuoto (ε₀) è una costante fondamentale della natura che compare nella legge di Coulomb e nelle equazioni di Maxwell. La permettività relativa o costante dielettrica quantifica quanto un materiale riduce il campo elettrico rispetto al vuoto.",
+    "latex": "\\varepsilon_0 = 8.854\\times10^{-12}\\,\\frac{\\text{C}^2}{\\text{N}\\cdot\\text{m}^2}, \\quad k_e = \\frac{1}{4\\pi\\varepsilon_0}",
+    "seeAlso": [
+      "coulombs-law",
+      "gauss-law"
+    ]
+  },
+  "conductor": {
+    "labelEn": "Conductor",
+    "labelIt": "Conduttore",
+    "shortEn": "Material with free electrons that can move under an applied electric field, enabling current flow.",
+    "shortIt": "Materiale con elettroni liberi che possono muoversi sotto un campo elettrico applicato, consentendo il flusso di corrente.",
+    "longEn": "In physics and electrical engineering, a conductor is an object or type of material that allows the flow of charge (electrical current) in one or more directions. Materials made of metal are common electrical conductors. Electrical current is generated by the flow of negatively charged electrons, positively charged holes, and positive or negative ions in some cases. In a conductor, electric fields are zero inside the material under electrostatic equilibrium, and excess charges reside entirely on its surface.",
+    "longIt": "In fisica e ingegneria elettrica, un conduttore è un materiale in cui le cariche elettriche possono muoversi liberamente al suo interno. I metalli, come il rame e l'argento, sono eccellenti conduttori grazie alla presenza di elettroni liberi nel reticolo cristallino. In condizioni di equilibrio elettrostatico, il campo elettrico all'interno di un conduttore è nullo e qualsiasi carica in eccesso si distribuisce uniformemente sulla sua superficie esterna.",
+    "seeAlso": [
+      "electric-field",
+      "ohms-law"
+    ]
+  },
+  "dielectric": {
+    "labelEn": "Dielectric",
+    "labelIt": "Dielettrico",
+    "shortEn": "Insulating material that becomes polarized in an electric field, increasing capacitance by factor κ.",
+    "shortIt": "Materiale isolante che si polarizza in un campo elettrico, aumentando la capacità di un fattore κ.",
+    "longEn": "A dielectric is an electrical insulator that can be polarized by an applied electric field. When a dielectric material is placed in an electric field, electric charges do not flow through the material as they do in an electrical conductor but only slightly shift from their average equilibrium positions causing dielectric polarization. Because of dielectric polarization, positive charges are displaced in the direction of the field and negative charges shift in the direction opposite to the field, thereby reducing the overall inner field.",
+    "longIt": "Un dielettrico è un materiale isolante che possiede la proprietà di essere polarizzato se immerso in un campo elettrico. La polarizzazione consiste nello spostamento microscopico delle cariche elettriche vincolate attorno alle rispettive posizioni di equilibrio: le cariche positive si spostano lievemente nella direzione del campo, mentre le negative nella direzione opposta. Questo fenomeno genera un campo elettrico interno che si oppone a quello esterno, aumentando la capacità di un condensatore quando il dielettrico è interposto tra le sue armature.",
+    "seeAlso": [
+      "capacitance",
+      "permittivity",
+      "electric-dipole"
+    ]
+  },
+  "electric-dipole": {
+    "labelEn": "Electric dipole",
+    "labelIt": "Dipolo elettrico",
+    "shortEn": "A pair of equal and opposite charges ±q separated by distance d. Dipole moment p = qd.",
+    "shortIt": "Una coppia di cariche uguali e opposte ±q separate da una distanza d. Momento di dipolo p = qd.",
+    "longEn": "An electric dipole is a separation of positive and negative charges. The simplest example of this is a pair of electric charges of equal magnitude but opposite sign, separated by some, usually small, distance. A permanent electric dipole is an intrinsic property of many molecules (such as water) owing to asymmetric distribution of electrons. The electric dipole moment is a measure of the system's overall polarity, pointing from the negative to the positive charge, and interacts with external electric fields to produce torque.",
+    "longIt": "Un dipolo elettrico è un sistema composto da due cariche elettriche uguali in modulo ma di segno opposto, separate da una certa distanza. Questa configurazione costituisce il termine dominante nell'espansione multipolare di distribuzioni di carica asimmetriche neutre. Molte molecole, come quella dell'acqua, costituiscono dipoli elettrici permanenti a causa dell'asimmetria nella distribuzione della nube elettronica. Il dipolo è caratterizzato dal momento di dipolo, un vettore che punta dalla carica negativa a quella positiva e subisce una coppia meccanica se esposto a un campo elettrico esterno.",
+    "latex": "\\vec{p} = q\\vec{d}, \\quad \\vec{\\tau} = \\vec{p}\\times\\vec{E}",
+    "seeAlso": [
+      "electric-field",
+      "dielectric"
+    ]
+  },
+  "ohms-law": {
+    "labelEn": "Ohm's Law",
+    "labelIt": "Legge di Ohm",
+    "shortEn": "V = IR. The voltage across a resistor equals current times resistance, for ohmic materials.",
+    "shortIt": "V = IR. La tensione ai capi di una resistenza è uguale alla corrente per la resistenza, per materiali ohmici.",
+    "longEn": "Ohm's law states that the current through a conductor between two points is directly proportional to the voltage across the two points. Introducing the constant of proportionality, the resistance, one arrives at the usual mathematical equation that describes this relationship: I = V/R, where I is the current, V is the voltage measured across the conductor, and R is the resistance of the conductor. Materials and components that obey Ohm's law are described as 'ohmic'.",
+    "longIt": "La legge di Ohm stabilisce che, per molti materiali conduttori, la corrente elettrica che attraversa il conduttore tra due punti è direttamente proporzionale alla differenza di potenziale (tensione) applicata ai suoi capi. La costante di proporzionalità è detta resistenza elettrica, portando alla celebre formula V = R·I. I componenti elettrici che seguono linearmente questa legge sono detti componenti ohmici o resistori perfetti.",
+    "latex": "V = IR, \\quad \\vec{J} = \\sigma\\vec{E}, \\quad P = IV = I^2R",
+    "seeAlso": [
+      "electric-current",
+      "resistance",
+      "kirchhoff"
+    ]
+  },
+  "electric-current": {
+    "labelEn": "Electric current",
+    "labelIt": "Corrente elettrica",
+    "shortEn": "I = dq/dt. Rate of charge flow through a cross-section. Unit: ampere (A = C/s).",
+    "shortIt": "I = dq/dt. Velocità del flusso di carica attraverso una sezione. Unità: ampere (A = C/s).",
+    "longEn": "An electric current is a stream of charged particles, such as electrons or ions, moving through an electrical conductor or space. It is measured as the net rate of flow of electric charge through a surface or into a control volume. The moving particles are called charge carriers, which may be one of several types of particles, depending on the conductor. In electric circuits the charge carriers are often electrons moving through a wire. By historical convention, conventional current is defined as flowing in the direction of positive charge.",
+    "longIt": "La corrente elettrica è uno spostamento direzionato di cariche elettriche. Le particelle cariche in movimento (portatori di carica) possono essere elettroni all'interno di un filo metallico, oppure ioni positivi e negativi in un elettrolita o in un plasma. L'intensità di corrente elettrica, misurata in ampere (A), rappresenta la quantità di carica netta che attraversa una data sezione del conduttore nell'unità di tempo. Per convenzione storica, la direzione della corrente è assunta concorde a quella del moto di cariche positive.",
+    "latex": "I = \\frac{dq}{dt}, \\quad \\vec{J} = nq\\vec{v}_d",
+    "seeAlso": [
+      "ohms-law",
+      "kirchhoff"
+    ]
+  },
+  "resistance": {
+    "labelEn": "Resistance",
+    "labelIt": "Resistenza",
+    "shortEn": "R = V/I. Opposition to current flow. Unit: ohm (Ω). R = ρL/A for a uniform conductor.",
+    "shortIt": "R = V/I. Opposizione al flusso di corrente. Unità: ohm (Ω). R = ρL/A per un conduttore uniforme.",
+    "longEn": "The electrical resistance of an object is a measure of its opposition to the flow of electric current. The inverse quantity is electrical conductance. Electrical resistance shares some conceptual parallels with the notion of mechanical friction. The resistance of an object depends in large part on the material it is made of, as well as its size and shape, being directly proportional to its length and inversely proportional to its cross-sectional area. It is defined as the ratio of voltage to current (R = V/I) and is measured in ohms.",
+    "longIt": "La resistenza elettrica è una grandezza fisica scalare che misura l'attitudine di un corpo a opporsi al passaggio di una corrente elettrica quando è sottoposto a una differenza di potenziale. Secondo la seconda legge di Ohm, la resistenza di un conduttore uniforme è direttamente proporzionale alla sua lunghezza e inversamente proporzionale alla sua sezione trasversale, dipendendo dalla resistività specifica del materiale. Si misura in ohm (Ω). Il passaggio di corrente in un resistore causa la dissipazione di energia sotto forma di calore, fenomeno noto come effetto Joule.",
+    "latex": "R = \\frac{V}{I} = \\rho\\frac{L}{A}",
+    "seeAlso": [
+      "ohms-law",
+      "kirchhoff"
+    ]
+  },
+  "kirchhoff": {
+    "labelEn": "Kirchhoff's Laws",
+    "labelIt": "Leggi di Kirchhoff",
+    "shortEn": "KCL: sum of currents at a node = 0. KVL: sum of voltages around a loop = 0.",
+    "shortIt": "KCL: somma delle correnti a un nodo = 0. KVL: somma delle tensioni attorno a una maglia = 0.",
+    "longEn": "Kirchhoff's circuit laws are two equalities that deal with the current and potential difference (commonly known as voltage) in the lumped element model of electrical circuits. They were first described in 1845 by German physicist Gustav Kirchhoff. Kirchhoff's Current Law (KCL) states that the sum of currents entering a junction must equal the sum of currents leaving it, reflecting charge conservation. Kirchhoff's Voltage Law (KVL) states that the directed sum of potential differences around any closed loop is zero, reflecting energy conservation.",
+    "longIt": "Le leggi di Kirchhoff sono due principi fondamentali dell'elettronica usati per l'analisi dei circuiti a parametri concentrati, formulati dal fisico tedesco Gustav Kirchhoff nel 1845. La prima legge (KCL o legge dei nodi) afferma che la somma algebrica delle correnti in un nodo di un circuito è nulla, a garanzia della conservazione della carica elettrica. La seconda legge (KVL o legge delle maglie) sancisce che la somma algebrica delle differenze di potenziale lungo qualsiasi percorso chiuso di un circuito è pari a zero, quale conseguenza del principio di conservazione dell'energia e del carattere conservativo del campo elettrico stazionario.",
+    "latex": "\\sum_k I_k = 0 \\quad (\\text{KCL}), \\qquad \\sum_k V_k = 0 \\quad (\\text{KVL})",
+    "seeAlso": [
+      "electric-current",
+      "resistance"
+    ]
+  },
+  "magnetic-field": {
+    "labelEn": "Magnetic field",
+    "labelIt": "Campo magnetico",
+    "shortEn": "Vector field B that exerts a force on moving charges: F = qv × B. Unit: tesla (T).",
+    "shortIt": "Campo vettoriale B che esercita una forza sulle cariche in moto: F = qv × B. Unità: tesla (T).",
+    "longEn": "A magnetic field is a vector field that describes the magnetic influence on moving electric charges, electric currents, and magnetic materials. A moving charge in a magnetic field experiences a force perpendicular to its own velocity and to the magnetic field. The magnetic field is generated by electric currents and magnetic dipoles (including permanent magnets). Historically, two related fields were named the magnetic field: the magnetic flux density B (measured in teslas) and the magnetic field strength H (measured in amperes per meter).",
+    "longIt": "Un campo magnetico è un campo vettoriale che descrive l'influenza magnetica sulle cariche elettriche in movimento, sulle correnti elettriche e sui materiali magnetici. Una carica elettrica che si muove in un campo magnetico subisce una forza, detta forza di Lorentz, che è perpendicolare sia alla velocità della carica sia alla direzione del campo stesso. Il campo magnetico è originato non solo da correnti elettriche macroscopiche, ma anche dal momento magnetico intrinseco (spin) e orbitale delle particelle elementari.",
+    "latex": "\\vec{F} = q\\vec{v}\\times\\vec{B}, \\quad [B] = \\text{T} = \\text{kg/(A·s}^2\\text{)}",
+    "seeAlso": [
+      "lorentz-force",
+      "biot-savart",
+      "ampere-law"
+    ]
+  },
+  "lorentz-force": {
+    "labelEn": "Lorentz force",
+    "labelIt": "Forza di Lorentz",
+    "shortEn": "F = q(E + v × B). Total electromagnetic force on a charged particle.",
+    "shortIt": "F = q(E + v × B). Forza elettromagnetica totale su una particella carica.",
+    "longEn": "In physics, the Lorentz force is the combination of electric and magnetic force on a point charge due to electromagnetic fields. A particle of charge q moving with a velocity v in an electric field E and a magnetic field B experiences a force of F = qE + qv × B. The magnetic force component is always orthogonal to the velocity of the charge, thereby doing no work and only changing the particle's direction of motion. It is responsible for phenomena like the circular motion of particles in a cyclotron.",
+    "longIt": "In fisica, la forza di Lorentz è la forza totale esercitata da un campo elettromagnetico su una carica elettrica puntiforme in movimento. Per una particella con carica q e velocità v in presenza di un campo elettrico E e di un campo magnetico B, l'espressione completa della forza è F = q(E + v × B). La componente puramente magnetica di tale forza è sempre perpendicolare alla velocità della particella e al campo magnetico: non compie quindi alcun lavoro meccanico, limitandosi a modificare la direzione della traiettoria senza alterare l'energia cinetica della carica.",
+    "latex": "\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B}), \\quad r = \\frac{mv}{|q|B}",
+    "seeAlso": [
+      "magnetic-field",
+      "biot-savart"
+    ]
+  },
+  "biot-savart": {
+    "labelEn": "Biot-Savart Law",
+    "labelIt": "Legge di Biot-Savart",
+    "shortEn": "dB = (μ₀/4π) I dl × r̂/r². Gives the magnetic field from a current element.",
+    "shortIt": "dB = (μ₀/4π) I dl × r̂/r². Dà il campo magnetico da un elemento di corrente.",
+    "longEn": "In physics, the Biot–Savart law is an equation describing the magnetic field generated by a constant electric current. It relates the magnetic field to the magnitude, direction, length, and proximity of the electric current. The Biot–Savart law is fundamental to magnetostatics, playing a role similar to that of Coulomb's law in electrostatics. When magnetostatics does not apply, the Biot–Savart law should be replaced by Jefimenko's equations.",
+    "longIt": "La legge di Biot-Savart è una formula della magnetostatica che consente di calcolare il campo magnetico generato da un conduttore percorso da corrente elettrica stazionaria. Prende il nome dai fisici francesi Jean-Baptiste Biot e Félix Savart. La legge svolge in magnetostatica un ruolo del tutto analogo a quello della legge di Coulomb nell'elettrostatica: stabilisce che l'infinitesimo contributo al campo magnetico è direttamente proporzionale all'intensità di corrente, e inversamente proporzionale al quadrato della distanza dal filo.",
+    "latex": "d\\vec{B} = \\frac{\\mu_0}{4\\pi}\\frac{I\\,d\\vec{\\ell}\\times\\hat{r}}{r^2}",
+    "seeAlso": [
+      "magnetic-field",
+      "ampere-law",
+      "permeability"
+    ]
+  },
+  "ampere-law": {
+    "labelEn": "Ampère's Law",
+    "labelIt": "Legge di Ampère",
+    "shortEn": "∮B·dl = μ₀I_enc. The line integral of B around any closed loop equals μ₀ × enclosed current.",
+    "shortIt": "∮B·dl = μ₀I_enc. L'integrale di linea di B attorno a qualsiasi percorso chiuso è uguale a μ₀ × corrente racchiusa.",
+    "longEn": "Ampère's circuital law relates the integrated magnetic field around a closed loop to the electric current passing through the loop. Originally formulated by André-Marie Ampère in 1826, it is the magnetic analogue of Gauss's law for electrostatics. James Clerk Maxwell later derived it again using hydrodynamics and extended it by adding a displacement current term, forming the Ampère–Maxwell law, which is one of the four Maxwell's equations that form the basis of classical electromagnetism.",
+    "longIt": "Il teorema di Ampère (o legge di circuitazione di Ampère) mette in relazione l'integrale di linea del campo magnetico lungo una curva chiusa con la corrente elettrica totale concatenata alla curva stessa. Formulata originariamente da André-Marie Ampère, la legge ha un ruolo centrale in magnetostatica per configurazioni altamente simmetriche. In seguito, James Clerk Maxwell ha esteso questa legge introducendo la corrente di spostamento, rendendola valida anche in regimi dinamici e includendola tra le celebri equazioni di Maxwell.",
+    "latex": "\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I_{\\text{enc}}",
+    "seeAlso": [
+      "magnetic-field",
+      "maxwell-equations",
+      "permeability"
+    ]
+  },
+  "permeability": {
+    "labelEn": "Permeability (μ₀)",
+    "labelIt": "Permeabilità (μ₀)",
+    "shortEn": "μ₀ = 4π×10⁻⁷ T·m/A. Magnetic constant of free space, relating B field to its sources.",
+    "shortIt": "μ₀ = 4π×10⁻⁷ T·m/A. Costante magnetica del vuoto, che lega il campo B alle sue sorgenti.",
+    "longEn": "In electromagnetism, magnetic permeability is a measure of the magnetization that a material obtains in response to an applied magnetic field. Permeability is the constant of proportionality that relates a magnetic field B to its inducing magnetic field strength H. The permeability of vacuum, μ₀ (also called the magnetic constant), is the magnetic permeability in a classical vacuum. Its value is fundamental in relating mechanical and electromagnetic units.",
+    "longIt": "In elettromagnetismo, la permeabilità magnetica è una grandezza fisica che esprime l'attitudine di un materiale a magnetizzarsi in presenza di un campo magnetico. Essa quantifica il rapporto tra l'induzione magnetica B e il campo magnetico H all'interno del mezzo. La permeabilità del vuoto, indicata con μ₀, nota anche come costante magnetica, è un valore di riferimento universale che connette dinamicamente il campo magnetico alle correnti elettriche che lo generano.",
+    "latex": "\\mu_0 = 4\\pi\\times10^{-7}\\,\\text{T}\\cdot\\text{m}/\\text{A}, \\quad c = \\frac{1}{\\sqrt{\\mu_0\\varepsilon_0}}",
+    "seeAlso": [
+      "ampere-law",
+      "permittivity"
+    ]
+  },
+  "faraday-law": {
+    "labelEn": "Faraday's Law",
+    "labelIt": "Legge di Faraday",
+    "shortEn": "ε = −dΦ_B/dt. A changing magnetic flux induces an EMF. The basis of generators and transformers.",
+    "shortIt": "ε = −dΦ_B/dt. Un flusso magnetico variabile induce una fem. Base di generatori e trasformatori.",
+    "longEn": "Faraday's law of induction is a basic law of electromagnetism predicting how a magnetic field will interact with an electric circuit to produce an electromotive force (EMF). It states that the EMF around a closed path is equal to the negative of the time rate of change of the magnetic flux enclosed by the path. Discovered by Michael Faraday in 1831, it is the fundamental operating principle of transformers, inductors, and many types of electrical motors, generators and solenoids.",
+    "longIt": "La legge di Faraday sull'induzione elettromagnetica (nota anche come legge di Faraday-Neumann-Lenz) afferma che la forza elettromotrice indotta in un circuito chiuso è pari alla variazione nel tempo del flusso del campo magnetico attraverso la superficie abbracciata dal circuito, cambiata di segno. Questo principio fondamentale stabilisce che un campo magnetico variabile nel tempo genera un campo elettrico. Tale fenomeno costituisce il principio di funzionamento base di trasformatori, motori elettrici e generatori.",
+    "latex": "\\mathcal{E} = -\\frac{d\\Phi_B}{dt} = -\\frac{d}{dt}\\int\\vec{B}\\cdot d\\vec{A}",
+    "seeAlso": [
+      "magnetic-field",
+      "lenz-law",
+      "inductance"
+    ]
+  },
+  "lenz-law": {
+    "labelEn": "Lenz's Law",
+    "labelIt": "Legge di Lenz",
+    "shortEn": "The induced current flows in a direction that opposes the change in flux causing it.",
+    "shortIt": "La corrente indotta scorre in una direzione che si oppone alla variazione di flusso che la causa.",
+    "longEn": "Lenz's law, named after the physicist Emil Lenz who formulated it in 1834, states that the direction of the electric current induced in a conductor by a changing magnetic field is such that the magnetic field created by the induced current opposes the initial changing magnetic field. It is a qualitative law that specifies the direction of induced current but states nothing about its magnitude. Lenz's law is a manifestation of the conservation of energy in electromagnetic systems.",
+    "longIt": "La legge di Lenz stabilisce che la direzione di qualsiasi effetto indotto magneticamente, come la forza elettromotrice o la corrente, è tale da opporsi alla causa che lo ha generato. Formulata dal fisico russo Emil Lenz nel 1834, questa regola fornisce una spiegazione fisica del segno meno che compare nella legge dell'induzione di Faraday-Neumann. La legge di Lenz è essenzialmente una conseguenza del principio universale della conservazione dell'energia all'interno dei sistemi elettromagnetici.",
+    "seeAlso": [
+      "faraday-law",
+      "inductance"
+    ]
+  },
+  "inductance": {
+    "labelEn": "Inductance",
+    "labelIt": "Induttanza",
+    "shortEn": "L = NΦ/I. Self-inductance: opposes current change ε = −L dI/dt. Unit: henry (H).",
+    "shortIt": "L = NΦ/I. Autoinduzione: si oppone alla variazione di corrente ε = −L dI/dt. Unità: henry (H).",
+    "longEn": "In electromagnetism and electronics, inductance is the tendency of an electrical conductor to oppose a change in the electric current flowing through it. The flow of electric current creates a magnetic field around the conductor. An increase in current causes the magnetic field to expand, inducing an opposing electromotive force (EMF). Thus, inductance results in an induced voltage that is proportional to the rate of change of current. It is measured in henries (H) and is fundamental for energy storage in circuits.",
+    "longIt": "L'induttanza è la proprietà dei circuiti elettrici tale per cui una variazione della corrente che li attraversa induce una forza elettromotrice che, per la legge di Lenz, si oppone alla variazione stessa della corrente. L'effetto è dovuto al fatto che la corrente produce un flusso magnetico concatenato al circuito: variando la corrente varia il flusso, generando così una tensione autoindotta. Un componente progettato appositamente per sfruttare questa proprietà è chiamato induttore o bobina.",
+    "latex": "\\mathcal{E}_L = -L\\frac{dI}{dt}, \\quad U_L = \\frac{1}{2}LI^2",
+    "seeAlso": [
+      "faraday-law",
+      "lenz-law"
+    ]
+  },
+  "maxwell-equations": {
+    "labelEn": "Maxwell's Equations",
+    "labelIt": "Equazioni di Maxwell",
+    "shortEn": "Four equations unifying electricity and magnetism, predicting EM waves at speed c = 1/√(μ₀ε₀).",
+    "shortIt": "Quattro equazioni che unificano elettricità e magnetismo, predicendo onde EM a velocità c = 1/√(μ₀ε₀).",
+    "longEn": "Maxwell's equations are a set of coupled partial differential equations that form the foundation of classical electromagnetism, classical optics, and electric circuits. The equations mathematically describe how electric and magnetic fields are generated by charges, currents, and changes of the fields. They demonstrate that electricity and magnetism are two manifestations of the same phenomenon. Significantly, Maxwell's equations predict the existence of electromagnetic waves propagating at the speed of light.",
+    "longIt": "Le equazioni di Maxwell sono un sistema di quattro equazioni differenziali alle derivate parziali che costituiscono i pilastri teorici dell'elettromagnetismo classico. Queste relazioni descrivono in modo unificato come i campi elettrico e magnetico siano generati dalle distribuzioni di cariche e correnti elettriche e dalle loro variazioni nel tempo. Inserendo la corrente di spostamento, Maxwell rivelò che una variazione del campo elettrico induce un campo magnetico, dimostrando che la luce è un'onda elettromagnetica.",
+    "seeAlso": [
+      "gauss-law",
+      "faraday-law",
+      "ampere-law",
+      "em-wave"
+    ]
+  },
+  "em-wave": {
+    "labelEn": "Electromagnetic wave",
+    "labelIt": "Onda elettromagnetica",
+    "shortEn": "Self-propagating oscillations of E and B fields, perpendicular to each other and to propagation. Speed c in vacuum.",
+    "shortIt": "Oscillazioni auto-propaganti dei campi E e B, perpendicolari tra loro e alla propagazione. Velocità c nel vuoto.",
+    "longEn": "Electromagnetic waves, or electromagnetic radiation, are synchronized oscillations of electric and magnetic fields that propagate at the speed of light through a vacuum. The oscillations of the two fields are perpendicular to each other and perpendicular to the direction of energy and wave propagation. The electromagnetic spectrum categorizes these waves by frequency, including radio waves, microwaves, infrared, visible light, ultraviolet, X-rays, and gamma rays. They carry electromagnetic radiant energy and momentum.",
+    "longIt": "Le onde elettromagnetiche sono perturbazioni oscillanti e autopropaganti del campo elettromagnetico che viaggiano attraverso lo spazio, trasportando energia radiante ed impulso. Nel vuoto, tutte le onde elettromagnetiche si propagano alla velocità della luce. I campi elettrico e magnetico in un'onda elettromagnetica sono ortogonali tra loro e ortogonali alla direzione di propagazione. L'insieme delle possibili frequenze costituisce lo spettro elettromagnetico, che spazia dalle onde radio fino ai raggi gamma.",
+    "latex": "c = \\frac{1}{\\sqrt{\\mu_0\\varepsilon_0}} \\approx 3\\times10^8\\,\\text{m/s}",
+    "seeAlso": [
+      "maxwell-equations",
+      "poynting-vector"
+    ]
+  },
+  "poynting-vector": {
+    "labelEn": "Poynting vector",
+    "labelIt": "Vettore di Poynting",
+    "shortEn": "S = E × B / μ₀. Energy flux density of an EM wave (power per unit area). Unit: W/m².",
+    "shortIt": "S = E × B / μ₀. Densità del flusso di energia di un'onda EM (potenza per unità di area). Unità: W/m².",
+    "longEn": "In physics, the Poynting vector represents the directional energy flux (the energy transfer per unit area per unit time) of an electromagnetic field. Named after John Henry Poynting who introduced it in 1884, the vector is defined as the cross product of the electric field vector and the auxiliary magnetic field vector. It defines the direction of propagation and the rate of energy transport of an electromagnetic wave. Its magnitude corresponds to the intensity of the light or radiation.",
+    "longIt": "In elettrodinamica, il vettore di Poynting è una grandezza vettoriale che esprime la densità di flusso di energia del campo elettromagnetico; indica cioè l'energia elettromagnetica che attraversa una superficie unitaria in un secondo. Il vettore punta nella direzione di propagazione dell'onda e il suo modulo rappresenta l'intensità dell'onda in quel punto. È definito tramite il prodotto vettoriale tra il campo elettrico e il campo magnetico.",
+    "latex": "\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}, \\quad \\langle S\\rangle = \\frac{E_0^2}{2\\mu_0 c}",
+    "seeAlso": [
+      "em-wave",
+      "maxwell-equations"
+    ]
+  },
+  "refractive-index": {
+    "labelEn": "Refractive index",
+    "labelIt": "Indice di rifrazione",
+    "shortEn": "n = c/v. Ratio of light speed in vacuum to speed in medium. Dimensionless, always ≥ 1.",
+    "shortIt": "n = c/v. Rapporto tra la velocità della luce nel vuoto e la velocità nel mezzo. Adimensionale, sempre ≥ 1.",
+    "longEn": "The refractive index, or index of refraction, of a material is a dimensionless number that describes how fast light travels through the material. It is defined as the ratio of the speed of light in a vacuum to the phase velocity of light in the medium. The refractive index determines how much the path of light is bent, or refracted, when entering a material. In general, it varies slightly with the wavelength of light, a phenomenon known as dispersion which causes the splitting of white light in prisms.",
+    "longIt": "L'indice di rifrazione di un materiale è una grandezza adimensionale che indica quanto la velocità di propagazione della radiazione elettromagnetica, in particolare della luce, venga ridotta all'interno del mezzo stesso rispetto al vuoto. Esso determina il grado in cui la luce subisce il fenomeno della rifrazione (deviazione del percorso) passando da un mezzo a un altro, secondo la legge di Snell. La sua dipendenza dalla frequenza della luce innesca il fenomeno della dispersione ottica.",
+    "latex": "n = \\frac{c}{v}, \\quad n_1\\sin\\theta_1 = n_2\\sin\\theta_2",
+    "seeAlso": [
+      "snell-law",
+      "total-internal-reflection"
+    ]
+  },
+  "snell-law": {
+    "labelEn": "Snell's Law",
+    "labelIt": "Legge di Snell",
+    "shortEn": "n₁ sin θ₁ = n₂ sin θ₂. Conservation of the tangential component of the wave vector at an interface.",
+    "shortIt": "n₁ sin θ₁ = n₂ sin θ₂. Conservazione della componente tangenziale del vettore d'onda all'interfaccia.",
+    "longEn": "Snell's law is a formula used to describe the relationship between the angles of incidence and refraction, when referring to light or other waves passing through a boundary between two different isotropic media. It states that the ratio of the sines of the angles of incidence and refraction is equivalent to the ratio of phase velocities in the two media, or inversely proportional to the ratio of the refractive indices. The law is pivotal in optics and understanding how lenses and optical fibers function.",
+    "longIt": "La legge di Snell (nota anche come legge di Cartesio o legge di Snell-Descartes) descrive in modo quantitativo il fenomeno della rifrazione, ovvero come cambia la direzione dei raggi luminosi quando passano attraverso la superficie di separazione tra due mezzi trasparenti con indici di rifrazione diversi. La legge stabilisce che il prodotto dell'indice di rifrazione del primo mezzo per il seno dell'angolo di incidenza è uguale al prodotto dell'indice del secondo mezzo per il seno dell'angolo di rifrazione.",
+    "latex": "n_1\\sin\\theta_1 = n_2\\sin\\theta_2",
+    "seeAlso": [
+      "refractive-index",
+      "total-internal-reflection"
+    ]
+  },
+  "total-internal-reflection": {
+    "labelEn": "Total internal reflection (TIR)",
+    "labelIt": "Riflessione totale interna (RTI)",
+    "shortEn": "When θ > θ_c = arcsin(n₂/n₁), light in a denser medium cannot escape — all is reflected.",
+    "shortIt": "Quando θ > θ_c = arcsin(n₂/n₁), la luce in un mezzo più denso non può sfuggire — tutta viene riflessa.",
+    "longEn": "Total internal reflection is an optical phenomenon in which waves arriving at the interface from one medium to another are not refracted into the second medium, but completely reflected back into the first medium. It occurs when light traveling in a denser medium strikes a boundary with a less dense medium at an angle larger than a particular critical angle with respect to the normal to the surface. It is the operating principle of optical fibers and prismatic binoculars.",
+    "longIt": "La riflessione totale è un fenomeno ottico che si verifica quando un raggio luminoso incontra l'interfaccia tra due mezzi, provenendo dal mezzo con indice di rifrazione maggiore. Se l'angolo di incidenza supera un certo valore limite, chiamato angolo critico, la luce non viene più rifratta nel secondo mezzo ma viene interamente riflessa all'interno del primo. Questo principio è la base del confinamento della luce nelle fibre ottiche e in numerosi strumenti ottici come i prismi.",
+    "latex": "\\sin\\theta_c = \\frac{n_2}{n_1} \\quad (n_1 > n_2)",
+    "seeAlso": [
+      "snell-law",
+      "refractive-index"
+    ]
+  },
+  "interference": {
+    "labelEn": "Interference",
+    "labelIt": "Interferenza",
+    "shortEn": "Superposition of two or more coherent waves. Constructive when path diff = mλ; destructive when (m+½)λ.",
+    "shortIt": "Sovrapposizione di due o più onde coerenti. Costruttiva quando diff. di cammino = mλ; distruttiva quando (m+½)λ.",
+    "longEn": "In physics, interference is a phenomenon in which two coherent waves are superposed to form a resultant wave of greater, lower, or the same amplitude. Constructive interference occurs when the phase difference between the waves is an even multiple of π, while destructive interference occurs when the difference is an odd multiple of π. The phenomenon is most commonly observed with light waves in experiments like Young's double-slit experiment, demonstrating the wave nature of light.",
+    "longIt": "In fisica, l'interferenza è il fenomeno dovuto alla sovrapposizione in un punto dello spazio di due o più onde coerenti. A seconda della differenza di fase tra le onde che si incontrano, l'ampiezza dell'onda risultante può essere maggiore (interferenza costruttiva) o minore (interferenza distruttiva) delle ampiezze originarie. L'interferenza della luce, dimostrata storicamente dall'esperimento della doppia fenditura di Thomas Young, ha fornito una prova cruciale a favore della natura ondulatoria della luce.",
+    "latex": "d\\sin\\theta = m\\lambda \\quad (\\text{bright}), \\quad \\Delta y = \\frac{\\lambda L}{d}",
+    "seeAlso": [
+      "diffraction",
+      "huygens"
+    ]
+  },
+  "diffraction": {
+    "labelEn": "Diffraction",
+    "labelIt": "Diffrazione",
+    "shortEn": "Bending of waves around obstacles or through openings, significant when λ ≈ aperture size.",
+    "shortIt": "Piega delle onde attorno agli ostacoli o attraverso le aperture, significativa quando λ ≈ dimensione dell'apertura.",
+    "longEn": "Diffraction refers to various phenomena that occur when a wave encounters an obstacle or a slit. It is defined as the bending of waves around the corners of an obstacle or through an aperture into the region of geometrical shadow of the obstacle/aperture. The diffracting object or slit effectively becomes a secondary source of the propagating wave. The amount of diffraction is most significant when the wavelength is roughly comparable to the size of the obstacle or opening.",
+    "longIt": "La diffrazione è un fenomeno fisico associato alla deviazione della traiettoria di propagazione delle onde (come la luce, il suono, le onde marine) quando esse incontrano un ostacolo o una fessura di dimensioni paragonabili alla loro lunghezza d'onda. In tali condizioni, l'onda si \"piega\" attorno all'ostacolo invadendo l'area di ombra geometrica, creando frange di intensità alternata. Il principio di Huygens-Fresnel fornisce il modello teorico fondante per spiegare e calcolare le figure di diffrazione.",
+    "latex": "a\\sin\\theta = m\\lambda \\quad (\\text{single slit minima})",
+    "seeAlso": [
+      "interference",
+      "huygens"
+    ]
+  },
+  "huygens": {
+    "labelEn": "Huygens' principle",
+    "labelIt": "Principio di Huygens",
+    "shortEn": "Every point on a wavefront is a secondary source of spherical wavelets. The next wavefront is their envelope.",
+    "shortIt": "Ogni punto di un fronte d'onda è sorgente secondaria di onde sferiche. Il fronte d'onda successivo è il loro inviluppo.",
+    "longEn": "The Huygens–Fresnel principle is a method of analysis applied to problems of wave propagation both in the far-field limit and in near-field diffraction. It states that every point on a wavefront is itself the source of spherical wavelets, and the secondary wavelets emanating from different points mutually interfere. The sum of these spherical wavelets forms the new wavefront. The principle is instrumental in understanding phenomena like diffraction, reflection, and refraction.",
+    "longIt": "Il principio di Huygens-Fresnel, in fisica e in ottica, è un metodo di analisi applicato ai problemi di propagazione delle onde. Esso stabilisce che ogni punto di un fronte d'onda che avanza si comporta come se fosse una sorgente puntiforme di onde sferiche secondarie, e il fronte d'onda in ogni istante successivo coincide con l'inviluppo di tali onde secondarie. Questo modello concettuale è alla base della spiegazione della propagazione rettilinea della luce, della riflessione, della rifrazione e della diffrazione.",
+    "seeAlso": [
+      "interference",
+      "diffraction",
+      "snell-law"
+    ]
+  },
+  "polarization": {
+    "labelEn": "Polarization",
+    "labelIt": "Polarizzazione",
+    "shortEn": "Orientation of the E field oscillation in a transverse EM wave. Can be linear, circular, or elliptical.",
+    "shortIt": "Orientamento dell'oscillazione del campo E in un'onda EM trasversale. Può essere lineare, circolare o ellittica.",
+    "longEn": "Polarization is a property applying to transverse waves that specifies the geometrical orientation of the oscillations. In an electromagnetic wave, such as light, polarization refers to the direction of the oscillating electric field. Natural sunlight is generally unpolarized, with electric fields oscillating in all directions perpendicular to propagation. Certain filters, known as polarizers, can restrict these oscillations to a single plane, creating linearly polarized light.",
+    "longIt": "La polarizzazione è una proprietà delle onde trasversali, tra cui la radiazione elettromagnetica, che indica l'orientamento geometrico assunto dalle oscillazioni nello spazio. Nel caso della luce, specifica la direzione di oscillazione del campo elettrico. La luce emessa dalle sorgenti naturali è generalmente non polarizzata, presentando oscillazioni disordinate in tutte le direzioni perpendicolari al raggio. Il passaggio attraverso appositi filtri ottici, o il riflesso su alcune superfici, può originare luce polarizzata, dove il campo elettrico vibra in un piano ben preciso.",
+    "latex": "I = I_0\\cos^2\\theta \\quad (\\text{Malus}), \\quad \\tan\\theta_B = \\frac{n_2}{n_1}",
+    "seeAlso": [
+      "em-wave",
+      "interference"
+    ]
+  }
+}
