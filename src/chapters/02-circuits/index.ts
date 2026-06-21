@@ -1,113 +1,168 @@
-import { m, M } from '../../utils/katex-render.js';
-import { t } from '../../utils/lang.js';
+import { renderChapter, type ChapterData } from '../../ui/renderer.js';
 import { wireTermLinks } from '../../ui/term-panel.js';
 
+const data: ChapterData = {
+  id: '02-circuits',
+  part: { en: 'Part II', it: 'Parte II' },
+  title: { en: 'Electric Current & DC Circuits', it: 'Corrente Elettrica & Circuiti DC' },
+  subtitle: {
+    en: 'When charges flow, they carry energy. Current, resistance, and circuit laws govern how electrical energy is distributed.',
+    it: 'Quando le cariche scorrono, trasportano energia. Corrente, resistenza e leggi dei circuiti governano come l\'energia elettrica viene distribuita.',
+  },
+  prereq: {
+    text: {
+      en: 'Chapter 1: Electrostatics — [[electric-potential|electric potential]] V and [[capacitance|capacitance]] C.',
+      it: 'Capitolo 1: Elettrostatica — [[electric-potential|potenziale elettrico]] V e [[capacitance|capacità]] C.',
+    },
+    links: [{ id: '01-electrostatics', label: { en: 'Chapter 1: Electrostatics', it: 'Capitolo 1: Elettrostatica' } }],
+  },
+  sections: [
+    {
+      id: 'electric-current',
+      title: { en: '3.1 Electric Current', it: '3.1 Corrente Elettrica' },
+      blocks: [
+        {
+          type: 'paragraph',
+          text: {
+            en: '[[electric-current|Electric current]] I is the rate of charge flow through a cross-section:',
+            it: 'La [[electric-current|corrente elettrica]] I è la velocità del flusso di carica attraverso una sezione:',
+          },
+        },
+        {
+          type: 'formula',
+          label: { en: 'Current', it: 'Corrente' },
+          latex: 'I = \\frac{dq}{dt} \\qquad [\\text{A = C/s}]',
+        },
+        {
+          type: 'paragraph',
+          text: {
+            en: 'Microscopically, current density j relates to drift velocity v_d of charge carriers with density n:',
+            it: 'Microscopicamente, la densità di corrente j è legata alla velocità di deriva v_d dei portatori di carica con densità n:',
+          },
+        },
+        {
+          type: 'formula',
+          latex: '\\vec{J} = nq\\vec{v}_d \\qquad I = \\int \\vec{J} \\cdot d\\vec{A}',
+        },
+      ],
+    },
+    {
+      id: 'ohms-law',
+      title: { en: '3.2 Resistance & Ohm\'s Law', it: '3.2 Resistenza & Legge di Ohm' },
+      blocks: [
+        {
+          type: 'formula',
+          label: { en: 'Ohm\'s Law (macroscopic)', it: 'Legge di Ohm (macroscopica)' },
+          latex: 'V = IR \\qquad R = \\rho\\frac{L}{A}',
+          note: {
+            en: 'ρ is resistivity (material property), L is length, A is cross-sectional area.',
+            it: 'ρ è la resistività (proprietà del materiale), L è la lunghezza, A è l\'area della sezione trasversale.',
+          },
+        },
+        {
+          type: 'formula',
+          label: { en: 'Ohm\'s Law (microscopic)', it: 'Legge di Ohm (microscopica)' },
+          latex: '\\vec{J} = \\sigma \\vec{E} \\qquad \\sigma = \\frac{1}{\\rho}',
+        },
+        {
+          type: 'paragraph',
+          text: {
+            en: 'Power dissipated in a [[resistance|resistor]]:',
+            it: 'Potenza dissipata in una [[resistance|resistenza]]:',
+          },
+        },
+        {
+          type: 'formula',
+          latex: 'P = IV = I^2 R = \\frac{V^2}{R}',
+        },
+      ],
+    },
+    {
+      id: 'kirchhoff',
+      title: { en: '3.3 Kirchhoff\'s Laws', it: '3.3 Leggi di Kirchhoff' },
+      blocks: [
+        {
+          type: 'formula',
+          label: { en: 'KCL — Current Law (node rule)', it: 'KCL — Legge delle Correnti (regola del nodo)' },
+          latex: '\\sum_{k} I_k = 0 \\quad \\text{(at any node)}',
+          note: {
+            en: 'Conservation of charge: currents in = currents out.',
+            it: 'Conservazione della carica: correnti entranti = correnti uscenti.',
+          },
+        },
+        {
+          type: 'formula',
+          label: { en: 'KVL — Voltage Law (loop rule)', it: 'KVL — Legge delle Tensioni (regola della maglia)' },
+          latex: '\\sum_{k} V_k = 0 \\quad \\text{(around any closed loop)}',
+          note: {
+            en: 'Conservation of energy: voltage drops sum to zero around any loop.',
+            it: 'Conservazione dell\'energia: le cadute di tensione si azzerano attorno a qualsiasi maglia.',
+          },
+        },
+        {
+          type: 'heading3',
+          text: { en: 'Series and Parallel', it: 'Serie e Parallelo' },
+        },
+        {
+          type: 'table',
+          headers: [
+            { en: '', it: '' },
+            { en: 'Series', it: 'Serie' },
+            { en: 'Parallel', it: 'Parallelo' },
+          ],
+          rows: [
+            [{ en: 'Resistors', it: 'Resistori' }, '$R_{tot} = \\sum R_i$', '$1/R_{tot} = \\sum 1/R_i$'],
+            [{ en: 'Capacitors', it: 'Condensatori' }, '$1/C_{tot} = \\sum 1/C_i$', '$C_{tot} = \\sum C_i$'],
+          ],
+        },
+      ],
+    },
+    {
+      id: 'rc-circuits',
+      title: { en: '3.4 RC Circuits', it: '3.4 Circuiti RC' },
+      blocks: [
+        {
+          type: 'paragraph',
+          text: {
+            en: 'Charging a [[capacitance|capacitor]] C through [[resistance|resistor]] R from EMF ε:',
+            it: 'Caricare un [[capacitance|condensatore]] C attraverso una [[resistance|resistenza]] R da fem ε:',
+          },
+        },
+        {
+          type: 'formula',
+          latex: 'Q(t) = C\\mathcal{E}\\left(1 - e^{-t/\\tau}\\right) \\quad I(t) = \\frac{\\mathcal{E}}{R}e^{-t/\\tau} \\quad \\tau = RC',
+        },
+        {
+          type: 'paragraph',
+          text: {
+            en: 'Discharging:',
+            it: 'Scarica:',
+          },
+        },
+        {
+          type: 'formula',
+          latex: 'Q(t) = Q_0 e^{-t/\\tau} \\quad I(t) = \\frac{Q_0}{RC} e^{-t/\\tau}',
+        },
+        {
+          type: 'key-formulas',
+          items: [
+            { name: { en: 'Current', it: 'Corrente' }, latex: 'I = dq/dt' },
+            { name: { en: 'Ohm\'s law', it: 'Legge di Ohm' }, latex: 'V = IR' },
+            { name: { en: 'Power', it: 'Potenza' }, latex: 'P = IV = I^2R' },
+            { name: { en: 'KCL', it: 'KCL' }, latex: '\\sum I_k = 0' },
+            { name: { en: 'KVL', it: 'KVL' }, latex: '\\sum V_k = 0' },
+            { name: { en: 'RC time constant', it: 'Costante di tempo RC' }, latex: '\\tau = RC' },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export function renderCircuits(): string {
-  return `
-<div class="chapter-header">
-  <div class="part-label">${t('Part II', 'Parte II')}</div>
-  <h1>${t('Electric Current &amp; DC Circuits', 'Corrente Elettrica &amp; Circuiti DC')}</h1>
-  <p>${t(
-    'When charges flow, they carry energy. Current, resistance, and circuit laws govern how electrical energy is distributed.',
-    'Quando le cariche scorrono, trasportano energia. Corrente, resistenza e leggi dei circuiti governano come l\'energia elettrica viene distribuita.'
-  )}</p>
-</div>
-
-<div class="callout prereq">
-  <div class="callout-title">${t('Prerequisites', 'Prerequisiti')}</div>
-  <p>${t(
-    '<a href="#01-electrostatics" class="crossref">Chapter 1: Electrostatics</a> — electric potential V and capacitance C.',
-    '<a href="#01-electrostatics" class="crossref">Capitolo 1: Elettrostatica</a> — potenziale elettrico V e capacità C.'
-  )}</p>
-</div>
-
-<h2>${t('3.1 Electric Current', '3.1 Corrente Elettrica')}</h2>
-<p>${t(
-  'Electric current I is the rate of charge flow through a cross-section:',
-  'La corrente elettrica I è la velocità del flusso di carica attraverso una sezione:'
-)}</p>
-<div class="formula-block">
-  <div class="formula-label">${t('Current', 'Corrente')}</div>
-  ${M('I = \\frac{dq}{dt} \\qquad [\\text{A = C/s}]')}
-</div>
-
-<p>${t('Microscopically, current density j relates to drift velocity v_d of charge carriers with density n:', 'Microscopicamente, la densità di corrente j è legata alla velocità di deriva v_d dei portatori di carica con densità n:')}</p>
-<div class="formula-block">
-  ${M('\\vec{J} = nq\\vec{v}_d \\qquad I = \\int \\vec{J} \\cdot d\\vec{A}')}
-</div>
-
-<h2>${t('3.2 Resistance & Ohm\'s Law', '3.2 Resistenza & Legge di Ohm')}</h2>
-<div class="formula-block">
-  <div class="formula-label">${t('Ohm\'s Law (macroscopic)', 'Legge di Ohm (macroscopica)')}</div>
-  ${M('V = IR \\qquad R = \\rho\\frac{L}{A}')}
-  <p style="font-size:0.82rem;margin-top:8px;color:var(--text2)">${t(
-    'ρ is resistivity (material property), L is length, A is cross-sectional area.',
-    'ρ è la resistività (proprietà del materiale), L è la lunghezza, A è l\'area della sezione trasversale.'
-  )}</p>
-</div>
-
-<div class="formula-block">
-  <div class="formula-label">${t('Ohm\'s Law (microscopic)', 'Legge di Ohm (microscopica)')}</div>
-  ${M('\\vec{J} = \\sigma \\vec{E} \\qquad \\sigma = \\frac{1}{\\rho}')}
-</div>
-
-<p>${t('Power dissipated in a resistor:', 'Potenza dissipata in una resistenza:')}</p>
-<div class="formula-block">
-  ${M('P = IV = I^2 R = \\frac{V^2}{R}')}
-</div>
-
-<h2>${t('3.3 Kirchhoff\'s Laws', '3.3 Leggi di Kirchhoff')}</h2>
-
-<div class="formula-block">
-  <div class="formula-label">${t('KCL — Current Law (node rule)', 'KCL — Legge delle Correnti (regola del nodo)')}</div>
-  ${M('\\sum_{k} I_k = 0 \\quad \\text{(at any node)}')}
-  <p style="font-size:0.82rem;margin-top:8px;color:var(--text2)">${t('Conservation of charge: currents in = currents out.', 'Conservazione della carica: correnti entranti = correnti uscenti.')}</p>
-</div>
-
-<div class="formula-block">
-  <div class="formula-label">${t('KVL — Voltage Law (loop rule)', 'KVL — Legge delle Tensioni (regola della maglia)')}</div>
-  ${M('\\sum_{k} V_k = 0 \\quad \\text{(around any closed loop)}')}
-  <p style="font-size:0.82rem;margin-top:8px;color:var(--text2)">${t('Conservation of energy: voltage drops sum to zero around any loop.', 'Conservazione dell\'energia: le cadute di tensione si azzerano attorno a qualsiasi maglia.')}</p>
-</div>
-
-<h3>${t('Series and Parallel', 'Serie e Parallelo')}</h3>
-<table>
-  <thead><tr>
-    <th></th>
-    <th>${t('Series', 'Serie')}</th>
-    <th>${t('Parallel', 'Parallelo')}</th>
-  </tr></thead>
-  <tbody>
-    <tr><td>${t('Resistors', 'Resistori')}</td><td>${m('R_{tot} = \\sum R_i')}</td><td>${m('1/R_{tot} = \\sum 1/R_i')}</td></tr>
-    <tr><td>${t('Capacitors', 'Condensatori')}</td><td>${m('1/C_{tot} = \\sum 1/C_i')}</td><td>${m('C_{tot} = \\sum C_i')}</td></tr>
-  </tbody>
-</table>
-
-<h2>${t('3.4 RC Circuits', '3.4 Circuiti RC')}</h2>
-<p>${t('Charging a capacitor C through resistor R from EMF ε:', 'Caricare un condensatore C attraverso una resistenza R da fem ε:')}</p>
-<div class="formula-block">
-  ${M('Q(t) = C\\mathcal{E}\\left(1 - e^{-t/\\tau}\\right) \\quad I(t) = \\frac{\\mathcal{E}}{R}e^{-t/\\tau} \\quad \\tau = RC')}
-</div>
-<p>${t('Discharging:', 'Scarica:')}</p>
-<div class="formula-block">
-  ${M('Q(t) = Q_0 e^{-t/\\tau} \\quad I(t) = \\frac{Q_0}{RC} e^{-t/\\tau}')}
-</div>
-
-<div class="key-formulas">
-  <h4>${t('Chapter Summary', 'Riassunto del Capitolo')}</h4>
-  <ul>
-    <li><span class="formula-name">${t('Current', 'Corrente')}</span> ${m('I = dq/dt')}</li>
-    <li><span class="formula-name">${t('Ohm\'s law', 'Legge di Ohm')}</span> ${m('V = IR')}</li>
-    <li><span class="formula-name">${t('Power', 'Potenza')}</span> ${m('P = IV = I^2R')}</li>
-    <li><span class="formula-name">${t('KCL', 'KCL')}</span> ${m('\\sum I_k = 0')}</li>
-    <li><span class="formula-name">${t('KVL', 'KVL')}</span> ${m('\\sum V_k = 0')}</li>
-    <li><span class="formula-name">${t('RC time constant', 'Costante di tempo RC')}</span> ${m('\\tau = RC')}</li>
-  </ul>
-</div>
-`;
+  return renderChapter(data);
 }
 
 export function initCircuitsDiagrams() {
-  // No interactive diagram in this chapter yet
   wireTermLinks(document.getElementById('chapter-view')!);
 }

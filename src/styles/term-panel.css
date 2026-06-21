@@ -13,7 +13,7 @@
 
 .term-link:hover {
   color: var(--accent-blue);
-  background: rgba(137, 180, 250, 0.12);
+  background: var(--blue-050);
   text-decoration-style: solid;
 }
 
@@ -30,14 +30,14 @@
   width: 360px;
   max-width: 92vw;
   height: calc(100vh - var(--topbar-h));
-  background: var(--bg2);
-  border-left: 1px solid var(--border);
-  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  background: var(--surface-card);
+  border-left: 1px solid var(--line-hair);
+  box-shadow: var(--shadow-float);
   display: flex;
   flex-direction: column;
   z-index: 200;
   transform: translateX(100%);
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--dur-slow) var(--ease-out);
   outline: none;
   overflow: hidden;
 }
@@ -62,18 +62,18 @@
   display: flex;
   align-items: center;
   padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line-hair);
   gap: 8px;
   flex-shrink: 0;
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 .term-panel-title {
   flex: 1;
   font-family: var(--font-serif);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: var(--t-h3);
+  font-weight: 500;
+  color: var(--text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,18 +91,18 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--text3);
-  border-radius: 4px;
+  color: var(--text-faint);
+  border-radius: var(--r-1);
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--dur-fast), color var(--dur-fast);
 }
 
 .term-panel-actions button:hover {
-  background: var(--border);
-  color: var(--text);
+  background: var(--line-hair);
+  color: var(--text-strong);
 }
 
 /* ── Panel body ── */
@@ -115,26 +115,28 @@
 }
 
 .term-short {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text);
+  font-size: var(--t-body-lg);
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--text-strong);
   margin-bottom: 14px;
   line-height: 1.5;
-  border-left: 3px solid var(--accent-blue);
+  border-left: 2px solid var(--blue-500);
   padding-left: 12px;
 }
 
 .term-long {
-  font-size: 0.88rem;
-  color: var(--text2);
-  line-height: 1.7;
+  font-size: var(--t-body);
+  font-family: var(--font-serif);
+  color: var(--text-body);
+  line-height: var(--lh-reading);
   margin-bottom: 16px;
 }
 
 .term-formula {
   background: var(--formula-bg);
-  border-left: 3px solid var(--formula-border);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-left: 2px solid var(--formula-border);
+  border-radius: 0 var(--r-2) var(--r-2) 0;
   padding: 12px 16px;
   margin: 12px 0;
   overflow-x: auto;
@@ -144,26 +146,27 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.78rem;
+  font-size: var(--t-caption);
+  font-family: var(--font-mono);
   color: var(--accent-blue);
   text-decoration: none;
   margin-top: 12px;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  transition: border-color 0.12s, background 0.12s;
+  padding: 4px 10px;
+  border: 1px solid var(--line-hair);
+  border-radius: var(--r-pill);
+  transition: border-color var(--dur-fast), background var(--dur-fast);
 }
 
 .term-wiki-link:hover {
-  border-color: var(--accent-blue);
-  background: rgba(137, 180, 250, 0.08);
+  border-color: var(--blue-500);
+  background: var(--blue-050);
 }
 
 /* ── See also ── */
 .term-panel-see-also {
   padding: 12px 20px 16px;
-  border-top: 1px solid var(--border);
-  font-size: 0.8rem;
+  border-top: 1px solid var(--line-hair);
+  font-size: var(--t-caption);
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -172,28 +175,29 @@
 }
 
 .see-also-label {
-  color: var(--text3);
+  color: var(--text-faint);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  font-size: var(--t-micro);
+  letter-spacing: var(--tr-eyebrow);
   margin-right: 2px;
 }
 
 .term-see-also-link {
   padding: 3px 10px;
-  border-radius: 999px;
-  border: 1.5px solid var(--accent-blue);
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--blue-500);
   background: transparent;
   color: var(--accent-blue);
-  font-size: 0.78rem;
+  font-size: var(--t-caption);
+  font-family: var(--font-mono);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--dur-fast), color var(--dur-fast);
 }
 
 .term-see-also-link:hover {
-  background: var(--accent-blue);
+  background: var(--blue-500);
   color: white;
 }
 
