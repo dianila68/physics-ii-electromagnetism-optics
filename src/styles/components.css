@@ -166,6 +166,15 @@
 .callout.law     { background: var(--paper-1);  border-color: var(--ink-700); border-left-width: 2px; }
 .callout.law     .callout-title { color: var(--text-strong); }
 
+/* Pedagogy: chapter-opening motivation hook (stake → lens → gap, ends on a question) */
+.callout.motivation { background: color-mix(in srgb, var(--spec-violet) 10%, var(--surface-card)); border-color: var(--spec-violet); }
+.callout.motivation .callout-title { color: var(--spec-violet); }
+
+/* Pedagogy: end-of-chapter curiosity bridge (push an idea to its limit → next chapter) */
+.callout.bridge { background: color-mix(in srgb, var(--spec-amber) 12%, var(--surface-card)); border-color: var(--spec-amber); }
+.callout.bridge .callout-title { color: var(--spec-amber); }
+
+
 /* ── Derivation (collapsible) ── */
 details.derivation {
   background: var(--paper-1);

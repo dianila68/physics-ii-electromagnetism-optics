@@ -97,17 +97,27 @@ composites, the constituent count.
 
 ## Engine coverage
 
-The CPU engine honours layer gating directly. The GPU engine (`GpuEngine.ts`)
-carries a documented TODO: its WGSL kernel currently keys pairwise forces off
-`kind` only, not `layer`, so post-aggregation force gating is approximate on
-GPU (the aggregation itself is engine-agnostic — it mutates the World, which
-both engines re-sync from). Packing `layer` into the attribute buffer and
-gating LJ/strong by it is the follow-up to make GPU exactly match CPU.
+Both engines honour layer gating. The CPU engine filters directly on
+`entityLayer(e)`. The GPU engine packs the layer into the attribute buffer
+(`packed = kind + 4*fixed + 16*layer`) and decodes it in the WGSL kernel, so
+Lennard-Jones is gated to atomic-layer atoms exactly as on the CPU — a
+molecular composite no longer feels its constituents' pull. The strong force is
+keyed on quark kind (only ever at the subatomic layer), so it needs no extra
+gate. `runEmergence` is engine-agnostic: it mutates the World, which both
+engines re-sync from.
+
+## Presets
+
+Two presets demonstrate the feature end to end (`src/editor/presets.ts`):
+
+- **Emergence: quarks → nucleons** — three quark triplets with the confining
+  force on and `activeBoundary: 'subatomic-atomic'`. Play until each triplet
+  binds, then press *Emerge* to promote each into a nucleon one layer up.
+- **Emergence: atoms → molecule** — a pool of atoms condensing under
+  Lennard-Jones with `activeBoundary: 'atomic-molecular'`. Once bound, *Emerge*
+  ties the cluster into a single molecule.
 
 ## Suggested follow-ups
 
-- Add dedicated presets demonstrating subatomic→atomic and atomic→molecular
-  emergence end to end.
 - Optional auto-run of `runEmergence` on an interval while playing, instead of
   only on the manual Emerge action.
-- GPU layer gating (above).

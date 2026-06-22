@@ -5,6 +5,7 @@
 
 import { getLang } from '../utils/lang.js';
 import { TERMS } from '../content/terms.js';
+import { OPENERS, BRIDGES } from '../content/narrative.js';
 import { m, M } from '../utils/katex-render.js';
 
 export type Lang = 'en' | 'it';
@@ -14,7 +15,7 @@ export interface BiText { en: string; it: string; }
 export type ContentBlock =
   | { type: 'paragraph'; text: BiText }
   | { type: 'formula'; label?: BiText; latex: string; note?: BiText }
-  | { type: 'callout'; variant: 'prereq' | 'note' | 'key' | 'warning' | 'insight' | 'law'; title: BiText; text: BiText }
+  | { type: 'callout'; variant: 'prereq' | 'note' | 'key' | 'warning' | 'insight' | 'law' | 'motivation' | 'bridge'; title: BiText; text: BiText }
   | { type: 'table'; headers: BiText[]; rows: (string | BiText)[][] }
   | { type: 'derivation'; title: BiText; blocks: ContentBlock[] }
   | { type: 'diagram'; id: string; title: BiText; caption: BiText; hasControls?: boolean; hasLayers?: string[] }
@@ -51,6 +52,8 @@ function calloutTitle(variant: string, l: Lang): string {
     warning: { en: 'Warning', it: 'Attenzione' },
     insight: { en: 'Key idea', it: 'Idea chiave' },
     law:     { en: 'Law', it: 'Legge' },
+    motivation: { en: 'Motivation', it: 'Motivazione' },
+    bridge:  { en: 'Next', it: 'Avanti' },
   };
   return titles[variant]?.[l] ?? variant;
 }
@@ -169,8 +172,18 @@ function renderBlock(block: ContentBlock): string {
   }
 }
 
+function renderNarrative(variant: 'motivation' | 'bridge', n: { title: BiText; text: BiText }): string {
+  return `<div class="callout ${variant}">
+    <div class="callout-title">${bi(n.title)}</div>
+    <p>${processText(bi(n.text))}</p>
+  </div>`;
+}
+
 export function renderChapter(data: ChapterData): string {
   const l = lang();
+
+  const opener = OPENERS[data.id] ? renderNarrative('motivation', OPENERS[data.id]) : '';
+  const bridge = BRIDGES[data.id] ? renderNarrative('bridge', BRIDGES[data.id]) : '';
 
   const prereqHtml = data.prereq ? (() => {
     const links = (data.prereq!.links ?? []).map(link =>
@@ -198,7 +211,9 @@ export function renderChapter(data: ChapterData): string {
   <h1>${bi(data.title)}</h1>
   <p class="prose" style="margin-top:10px;font-family:var(--font-serif);color:var(--text-muted)">${bi(data.subtitle)}</p>
 </div>
+${opener}
 ${prereqHtml}
 ${sectionsHtml}
+${bridge}
 `;
 }
