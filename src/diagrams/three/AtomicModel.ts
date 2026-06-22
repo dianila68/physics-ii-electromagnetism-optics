@@ -27,15 +27,30 @@ export function initAtomicModel(container: HTMLElement) {
   scene.add(point);
 
   const particles: Particle[] = [];
+  // Non-particle scene additions (electron clouds, gluon lines) tracked so
+  // they can be disposed cleanly on every mode switch.
+  const extras: THREE.Object3D[] = [];
 
   let mode: 'atom' | 'nucleus' | 'quark' = 'atom';
 
+  function addExtra(obj: THREE.Object3D) {
+    scene.add(obj);
+    extras.push(obj);
+  }
+
+  function disposeObject(obj: THREE.Object3D) {
+    const anyObj = obj as THREE.Mesh | THREE.Points | THREE.Line;
+    anyObj.geometry?.dispose?.();
+    const mat = anyObj.material as THREE.Material | THREE.Material[] | undefined;
+    if (Array.isArray(mat)) mat.forEach(m => m.dispose());
+    else mat?.dispose?.();
+  }
+
   function clearScene() {
-    particles.forEach(p => scene.remove(p.mesh));
+    particles.forEach(p => { scene.remove(p.mesh); disposeObject(p.mesh); });
     particles.length = 0;
-    scene.children
-      .filter(c => c instanceof THREE.Line || (c instanceof THREE.Mesh && !particles.find(p => p.mesh === c)))
-      .forEach(c => scene.remove(c));
+    extras.forEach(o => { scene.remove(o); disposeObject(o); });
+    extras.length = 0;
   }
 
   function buildAtom() {
@@ -49,43 +64,59 @@ export function initAtomicModel(container: HTMLElement) {
     scene.add(nucleus);
     particles.push({ mesh: nucleus });
 
-    // Electron shells (simplified Hydrogen-like: 3 shells)
+    // Electron shells as probability clouds (state-of-the-art depiction):
+    // electrons are not balls on orbits but a smeared-out density. Each shell
+    // is a spherical point cloud whose radial spread mimics |ψ|², plus a faint
+    // translucent halo for body. No rings, no orbiting motion.
     const shellConfig = [
       { r: 2.5, n: 2, color: 0x89b4fa },
       { r: 4.0, n: 6, color: 0xa6e3a1 },
       { r: 5.5, n: 10, color: 0xf9e2af },
     ];
 
-    shellConfig.forEach((shell, si) => {
-      // Orbit ring
-      const ringGeo = new THREE.TorusGeometry(shell.r, 0.02, 8, 80);
-      const ringMat = new THREE.MeshBasicMaterial({ color: shell.color, opacity: 0.3, transparent: true });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x = Math.PI / 2 + si * 0.5;
-      scene.add(ring);
-
-      // Electrons on this shell
-      for (let i = 0; i < shell.n; i++) {
-        const eGeo = new THREE.SphereGeometry(0.12, 16, 16);
-        const eMat = new THREE.MeshPhongMaterial({ color: shell.color, emissive: shell.color, emissiveIntensity: 0.3 });
-        const eMesh = new THREE.Mesh(eGeo, eMat);
-        scene.add(eMesh);
-        particles.push({
-          mesh: eMesh,
-          isElectron: true,
-          orbit: {
-            radius: shell.r,
-            speed: 0.4 + si * 0.15,
-            phase: (i / shell.n) * Math.PI * 2,
-            tilt: new THREE.Euler(si * 0.5, 0, si * 0.7),
-          },
-        });
-      }
+    shellConfig.forEach(shell => {
+      addExtra(makeElectronCloud(shell.r, shell.n, shell.color));
+      // Faint translucent halo at the shell radius.
+      const haloGeo = new THREE.SphereGeometry(shell.r, 24, 24);
+      const haloMat = new THREE.MeshBasicMaterial({
+        color: shell.color, transparent: true, opacity: 0.05, depthWrite: false,
+      });
+      addExtra(new THREE.Mesh(haloGeo, haloMat));
     });
 
     infoEl.textContent = getLang() === 'en'
-      ? 'Atom view — click to zoom into nucleus'
-      : 'Vista atomo — clicca per ingrandire il nucleo';
+      ? 'Atom view — electrons shown as probability clouds, not orbits — click to zoom into the nucleus'
+      : 'Vista atomo — gli elettroni sono nubi di probabilità, non orbite — clicca per ingrandire il nucleo';
+  }
+
+  // A spherical electron probability cloud: points scattered around radius `r`
+  // with Gaussian radial spread, rendered as soft additive dots. Density scales
+  // with the electron count `n`.
+  function makeElectronCloud(r: number, n: number, color: number): THREE.Points {
+    const count = n * 160;
+    const positions = new Float32Array(count * 3);
+    const gauss = () => {
+      // Box–Muller standard normal.
+      const u = Math.random() || 1e-6, v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    };
+    for (let i = 0; i < count; i++) {
+      const rr = Math.max(0.2, r + gauss() * 0.4);
+      // Uniform direction on the unit sphere.
+      const ct = 2 * Math.random() - 1;
+      const st = Math.sqrt(1 - ct * ct);
+      const ph = Math.random() * Math.PI * 2;
+      positions[i * 3] = rr * st * Math.cos(ph);
+      positions[i * 3 + 1] = rr * st * Math.sin(ph);
+      positions[i * 3 + 2] = rr * ct;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({
+      color, size: 0.09, transparent: true, opacity: 0.55,
+      sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    return new THREE.Points(geo, mat);
   }
 
   function buildNucleus() {
@@ -144,12 +175,12 @@ export function initAtomicModel(container: HTMLElement) {
       particles.push({ mesh, orbit: { radius: 0.3, speed: 0.3, phase: Math.random() * Math.PI * 2, tilt: new THREE.Euler() } });
 
       // Gluon lines (springs between quarks)
-      const lineMat = new THREE.LineBasicMaterial({ color: 0xf9e2af, opacity: 0.6, transparent: true });
       quarkDefs.forEach(q2 => {
         if (q2 === q) return;
+        const lineMat = new THREE.LineBasicMaterial({ color: 0xf9e2af, opacity: 0.6, transparent: true });
         const pts = [q.pos.clone(), q2.pos.clone()];
         const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-        scene.add(new THREE.Line(lineGeo, lineMat));
+        addExtra(new THREE.Line(lineGeo, lineMat));
       });
     });
 
