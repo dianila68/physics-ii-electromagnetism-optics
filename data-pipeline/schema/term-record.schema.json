@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "term-record.schema.json",
+  "title": "Intermediate term record (pipeline)",
+  "description": "Superset of TermDef (src/content/terms.ts) plus pipeline metadata. The metadata fields (provenance, confidence, reviewStatus, sourceStale) are DROPPED on emit; the remainder maps 1:1 onto TermDef and becomes a value in public/terms.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "labelEn", "labelIt", "shortEn", "shortIt", "longEn", "longIt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Term id; the object key in terms.json. Sourced from chapter [[id|...]] references.",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "labelEn": { "type": "string", "description": "→ TermDef.labelEn (preserved from terms.ts, not regenerated)" },
+    "labelIt": { "type": "string", "description": "→ TermDef.labelIt" },
+    "shortEn": { "type": "string", "description": "→ TermDef.shortEn — terse factual one-liner" },
+    "shortIt": { "type": "string", "description": "→ TermDef.shortIt — translated from shortEn" },
+    "longEn":  { "type": "string", "description": "→ TermDef.longEn — Wikipedia-lead-derived (CC BY-SA)" },
+    "longIt":  { "type": "string", "description": "→ TermDef.longIt — translated from longEn" },
+    "latex":   { "type": "string", "description": "→ TermDef.latex — numeric facts from Wikidata; must KaTeX-parse" },
+    "seeAlso": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "description": "→ TermDef.seeAlso — every id must exist in the final term set (validated)"
+    },
+    "wikipedia": { "type": "string", "description": "→ TermDef.wikipedia — canonical EN article title" },
+
+    "provenance": {
+      "type": "object",
+      "description": "DROPPED on emit. Drives attribution / credits surface (CC BY-SA).",
+      "additionalProperties": false,
+      "properties": {
+        "sourceTitleEn": { "type": "string" },
+        "sourceTitleIt": { "type": "string" },
+        "urlEn": { "type": "string", "format": "uri" },
+        "urlIt": { "type": "string", "format": "uri" },
+        "revidEn": { "type": "integer", "description": "Exact Wikipedia revision id used (attribution points here)" },
+        "revidIt": { "type": "integer" },
+        "wikidataIds": { "type": "array", "items": { "type": "string" }, "description": "Wikidata Q-ids for numeric facts (CC0)" },
+        "license": { "type": "string", "enum": ["CC-BY-SA-4.0", "CC0-1.0", "mixed", "original"] }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "description": "DROPPED on emit. Drives low-confidence flags (§5.4).",
+      "additionalProperties": false,
+      "properties": {
+        "draftSelf": { "type": "number", "minimum": 0, "maximum": 1, "description": "Haiku self-rating" },
+        "reviewer":  { "type": "number", "minimum": 0, "maximum": 1, "description": "Opus rating" },
+        "numericMatch": { "type": "boolean", "description": "true if numbers match Wikidata where checkable" },
+        "enItParity": { "type": "boolean", "description": "EN/IT semantic parity per review" }
+      }
+    },
+    "reviewStatus": {
+      "type": "string",
+      "enum": ["draft", "translated", "approved", "revised", "reject"],
+      "description": "DROPPED on emit. Only 'approved'/'revised' are eligible for human merge."
+    },
+    "sourceStale": {
+      "type": "boolean",
+      "description": "DROPPED on emit. true when EN changed and IT not yet re-synced (EN/IT lock-step)."
+    }
+  }
+}

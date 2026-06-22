@@ -1,5 +1,6 @@
 import type { PhysicsEngine } from '../PhysicsEngine.js';
 import type { World } from '../../core/world.js';
+import { entityLayer } from '../../core/world.js';
 
 // GPU-accelerated backend (Phase 5).
 //
@@ -15,6 +16,15 @@ import type { World } from '../../core/world.js';
 // Position/velocity readback is async too: `step` is fire-and-forget and
 // the World is updated when the copy resolves (≈one frame of latency),
 // which the Canvas2D renderer tolerates fine.
+//
+// Layered emergence (Phase 6): each entity's `layer` is packed into the attr
+// vec4 (packed = kind + 4*fixed + 16*layer) and decoded in the kernel, so the
+// GPU honours the same per-layer force gating as the CPU engine — e.g. a
+// molecular composite (an atom-kind body promoted to the molecular layer) no
+// longer feels Lennard-Jones from atomic-layer atoms. The `runEmergence`
+// aggregation is engine-agnostic (it mutates the World, which both engines
+// re-sync from). Strong force is keyed on quark kind, which only ever exists
+// at the subatomic layer, so it needs no extra layer gate.
 
 const WORKGROUP = 64;
 const FIXED_DT = 1 / 240;
@@ -40,7 +50,7 @@ struct Params {
 @group(0) @binding(0) var<uniform> P: Params;
 @group(0) @binding(1) var<storage, read>        posIn:  array<vec2<f32>>;
 @group(0) @binding(2) var<storage, read>        velIn:  array<vec2<f32>>;
-@group(0) @binding(3) var<storage, read>        attr:   array<vec4<f32>>; // mass, charge, radius, packed(kind+8*fixed)
+@group(0) @binding(3) var<storage, read>        attr:   array<vec4<f32>>; // mass, charge, radius, packed(kind + 4*fixed + 16*layer)
 @group(0) @binding(4) var<storage, read>        extF:   array<vec2<f32>>; // spring force (CPU prepass)
 @group(0) @binding(5) var<storage, read_write>  posOut: array<vec2<f32>>;
 @group(0) @binding(6) var<storage, read_write>  velOut: array<vec2<f32>>;
@@ -55,8 +65,10 @@ fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
   let mass = ai.x;
   let charge_i = ai.y;
   let packed_i = ai.w;
-  let fixed_i = packed_i > 7.5;
-  let kind_i = packed_i - select(0.0, 8.0, fixed_i);
+  let layer_i = floor(packed_i / 16.0);
+  let rem_i = packed_i - layer_i * 16.0;
+  let fixed_i = rem_i >= 4.0;
+  let kind_i = rem_i - select(0.0, 4.0, fixed_i);
 
   let pi = posIn[i];
   let vi = velIn[i];
@@ -82,8 +94,10 @@ fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
     let d2 = dot(dj, dj);
     let charge_j = aj.y;
     let packed_j = aj.w;
-    let fixed_j = packed_j > 7.5;
-    let kind_j = packed_j - select(0.0, 8.0, fixed_j);
+    let layer_j = floor(packed_j / 16.0);
+    let rem_j = packed_j - layer_j * 16.0;
+    let fixed_j = rem_j >= 4.0;
+    let kind_j = rem_j - select(0.0, 4.0, fixed_j);
 
     // Coulomb (softened): attractive toward j when product negative.
     if (P.coulombK != 0.0 && charge_i != 0.0 && charge_j != 0.0) {
@@ -94,8 +108,11 @@ fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
       force += -(dj / r) * mag; // repulsive for like signs (push i away from j)
     }
 
-    // Lennard-Jones between atoms (kind == 1).
-    if (P.ljEpsilon > 0.0 && kind_i == 1.0 && kind_j == 1.0) {
+    // Lennard-Jones between atomic-layer atoms (kind == 1, layer == 1).
+    // Gating by layer means a molecular composite (an atom-kind body promoted
+    // to the molecular layer) no longer feels its constituents' LJ pull —
+    // matching the CPU engine's one-level-at-a-time emergence rule.
+    if (P.ljEpsilon > 0.0 && kind_i == 1.0 && kind_j == 1.0 && layer_i == 1.0 && layer_j == 1.0) {
       let sigma = P.ljSigma;
       let cutoff = 2.5 * sigma;
       if (d2 <= cutoff * cutoff) {
@@ -216,8 +233,11 @@ export class GpuEngine implements PhysicsEngine {
       const e = entities[i];
       pos[i * 2] = e.pos.x; pos[i * 2 + 1] = e.pos.y;
       vel[i * 2] = e.vel.x; vel[i * 2 + 1] = e.vel.y;
+      // packed = kind(0..2) + 4*fixed + 16*layer(0..2). Decoded in the shader.
       const kind = e.kind === 'atom' ? 1 : e.kind === 'quark' ? 2 : 0;
-      const packed = kind + (e.fixed ? 8 : 0);
+      const lyr = entityLayer(e);
+      const layerIdx = lyr === 'subatomic' ? 0 : lyr === 'molecular' ? 2 : 1;
+      const packed = kind + (e.fixed ? 4 : 0) + 16 * layerIdx;
       attr[i * 4] = e.mass;
       attr[i * 4 + 1] = e.charge;
       attr[i * 4 + 2] = e.radius;

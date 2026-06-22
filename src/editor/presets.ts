@@ -15,6 +15,9 @@ const baseParams = () => ({
   ljSigma: 0.8,
   strongTension: 0,
   strongCore: 0.5,
+  activeBoundary: null,
+  emergenceBindRadius: 0.9,
+  emergenceMinCluster: 3,
 });
 
 export interface Preset {
@@ -170,6 +173,65 @@ const confinement = (): SceneData => ({
   links: [],
 });
 
+// --- Layered emergence (Phase 6) ---
+
+// Subatomic → atomic: three triplets of confined quarks. Run the sim so each
+// triplet binds, then press "Emerge" (boundary preset to subatomic→atomic) to
+// promote each bound triplet into a single nucleon/atom one layer up.
+const emergeNucleons = (): SceneData => {
+  const entities: Entity[] = [];
+  const colors = ['#e74c3c', '#27ae60', '#3b82f6'];
+  const labels = ['r', 'g', 'b'];
+  const centers = [{ x: 3.5, y: 4 }, { x: 6, y: 4 }, { x: 8.5, y: 4 }];
+  let n = 1;
+  for (const c of centers) {
+    const offs = [{ x: -0.3, y: -0.2 }, { x: 0.3, y: -0.2 }, { x: 0, y: 0.3 }];
+    for (let k = 0; k < 3; k++) {
+      entities.push({
+        id: `e${n++}`, kind: 'quark',
+        pos: { x: c.x + offs[k].x, y: c.y + offs[k].y }, vel: { x: 0, y: 0 },
+        mass: 0.5, radius: 0.18, fixed: false, charge: 0,
+        color: colors[k], label: labels[k],
+      });
+    }
+  }
+  return {
+    version: 1,
+    params: {
+      ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.08,
+      strongTension: 2.5, strongCore: 0.6,
+      activeBoundary: 'subatomic-atomic', emergenceMinCluster: 3, emergenceBindRadius: 1.0,
+    },
+    entities,
+    links: [],
+  };
+};
+
+// Atomic → molecular: a small pool of atoms that condenses under Lennard-Jones.
+// Once bound, "Emerge" (boundary preset to atomic→molecular) ties the cluster
+// into a single molecule one layer up.
+const emergeMolecule = (): SceneData => {
+  const entities: Entity[] = [];
+  const pts = [
+    { x: 5.4, y: 3.7 }, { x: 6.0, y: 3.6 }, { x: 6.6, y: 3.8 },
+    { x: 5.7, y: 4.3 }, { x: 6.3, y: 4.3 },
+  ];
+  pts.forEach((p, i) => entities.push({
+    id: `e${i + 1}`, kind: 'atom', pos: p, vel: { x: 0, y: 0 },
+    mass: 1, radius: 0.28, fixed: false, charge: 0, color: '#27ae60',
+  }));
+  return {
+    version: 1,
+    params: {
+      ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.06,
+      ljEpsilon: 2, ljSigma: 0.9,
+      activeBoundary: 'atomic-molecular', emergenceMinCluster: 3, emergenceBindRadius: 1.2,
+    },
+    entities,
+    links: [],
+  };
+};
+
 export const PRESETS: Preset[] = [
   { id: 'pendulum', nameEn: 'Spring Pendulum', nameIt: 'Pendolo a Molla', build: springPendulum },
   { id: 'chain', nameEn: 'Spring Chain', nameIt: 'Catena di Molle', build: springChain },
@@ -181,6 +243,8 @@ export const PRESETS: Preset[] = [
   { id: 'diatomic', nameEn: 'Diatomic Molecule', nameIt: 'Molecola Biatomica', build: diatomic },
   { id: 'proton', nameEn: 'Proton (3 quarks)', nameIt: 'Protone (3 quark)', build: proton },
   { id: 'confinement', nameEn: 'Quark Confinement', nameIt: 'Confinamento Quark', build: confinement },
+  { id: 'emerge-nucleons', nameEn: 'Emergence: quarks → nucleons', nameIt: 'Emergenza: quark → nucleoni', build: emergeNucleons },
+  { id: 'emerge-molecule', nameEn: 'Emergence: atoms → molecule', nameIt: 'Emergenza: atomi → molecola', build: emergeMolecule },
 ];
 
 export const defaultScene = springPendulum;

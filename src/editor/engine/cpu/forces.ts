@@ -1,6 +1,7 @@
 import type { World } from '../../core/world.js';
 import type { Link } from '../../core/types.js';
 import type { Vec2 } from '../../core/vec2.js';
+import { entityLayer } from '../../core/world.js';
 import { addScaledMut, sub, len } from '../../core/vec2.js';
 
 // Force models for the CPU engine, written as pure-ish accumulators that
@@ -98,7 +99,10 @@ export function applyLennardJones(world: World, forces: ForceMap): void {
   const minR = 0.8 * sigma;
   const maxForce = 200 * eps;
 
-  const atoms = [...world.entities.values()].filter(e => e.kind === 'atom');
+  // Only atomic-layer atoms interact via LJ. A molecular composite is a
+  // single body at the layer above and must not feel its constituents'
+  // LJ pull (that coupling has already "emerged" into one rigid body).
+  const atoms = [...world.entities.values()].filter(e => e.kind === 'atom' && entityLayer(e) === 'atomic');
   for (let i = 0; i < atoms.length; i++) {
     const a = atoms[i];
     for (let j = i + 1; j < atoms.length; j++) {
@@ -127,37 +131,58 @@ export function applyLennardJones(world: World, forces: ForceMap): void {
   }
 }
 
-// Toy "strong force" among 'quark' entities (subatomic, illustrative).
-//   F(r) = strongCore/r^2 (short-range repulsion) − strongTension (constant
-//   attraction). The constant attraction never vanishes with distance, so
-//   quarks stay confined — pulling one away meets a steady restoring force,
-//   the qualitative signature of QCD confinement (not a real QCD solver).
+// Cornell-style strong force among subatomic 'quark' entities.
+//
+// Physics model (illustrative, not a QCD solver):
+//   The Cornell potential for a quark–antiquark pair is
+//       V(r) = − a / r + b · r
+//   with a the short-range one-gluon-exchange (~Coulombic) coefficient and
+//   b the QCD string tension giving linear confinement. The radial force is
+//       F(r) = − dV/dr = − a / r^2 − b,
+//   which is attractive at every range. A purely attractive pair would
+//   collapse to a point under an explicit integrator, so — exactly as a
+//   real hadron has a finite size set by the quark cores — we add a
+//   short-range repulsive core that dominates below r = CORE_R, turning the
+//   1/r^2 term net-repulsive there. The result is a finite, stable bound
+//   triangle/pair that nonetheless can never be pulled apart (the constant
+//   −b confinement term), the qualitative signature of confinement.
+//
+// We map the params: strongCore -> a, strongTension -> b. Distances are
+// softened (clamped at CORE_R) and the magnitude capped for stability.
+const STRONG_CORE_R = 0.28; // hard-core radius; below it net repulsion wins
+const STRONG_MAX_FORCE = 500;
+
 export function applyStrongForce(world: World, forces: ForceMap): void {
-  const tension = world.params.strongTension;
-  const core = world.params.strongCore;
-  if (tension <= 0 && core <= 0) return;
-  const quarks = [...world.entities.values()].filter(e => e.kind === 'quark');
-  const minR = 0.2;
-  const maxForce = 500;
+  const b = world.params.strongTension; // string tension (linear term)
+  const a = world.params.strongCore;    // Coulombic / core coefficient
+  if (b <= 0 && a <= 0) return;
+  // Only subatomic-layer quarks bind via the strong force. A nucleon
+  // composite is a single body one layer up and must not feel this.
+  const quarks = [...world.entities.values()].filter(e => e.kind === 'quark' && entityLayer(e) === 'subatomic');
 
   for (let i = 0; i < quarks.length; i++) {
-    const a = quarks[i];
+    const qi = quarks[i];
     for (let j = i + 1; j < quarks.length; j++) {
-      const b = quarks[j];
-      const dx = b.pos.x - a.pos.x;
-      const dy = b.pos.y - a.pos.y;
+      const qj = quarks[j];
+      const dx = qj.pos.x - qi.pos.x;
+      const dy = qj.pos.y - qi.pos.y;
       let r = Math.sqrt(dx * dx + dy * dy);
-      if (r < minR) r = minR;
-      let fMag = core / (r * r) - tension; // >0 repel, <0 attract
-      if (fMag > maxForce) fMag = maxForce;
-      else if (fMag < -maxForce) fMag = -maxForce;
+      if (r < 1e-4) r = 1e-4;
+      // Cornell attraction: Coulombic −a/r^2 plus constant confinement −b.
+      // (fMag > 0 repels along r̂, < 0 attracts.) Inside the hard core the
+      // 1/r^4 repulsion overwhelms the attraction, fixing a finite size.
+      const rEff = Math.max(r, STRONG_CORE_R * 0.5);
+      const coreRepulsion = a * (STRONG_CORE_R * STRONG_CORE_R) / (rEff * rEff * rEff * rEff);
+      let fMag = coreRepulsion - a / (rEff * rEff) - b;
+      if (fMag > STRONG_MAX_FORCE) fMag = STRONG_MAX_FORCE;
+      else if (fMag < -STRONG_MAX_FORCE) fMag = -STRONG_MAX_FORCE;
       const inv = 1 / r;
       const fx = dx * inv * fMag;
       const fy = dy * inv * fMag;
-      const fa = forces.get(a.id);
-      const fb = forces.get(b.id);
-      if (fa) { fa.x -= fx; fa.y -= fy; }
-      if (fb) { fb.x += fx; fb.y += fy; }
+      const fi = forces.get(qi.id);
+      const fj = forces.get(qj.id);
+      if (fi) { fi.x -= fx; fi.y -= fy; }
+      if (fj) { fj.x += fx; fj.y += fy; }
     }
   }
 }

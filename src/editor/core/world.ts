@@ -1,14 +1,28 @@
-import type { Entity, Link, WorldParams, SceneData } from './types.js';
+import type { Entity, EntityKind, Link, WorldParams, SceneData, ScaleLayer } from './types.js';
 import { zero, clone } from './vec2.js';
 
 let _nextId = 1;
 const uid = (prefix: string): string => `${prefix}${_nextId++}`;
 
-function entityDefaultColor(kind: 'mass' | 'anchor' | 'atom' | 'quark'): string {
+export function entityDefaultColor(kind: EntityKind): string {
   if (kind === 'anchor') return '#94a3b8';
   if (kind === 'atom') return '#27ae60';
   if (kind === 'quark') return '#9b59b6';
   return '#e74c3c';
+}
+
+// The default scale layer implied by a body's kind, used when an entity
+// carries no explicit `layer` (older scenes / hand-placed bodies). Quarks
+// are subatomic; atoms are atomic; plain masses/anchors default to the
+// atomic layer (they are the generic "particle" of the mechanics scale).
+export function layerForKind(kind: EntityKind): ScaleLayer {
+  if (kind === 'quark') return 'subatomic';
+  return 'atomic';
+}
+
+// Resolve an entity's effective layer (explicit field, else by kind).
+export function entityLayer(e: Entity): ScaleLayer {
+  return e.layer ?? layerForKind(e.kind);
 }
 
 export const DEFAULT_PARAMS: WorldParams = {
@@ -23,6 +37,9 @@ export const DEFAULT_PARAMS: WorldParams = {
   ljSigma: 0.8,
   strongTension: 0,
   strongCore: 0.5,
+  activeBoundary: null,
+  emergenceBindRadius: 0.9,
+  emergenceMinCluster: 3,
 };
 
 // Clone params with all nested vectors copied, tolerating older scenes
@@ -40,8 +57,13 @@ function cloneParams(p: WorldParams): WorldParams {
     ljSigma: p.ljSigma ?? DEFAULT_PARAMS.ljSigma,
     strongTension: p.strongTension ?? 0,
     strongCore: p.strongCore ?? DEFAULT_PARAMS.strongCore,
+    activeBoundary: p.activeBoundary ?? null,
+    emergenceBindRadius: p.emergenceBindRadius ?? DEFAULT_PARAMS.emergenceBindRadius,
+    emergenceMinCluster: p.emergenceMinCluster ?? DEFAULT_PARAMS.emergenceMinCluster,
   };
 }
+
+export { cloneParams };
 
 // The World is the single source of truth for scene structure and state.
 // The PhysicsEngine mutates entity pos/vel in place; the Renderer reads
@@ -71,6 +93,9 @@ export class World {
       charge: partial.charge ?? 0,
       color: partial.color ?? entityDefaultColor(partial.kind),
       label: partial.label,
+      layer: partial.layer ?? layerForKind(partial.kind),
+      composite: partial.composite,
+      composedOf: partial.composedOf ? [...partial.composedOf] : undefined,
     };
     this.entities.set(e.id, e);
     this.structureRevision++;

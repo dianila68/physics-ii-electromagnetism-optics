@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motivation-record.schema.json",
+  "title": "Intermediate motivation record (pipeline)",
+  "description": "A chapter opener or end-of-chapter bridge. Generated from outlines (NOT scraped). The `block` payload is a valid ChapterData block (callout|paragraph) insertable verbatim into src/chapters/<id>/index.ts sections. No license/attribution needed — original copy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["chapterId", "kind", "block"],
+  "properties": {
+    "chapterId": { "type": "string", "description": "e.g. 00-matter, 03-magnetism" },
+    "kind": { "type": "string", "enum": ["opener", "bridge"] },
+    "nextChapterId": {
+      "type": "string",
+      "description": "For bridges: the chapter the cliffhanger points to. null for the final chapter (points outward)."
+    },
+    "placement": {
+      "type": "string",
+      "enum": ["first-block-first-section", "last-block-last-section"],
+      "description": "Where the merge step inserts the block. opener→first; bridge→last."
+    },
+    "block": {
+      "type": "object",
+      "description": "A ChapterData block. Bilingual text required.",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["callout", "paragraph"] },
+        "variant": {
+          "type": "string",
+          "enum": ["insight", "key", "note"],
+          "description": "callout variant per CONVENTIONS.md (opener→insight/key, bridge→note)"
+        },
+        "title": {
+          "type": "object",
+          "required": ["en", "it"],
+          "properties": { "en": { "type": "string" }, "it": { "type": "string" } }
+        },
+        "text": {
+          "type": "object",
+          "required": ["en", "it"],
+          "properties": { "en": { "type": "string" }, "it": { "type": "string" } },
+          "description": "May contain [[term-id|display]] links (validated) and inline $...$ LaTeX (validated)."
+        }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "DROPPED on emit" },
+    "reviewStatus": { "type": "string", "enum": ["draft", "translated", "approved", "revised", "reject"], "description": "DROPPED on emit" }
+  }
+}
