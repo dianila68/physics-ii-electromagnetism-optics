@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "generatedAt": "2026-06-22T19:50:47.349Z",
+    "mode": "fixture",
+    "attribution": {
+      "license": "CC-BY-SA-4.0",
+      "note": "Notes in this store are derived from English (and where present Italian) Wikipedia article lead sections, licensed under CC BY-SA 4.0. Each record carries provenance.sourceTitle/url/revid pointing at the exact revision used. Reuse must preserve attribution and share-alike.",
+      "wikidataNote": "Numeric constants (the LLM stages, PLAN §1.1) should be sourced from Wikidata (CC0); not fetched by this Wikipedia-only tool."
+    }
+  },
+  "notes": {
+    "coulombs-law": {
+      "id": "coulombs-law",
+      "labelEn": "Coulomb's Law",
+      "labelIt": "Legge di Coulomb",
+      "shortEn": "Inverse-square law quantifying force between two static electric charges.",
+      "longEn": "Coulomb's inverse-square law, or simply Coulomb's law, is an experimental law of physics that quantifies the amount of force between two stationary, electrically charged particles. The electric force between charged bodies at rest is conventionally called the electrostatic force or Coulomb force. The magnitude of the electrostatic force between two point charges is directly proportional to the product of the magnitudes of charges and inversely proportional to the square of the distance between them.",
+      "shortIt": "",
+      "longIt": "",
+      "itNeedsTranslation": true,
+      "itWikipediaHint": "In fisica, la legge di Coulomb descrive l'interazione elettrostatica tra particelle elettricamente cariche. Fu studiata da Charles Augustin de Coulomb.",
+      "wikipedia": "Coulomb's law",
+      "provenance": {
+        "sourceTitleEn": "Coulomb's law",
+        "urlEn": "https://en.wikipedia.org/w/index.php?title=Coulomb's_law&oldid=1234567892",
+        "revidEn": 1234567892,
+        "sourceTitleIt": "Legge di Coulomb",
+        "urlIt": "https://it.wikipedia.org/w/index.php?title=Legge_di_Coulomb&oldid=987654323",
+        "revidIt": 987654323,
+        "license": "CC-BY-SA-4.0",
+        "licenseNote": "Text derived from Wikipedia, licensed CC BY-SA 4.0. Attribution must cite the source article + revision; derived text inherits share-alike. See data-pipeline/README.md and PLAN.md §1.2."
+      },
+      "resolvedFrom": "override",
+      "fetchedAt": "2026-06-22T19:50:47.348Z"
+    },
+    "electric-field": {
+      "id": "electric-field",
+      "labelEn": "Electric field",
+      "labelIt": "Campo elettrico",
+      "shortEn": "Physical field surrounding electric charges.",
+      "longEn": "An electric field is a physical field that surrounds electrically charged particles. In classical electromagnetism, the electric field of a single charge describes their capacity to exert attractive or repulsive forces on another charged object. Electric fields originate from electric charges and time-varying electric currents. The electric field and the magnetic field are both manifestations of the electromagnetic field.",
+      "shortIt": "",
+      "longIt": "",
+      "itNeedsTranslation": true,
+      "itWikipediaHint": "In fisica, il campo elettrico è un campo di forze generato nello spazio dalla presenza di cariche elettriche o di campi magnetici variabili nel tempo.",
+      "wikipedia": "Electric field",
+      "provenance": {
+        "sourceTitleEn": "Electric field",
+        "urlEn": "https://en.wikipedia.org/w/index.php?title=Electric_field&oldid=1234567891",
+        "revidEn": 1234567891,
+        "sourceTitleIt": "Campo elettrico",
+        "urlIt": "https://it.wikipedia.org/w/index.php?title=Campo_elettrico&oldid=987654322",
+        "revidIt": 987654322,
+        "license": "CC-BY-SA-4.0",
+        "licenseNote": "Text derived from Wikipedia, licensed CC BY-SA 4.0. Attribution must cite the source article + revision; derived text inherits share-alike. See data-pipeline/README.md and PLAN.md §1.2."
+      },
+      "resolvedFrom": "override",
+      "fetchedAt": "2026-06-22T19:50:47.348Z"
+    },
+    "electron": {
+      "id": "electron",
+      "labelEn": "Electron",
+      "labelIt": "Elettrone",
+      "shortEn": "Subatomic particle with a negative elementary electric charge.",
+      "longEn": "The electron is a subatomic particle with a negative one elementary electric charge. It is a fundamental particle that does not appear to be made up of any smaller particles, and is classified as a lepton. The electron's mass is approximately 1/1836 that of the proton. Quantum mechanical properties of the electron include an intrinsic angular momentum (spin) of a half-integer value, expressed in units of the reduced Planck constant.",
+      "shortIt": "",
+      "longIt": "",
+      "itNeedsTranslation": true,
+      "itWikipediaHint": "L'elettrone è una particella subatomica con carica elettrica negativa pari a una carica elementare. È una particella fondamentale che non risulta composta da particelle più piccole ed è classificata come leptone.",
+      "wikipedia": "Electron",
+      "provenance": {
+        "sourceTitleEn": "Electron",
+        "urlEn": "https://en.wikipedia.org/w/index.php?title=Electron&oldid=1234567890",
+        "revidEn": 1234567890,
+        "sourceTitleIt": "Elettrone",
+        "urlIt": "https://it.wikipedia.org/w/index.php?title=Elettrone&oldid=987654321",
+        "revidIt": 987654321,
+        "license": "CC-BY-SA-4.0",
+        "licenseNote": "Text derived from Wikipedia, licensed CC BY-SA 4.0. Attribution must cite the source article + revision; derived text inherits share-alike. See data-pipeline/README.md and PLAN.md §1.2."
+      },
+      "resolvedFrom": "labelEn (low-confidence)",
+      "fetchedAt": "2026-06-22T19:50:47.348Z"
+    },
+    "magnetic-field": {
+      "id": "magnetic-field",
+      "labelEn": "Magnetic field",
+      "labelIt": "Campo magnetico",
+      "shortEn": "Field describing magnetic influence on moving charges and currents.",
+      "longEn": "A magnetic field is a physical field that describes the magnetic influence on moving electric charges, electric currents, and magnetic materials. A moving charge in a magnetic field experiences a force perpendicular to its own velocity and to the magnetic field. The SI unit of magnetic field strength (the magnetic flux density) is the tesla (T).",
+      "shortIt": "",
+      "longIt": "",
+      "itNeedsTranslation": true,
+      "itWikipediaHint": "In fisica, in particolare nel magnetismo, il campo magnetico è un campo vettoriale che descrive l'influenza magnetica su cariche elettriche in movimento, correnti elettriche e materiali magnetici.",
+      "wikipedia": "Magnetic field",
+      "provenance": {
+        "sourceTitleEn": "Magnetic field",
+        "urlEn": "https://en.wikipedia.org/w/index.php?title=Magnetic_field&oldid=1234567893",
+        "revidEn": 1234567893,
+        "sourceTitleIt": "Campo magnetico",
+        "urlIt": "https://it.wikipedia.org/w/index.php?title=Campo_magnetico&oldid=987654324",
+        "revidIt": 987654324,
+        "license": "CC-BY-SA-4.0",
+        "licenseNote": "Text derived from Wikipedia, licensed CC BY-SA 4.0. Attribution must cite the source article + revision; derived text inherits share-alike. See data-pipeline/README.md and PLAN.md §1.2."
+      },
+      "resolvedFrom": "override",
+      "fetchedAt": "2026-06-22T19:50:47.348Z"
+    }
+  }
+}
