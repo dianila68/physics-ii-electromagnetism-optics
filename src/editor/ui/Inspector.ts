@@ -104,6 +104,7 @@ export class Inspector {
     const heading =
       e.kind === 'atom' ? t('Atom', 'Atomo')
       : e.kind === 'quark' ? t('Quark', 'Quark')
+      : e.kind === 'electron' ? t('Electron (probability cloud)', 'Elettrone (nube di probabilità)')
       : e.fixed ? t('Anchor', 'Ancora')
       : t('Mass', 'Massa');
     this.heading(heading);

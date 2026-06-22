@@ -212,7 +212,12 @@ export class Canvas2DRenderer implements Renderer {
       const p = this.worldToScreen(e.pos);
       const r = Math.max(5, e.radius * this.scale);
 
-      if (e.fixed) {
+      if (e.render === 'cloud') {
+        // Probability cloud: a soft radial gradient with no hard edge — the
+        // modern depiction of a quantum object (e.g. an electron), rather
+        // than a ball on an orbit.
+        this.drawCloud(p, r, e.color);
+      } else if (e.kind === 'anchor') {
         // Anchors drawn as squares to read as "pinned to the world".
         ctx.fillStyle = e.color;
         ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
@@ -230,8 +235,9 @@ export class Canvas2DRenderer implements Renderer {
       }
 
       if (e.label) {
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 11px sans-serif';
+        // Clouds get a dim, centered label so they stay diffuse.
+        ctx.fillStyle = e.render === 'cloud' ? 'rgba(255,255,255,0.85)' : '#fff';
+        ctx.font = `${e.render === 'cloud' ? '' : 'bold '}11px sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(e.label, p.x, p.y);
@@ -239,7 +245,37 @@ export class Canvas2DRenderer implements Renderer {
     }
   }
 
+  // A diffuse probability cloud: a dense centre fading to fully transparent,
+  // with a couple of fainter shells so it reads as a distribution, not a disc.
+  private drawCloud(p: { x: number; y: number }, r: number, color: string): void {
+    const ctx = this.ctx;
+    const R = r * 1.7; // clouds extend beyond their nominal radius
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R);
+    grad.addColorStop(0, hexToRgba(color, 0.55));
+    grad.addColorStop(0.45, hexToRgba(color, 0.28));
+    grad.addColorStop(0.8, hexToRgba(color, 0.08));
+    grad.addColorStop(1, hexToRgba(color, 0));
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, R, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
   dispose(): void {
     this.canvas.remove();
   }
+}
+
+// Convert a #rgb / #rrggbb hex string to an rgba() string at the given alpha.
+// Falls back to the raw color (assumed already rgba/named) on a non-hex input.
+function hexToRgba(hex: string, alpha: number): string {
+  let h = hex.trim();
+  if (h[0] !== '#') return hex;
+  h = h.slice(1);
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  if (h.length !== 6) return hex;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

@@ -481,6 +481,23 @@ export class EditorApp {
         this.updateStatus();
         break;
       }
+      case 'electron': {
+        // An electron: charge −1, drawn as a probability cloud (render
+        // style defaults to 'cloud' for the electron kind in world.ts).
+        const ent = this.world.addEntity({
+          kind: 'electron',
+          pos: world,
+          mass: 0.2,
+          charge: -1,
+          label: 'e⁻',
+        });
+        // Make the Coulomb interaction live so electrons feel nuclei.
+        if (this.world.params.coulombK <= 0) this.world.params.coulombK = 5;
+        this.engine.sync();
+        this.select({ type: 'entity', entity: ent });
+        this.updateStatus();
+        break;
+      }
       case 'charge-pos':
       case 'charge-neg': {
         const positive = this.tool === 'charge-pos';
