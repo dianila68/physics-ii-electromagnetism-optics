@@ -1,0 +1,35 @@
+{
+  "_comment": "Built-in offline fixture for the smoke test (PLAN-robustness requirement). Keyed by Wikipedia article title (the resolved EN title). Used ONLY when --fixture is passed or when a live run falls back after a NetworkError. Extracts are abbreviated real CC BY-SA lead text; revids are illustrative.",
+  "Electron": {
+    "extract_en": "The electron is a subatomic particle with a negative one elementary electric charge. It is a fundamental particle that does not appear to be made up of any smaller particles, and is classified as a lepton. The electron's mass is approximately 1/1836 that of the proton. Quantum mechanical properties of the electron include an intrinsic angular momentum (spin) of a half-integer value, expressed in units of the reduced Planck constant.",
+    "summary_en": "Subatomic particle with a negative elementary electric charge.",
+    "revid_en": 1234567890,
+    "langlink_it": "Elettrone",
+    "extract_it": "L'elettrone è una particella subatomica con carica elettrica negativa pari a una carica elementare. È una particella fondamentale che non risulta composta da particelle più piccole ed è classificata come leptone.",
+    "revid_it": 987654321
+  },
+  "Electric field": {
+    "extract_en": "An electric field is a physical field that surrounds electrically charged particles. In classical electromagnetism, the electric field of a single charge describes their capacity to exert attractive or repulsive forces on another charged object. Electric fields originate from electric charges and time-varying electric currents. The electric field and the magnetic field are both manifestations of the electromagnetic field. The SI unit of the electric field is the volt per metre (V/m).",
+    "summary_en": "Physical field surrounding electric charges.",
+    "revid_en": 1234567891,
+    "langlink_it": "Campo elettrico",
+    "extract_it": "In fisica, il campo elettrico è un campo di forze generato nello spazio dalla presenza di cariche elettriche o di campi magnetici variabili nel tempo.",
+    "revid_it": 987654322
+  },
+  "Coulomb's law": {
+    "extract_en": "Coulomb's inverse-square law, or simply Coulomb's law, is an experimental law of physics that quantifies the amount of force between two stationary, electrically charged particles. The electric force between charged bodies at rest is conventionally called the electrostatic force or Coulomb force. The magnitude of the electrostatic force between two point charges is directly proportional to the product of the magnitudes of charges and inversely proportional to the square of the distance between them.",
+    "summary_en": "Inverse-square law quantifying force between two static electric charges.",
+    "revid_en": 1234567892,
+    "langlink_it": "Legge di Coulomb",
+    "extract_it": "In fisica, la legge di Coulomb descrive l'interazione elettrostatica tra particelle elettricamente cariche. Fu studiata da Charles Augustin de Coulomb.",
+    "revid_it": 987654323
+  },
+  "Magnetic field": {
+    "extract_en": "A magnetic field is a physical field that describes the magnetic influence on moving electric charges, electric currents, and magnetic materials. A moving charge in a magnetic field experiences a force perpendicular to its own velocity and to the magnetic field. The SI unit of magnetic field strength (the magnetic flux density) is the tesla (T).",
+    "summary_en": "Field describing magnetic influence on moving charges and currents.",
+    "revid_en": 1234567893,
+    "langlink_it": "Campo magnetico",
+    "extract_it": "In fisica, in particolare nel magnetismo, il campo magnetico è un campo vettoriale che descrive l'influenza magnetica su cariche elettriche in movimento, correnti elettriche e materiali magnetici.",
+    "revid_it": 987654324
+  }
+}
