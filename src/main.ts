@@ -6,6 +6,7 @@ import './styles/bookmarks.css';
 
 import { getLang, setLang, toggleLang, applyLang } from './utils/lang.js';
 import { initTermPanel, wireTermLinks } from './ui/term-panel.js';
+import { processText } from './ui/renderer.js';
 import { loadTerms } from './content/terms.js';
 import { buildTOC, registerNavigate, updateActiveLink, CHAPTERS } from './utils/nav.js';
 import { initBookmarks, renderMarginBookmarkCard, wireMarginBookmarkBtn } from './ui/bookmarks.js';
@@ -54,31 +55,36 @@ const chapterInits: Record<ChapterId, () => void> = {
 
 const MARGIN_NOTES: Partial<Record<ChapterId, Array<{ label: string; formula: string; text: string }>>> = {
   '00-matter': [
-    { label: 'Elementary charge', formula: 'e = 1.6 × 10⁻¹⁹ C', text: 'Charge is quantized — every observable charge is an integer multiple of e.' },
+    { label: 'Elementary charge', formula: 'e = 1.6 × 10⁻¹⁹ C', text: '[[electric-charge|Charge]] is quantized — every observable charge is an integer multiple of e, the charge carried by a [[proton]] (and minus that of an [[electron]]).' },
+    { label: 'Building blocks', formula: 'p⁺, n⁰, e⁻', text: 'Ordinary matter is built from [[proton|protons]] and [[neutron|neutrons]] (themselves bound [[quark|quarks]]) plus orbiting [[electron|electrons]]. See [[chapter:01-electrostatics|electrostatics]] for how their charge interacts.' },
   ],
   '01-electrostatics': [
-    { label: "Coulomb's Law", formula: 'F = k q₁q₂ / r²', text: 'k = 8.99 × 10⁹ N·m²/C². Force along the line joining the charges.' },
-    { label: 'Electric field', formula: 'E = F / q₀', text: 'Field at a point equals force per unit positive test charge placed there.' },
+    { label: "[[coulombs-law|Coulomb's Law]]", formula: 'F = k q₁q₂ / r²', text: 'k = 8.99 × 10⁹ N·m²/C², with k = 1/(4π[[permittivity|ε₀]]). Force along the line joining the charges.' },
+    { label: '[[electric-field|Electric field]]', formula: 'E = F / q₀', text: 'Field at a point equals force per unit positive test charge placed there. Its symmetry-based flux form is [[gauss-law|Gauss\'s Law]].' },
+    { label: '[[electric-potential|Potential]]', formula: 'E = −∇V', text: 'The [[electric-field]] is the gradient of the scalar [[electric-potential|potential]] V — the basis of [[capacitance]] and, later, [[chapter:02-circuits|circuits]].' },
   ],
   '02-circuits': [
-    { label: "Ohm's Law", formula: 'V = IR', text: 'Voltage equals current times resistance. Valid for linear (ohmic) conductors.' },
-    { label: 'Power', formula: 'P = IV = I²R', text: 'Power dissipated as heat in a resistor.' },
+    { label: "[[ohms-law|Ohm's Law]]", formula: 'V = IR', text: 'Voltage equals [[electric-current|current]] times [[resistance]]. Valid for linear (ohmic) [[conductor|conductors]].' },
+    { label: 'Power', formula: 'P = IV = I²R', text: 'Power dissipated as heat in a resistor (Joule heating).' },
+    { label: "[[kirchhoff|Kirchhoff's Laws]]", formula: 'ΣI = 0, ΣV = 0', text: 'Node and loop rules: charge conservation at junctions, energy conservation around loops.' },
   ],
   '03-magnetism': [
-    { label: 'Lorentz force', formula: 'F = qv × B', text: 'Magnetic force is perpendicular to both velocity and field — it does no work.' },
-    { label: 'Biot-Savart', formula: 'dB = μ₀I dl×r̂ / 4πr²', text: 'Magnetic field from a current element.' },
+    { label: '[[lorentz-force|Lorentz force]]', formula: 'F = qv × B', text: 'The [[magnetic-field|magnetic]] force is perpendicular to both velocity and field — it does no work.' },
+    { label: '[[biot-savart|Biot-Savart]]', formula: 'dB = μ₀I dl×r̂ / 4πr²', text: '[[magnetic-field|Magnetic field]] from a current element, scaled by [[permeability|μ₀]]. Its loop-integral form is [[ampere-law|Ampère\'s Law]].' },
   ],
   '04-induction': [
-    { label: "Faraday's Law", formula: 'EMF = −dΦ/dt', text: 'A changing magnetic flux induces an EMF. The minus sign is Lenz\'s Law.' },
+    { label: "[[faraday-law|Faraday's Law]]", formula: 'EMF = −dΦ/dt', text: 'A changing magnetic flux induces an EMF. The minus sign is [[lenz-law|Lenz\'s Law]], and a circuit\'s self-response is its [[inductance]].' },
   ],
   '05-maxwell': [
-    { label: 'Speed of light', formula: 'c = 1/√(ε₀μ₀)', text: '≈ 3 × 10⁸ m/s. Emerges from Maxwell\'s equations — light is an EM wave.' },
+    { label: 'Speed of light', formula: 'c = 1/√(ε₀μ₀)', text: '≈ 3 × 10⁸ m/s. Emerges from [[maxwell-equations|Maxwell\'s equations]] — light is an [[em-wave|EM wave]] carrying energy along the [[poynting-vector|Poynting vector]].' },
   ],
   '06-geo-optics': [
-    { label: "Snell's Law", formula: 'n₁ sin θ₁ = n₂ sin θ₂', text: 'Light bends toward the normal when entering a denser medium.' },
+    { label: "[[snell-law|Snell's Law]]", formula: 'n₁ sin θ₁ = n₂ sin θ₂', text: 'Light bends toward the normal when entering a medium of higher [[refractive-index]].' },
+    { label: '[[total-internal-reflection|TIR]]', formula: 'sin θ_c = n₂/n₁', text: 'Beyond the critical angle, light in the denser medium is wholly reflected — the principle behind optical fibers.' },
   ],
   '07-wave-optics': [
-    { label: 'Double-slit fringes', formula: 'd sin θ = mλ', text: 'Bright fringes where path difference equals integer wavelengths.' },
+    { label: 'Double-slit fringes', formula: 'd sin θ = mλ', text: 'Bright [[interference]] fringes where the path difference equals integer wavelengths.' },
+    { label: '[[diffraction|Diffraction]]', formula: 'a sin θ = mλ', text: 'Single-slit minima; waves spread around apertures per [[huygens|Huygens\' principle]]. Filtering the [[polarization]] of an [[em-wave]] follows Malus\' law.' },
   ],
 };
 
@@ -96,15 +102,25 @@ function updateMarginRail(id: ChapterId) {
   const notesHtml = items.length
     ? items.map(n => `
         <div class="margin-note-card">
-          <div class="margin-note-label">${n.label}</div>
+          <div class="margin-note-label">${processText(n.label)}</div>
           <div class="margin-note-formula">${n.formula}</div>
-          <div class="margin-note-text">${n.text}</div>
+          <div class="margin-note-text">${processText(n.text)}</div>
         </div>
       `).join('')
     : `<p style="font-size:var(--t-caption);color:var(--text-faint);font-family:var(--font-serif);line-height:1.6">Key quantities for this chapter will appear here.</p>`;
 
   notes.innerHTML = bookmarkCardHtml + notesHtml;
   wireMarginBookmarkBtn();
+
+  // Wire term links and crossrefs inside the rail (mirror the chapter-render pattern)
+  wireTermLinks(notes);
+  notes.querySelectorAll<HTMLAnchorElement>('a.crossref[data-chapter]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = a.dataset.chapter ?? a.getAttribute('href')!.slice(1);
+      navigate(target);
+    });
+  });
 }
 
 let currentChapter: ChapterId = 'home';

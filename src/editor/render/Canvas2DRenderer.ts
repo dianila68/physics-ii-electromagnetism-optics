@@ -18,6 +18,7 @@ export class Canvas2DRenderer implements Renderer {
   private worldW = 12;
   private worldH = 8;
   private fieldOverlay = false;
+  private selectedId: string | null = null;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -61,6 +62,10 @@ export class Canvas2DRenderer implements Renderer {
     this.fieldOverlay = visible;
   }
 
+  setSelected(id: string | null): void {
+    this.selectedId = id;
+  }
+
   render(world: World): void {
     // Keep the transform in sync with the world's bounds.
     if (world.params.bounds.w !== this.worldW || world.params.bounds.h !== this.worldH) {
@@ -80,6 +85,7 @@ export class Canvas2DRenderer implements Renderer {
     if (this.fieldOverlay) this.drawFieldOverlay(world);
     this.drawLinks(world);
     this.drawEntities(world);
+    this.drawSelectionCue(world);
 
     ctx.restore();
   }
@@ -243,6 +249,44 @@ export class Canvas2DRenderer implements Renderer {
         ctx.fillText(e.label, p.x, p.y);
       }
     }
+  }
+
+  // Selection cue: a faint velocity vector from the selected body, so its
+  // motion is legible while paused or stepping. Scaled so typical speeds read
+  // without dominating; hidden when essentially at rest.
+  private drawSelectionCue(world: World): void {
+    if (!this.selectedId) return;
+    const e = world.entities.get(this.selectedId);
+    if (!e) return;
+    const speed = Math.hypot(e.vel.x, e.vel.y);
+    if (speed < 0.05) return;
+
+    const ctx = this.ctx;
+    const p = this.worldToScreen(e.pos);
+    // 0.25 s of travel, in screen pixels, capped so fast bodies stay tidy.
+    const len = Math.min(120, speed * 0.25 * this.scale);
+    const ux = e.vel.x / speed;
+    const uy = e.vel.y / speed;
+    const tipX = p.x + ux * len;
+    const tipY = p.y + uy * len;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(41,128,185,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(tipX, tipY);
+    ctx.stroke();
+
+    const ah = 7;
+    const angle = Math.atan2(uy, ux);
+    ctx.beginPath();
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX - ah * Math.cos(angle - 0.5), tipY - ah * Math.sin(angle - 0.5));
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX - ah * Math.cos(angle + 0.5), tipY - ah * Math.sin(angle + 0.5));
+    ctx.stroke();
+    ctx.restore();
   }
 
   // A diffuse probability cloud: a dense centre fading to fully transparent,

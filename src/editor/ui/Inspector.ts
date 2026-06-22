@@ -1,8 +1,8 @@
 import type { World } from '../core/world.js';
-import { entityLayer } from '../core/world.js';
-import type { Entity, Link } from '../core/types.js';
+import { entityLayer, renderForKind } from '../core/world.js';
+import type { Entity, Link, RenderStyle, ScaleLayer } from '../core/types.js';
 import { t } from '../../utils/lang.js';
-import { makeSwitch } from '../../ui/components.js';
+import { makeSwitch, makeTabs } from '../../ui/components.js';
 
 export type Selection =
   | { type: 'entity'; entity: Entity }
@@ -17,10 +17,14 @@ export class Inspector {
   readonly element: HTMLElement;
   private world: World;
   private onChange: () => void;
+  // Called when an edit changes simulation STRUCTURE (e.g. a body's layer,
+  // which alters force-gating), so the host can re-sync the engine. Optional.
+  private onStructureChange: () => void;
 
-  constructor(world: World, onChange: () => void) {
+  constructor(world: World, onChange: () => void, onStructureChange?: () => void) {
     this.world = world;
     this.onChange = onChange;
+    this.onStructureChange = onStructureChange ?? (() => {});
     this.element = document.createElement('div');
     this.element.className = 'editor-inspector';
   }
@@ -87,6 +91,33 @@ export class Inspector {
     this.element.appendChild(row);
   }
 
+  // A labelled segmented control (built on the design-system Tabs). `onPick`
+  // fires the redraw; pass `structural: true` to also re-sync the engine.
+  private segmentedField(
+    label: string,
+    items: Array<{ label: string; value: string }>,
+    active: string,
+    set: (v: string) => void,
+    opts: { structural?: boolean } = {},
+  ): void {
+    const row = document.createElement('div');
+    row.className = 'insp-row insp-row-segmented';
+    const span = document.createElement('span');
+    span.textContent = label;
+    const tabs = makeTabs({
+      items,
+      active,
+      accent: 'blue',
+      onChange: v => {
+        set(v);
+        if (opts.structural) this.onStructureChange();
+        this.onChange();
+      },
+    });
+    row.append(span, tabs);
+    this.element.appendChild(row);
+  }
+
   private colorField(label: string, value: string, set: (v: string) => void): void {
     const row = document.createElement('label');
     row.className = 'insp-row';
@@ -119,18 +150,46 @@ export class Inspector {
     });
     this.colorField(t('Color', 'Colore'), e.color, v => (e.color = v));
 
-    const layerNote = document.createElement('div');
-    layerNote.className = 'insp-note';
-    const layerName = {
-      subatomic: t('subatomic', 'subatomico'),
-      atomic: t('atomic', 'atomico'),
-      molecular: t('molecular', 'molecolare'),
-    }[entityLayer(e)];
-    layerNote.textContent = e.composite
-      ? t(`composite · ${layerName} layer · ${e.composedOf?.length ?? 0} constituents`,
-          `composito · livello ${layerName} · ${e.composedOf?.length ?? 0} costituenti`)
-      : t(`layer: ${layerName}`, `livello: ${layerName}`);
-    this.element.appendChild(layerNote);
+    // Representation: any body can be shown as a hard sphere or a diffuse
+    // probability cloud (not just electrons).
+    this.segmentedField(
+      t('Render', 'Resa'),
+      [
+        { label: t('Solid', 'Solido'), value: 'solid' },
+        { label: t('Cloud', 'Nube'), value: 'cloud' },
+      ],
+      entityRenderStyle(e),
+      v => (e.render = v as RenderStyle),
+    );
+
+    // Scale layer: lets emergence scenarios be built by hand. Changing the
+    // layer re-gates the inter-layer forces, so it is a structural edit.
+    this.segmentedField(
+      t('Layer', 'Livello'),
+      [
+        { label: t('Sub', 'Sub'), value: 'subatomic' },
+        { label: t('Atom', 'Atom'), value: 'atomic' },
+        { label: t('Mol', 'Mol'), value: 'molecular' },
+      ],
+      entityLayer(e),
+      v => (e.layer = v as ScaleLayer),
+      { structural: true },
+    );
+
+    if (e.composite) {
+      const layerName = {
+        subatomic: t('subatomic', 'subatomico'),
+        atomic: t('atomic', 'atomico'),
+        molecular: t('molecular', 'molecolare'),
+      }[entityLayer(e)];
+      const note = document.createElement('div');
+      note.className = 'insp-note';
+      note.textContent = t(
+        `composite · ${layerName} layer · ${e.composedOf?.length ?? 0} constituents`,
+        `composito · livello ${layerName} · ${e.composedOf?.length ?? 0} costituenti`,
+      );
+      this.element.appendChild(note);
+    }
 
     const pos = document.createElement('div');
     pos.className = 'insp-note';
@@ -171,4 +230,9 @@ export class Inspector {
     this.numberField(t('Confinement', 'Confinamento'), p.strongTension, v => (p.strongTension = Math.max(0, v)), { min: 0, step: 0.5 });
     this.numberField(t('Core repulsion', 'Repulsione nucleo'), p.strongCore, v => (p.strongCore = Math.max(0, v)), { min: 0, step: 0.1 });
   }
+}
+
+// An entity's effective render style (explicit field, else the kind default).
+function entityRenderStyle(e: Entity): RenderStyle {
+  return e.render ?? renderForKind(e.kind);
 }

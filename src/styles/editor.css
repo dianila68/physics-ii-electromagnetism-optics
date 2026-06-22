@@ -175,6 +175,8 @@
   background: var(--surface-card);
 }
 .insp-row-switch { justify-content: flex-start; }
+.insp-row-segmented .tabs { flex: 0 0 auto; }
+.insp-row-segmented .tab-btn { padding-left: var(--sp-2); padding-right: var(--sp-2); }
 .insp-note {
   font-family: var(--font-mono);
   font-size: var(--t-micro);

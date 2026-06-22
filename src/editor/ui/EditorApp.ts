@@ -37,6 +37,13 @@ export class EditorApp {
   private rafId = 0;
   private lastTime = 0;
 
+  // Auto-emergence: when on AND the sim is playing AND a boundary is active,
+  // runEmergence() fires periodically (every AUTO_EMERGE_INTERVAL seconds of
+  // simulated time) so aggregation happens live without manual Emerge clicks.
+  private autoEmerge = false;
+  private autoEmergeAccum = 0;
+  private static readonly AUTO_EMERGE_INTERVAL = 0.5; // seconds
+
   // Interaction state.
   private draggingId: string | null = null;
   private springStartId: string | null = null;
@@ -74,7 +81,11 @@ export class EditorApp {
       onReset: () => this.reset(),
       onSpeed: m => (this.speed = m),
     });
-    this.inspector = new Inspector(this.world, () => this.requestRender());
+    this.inspector = new Inspector(
+      this.world,
+      () => this.requestRender(),
+      () => { this.engine.sync(); this.updateStatus(); },
+    );
 
     // Open with a demo so the page is alive immediately.
     this.world.loadScene(defaultScene());
@@ -244,6 +255,7 @@ export class EditorApp {
     this.renderer = next;
     this.renderer.mount(this.viewportEl);
     this.renderer.setFieldOverlay(this.fieldOn);
+    this.renderer.setSelected?.(this.selection?.type === 'entity' ? this.selection.entity.id : null);
     this.bindPointer(this.renderer.canvas);
     this.renderer.resize();
     this.renderer.render(this.world);
@@ -273,9 +285,24 @@ export class EditorApp {
     );
     this.emergeBtn.addEventListener('click', () => this.doEmerge());
 
+    // Auto toggle: while playing, re-run emergence periodically. Manual
+    // Emerge still works regardless of this switch.
+    const auto = makeSwitch({
+      label: t('Auto', 'Auto'),
+      checked: this.autoEmerge,
+      onChange: on => {
+        this.autoEmerge = on;
+        this.autoEmergeAccum = 0;
+      },
+    });
+    auto.title = t(
+      'While playing, automatically aggregate bound clusters about twice a second.',
+      'Durante la riproduzione, aggrega automaticamente i cluster legati circa due volte al secondo.',
+    );
+
     const row = document.createElement('div');
     row.className = 'editor-topbar-group';
-    row.append(this.boundaryHost, this.emergeBtn);
+    row.append(this.boundaryHost, this.emergeBtn, auto);
     wrap.append(label, row);
     this.renderBoundaryTabs();
     return wrap;
@@ -302,7 +329,7 @@ export class EditorApp {
     if (this.emergeBtn) this.emergeBtn.disabled = active === 'none';
   }
 
-  // Trigger one aggregation pass across the active boundary.
+  // Trigger one aggregation pass across the active boundary (manual button).
   private doEmerge(): void {
     const result = runEmergence(this.world);
     this.engine.sync();
@@ -314,6 +341,25 @@ export class EditorApp {
         'No bound cluster ready to emerge — let constituents settle, or widen the bind radius.',
         'Nessun cluster legato pronto a emergere — lascia assestare i costituenti o allarga il raggio di legame.',
       );
+    }
+  }
+
+  // Auto-emergence tick, driven by the sim loop. Only re-syncs / re-selects
+  // when a pass actually aggregates something, so an idle scene stays cheap
+  // and a running selection isn't disturbed needlessly.
+  private autoEmergeTick(simDt: number): void {
+    if (!this.autoEmerge || !this.world.params.activeBoundary) return;
+    this.autoEmergeAccum += simDt;
+    if (this.autoEmergeAccum < EditorApp.AUTO_EMERGE_INTERVAL) return;
+    this.autoEmergeAccum = 0;
+    const result = runEmergence(this.world);
+    if (result.composedCount > 0) {
+      this.engine.sync();
+      // A composite may have absorbed the currently selected body.
+      if (this.selection?.type === 'entity' && !this.world.entities.has(this.selection.entity.id)) {
+        this.select(null);
+      }
+      this.updateStatus();
     }
   }
 
@@ -409,6 +455,7 @@ export class EditorApp {
   private select(sel: Selection): void {
     this.selection = sel;
     this.inspector.show(sel);
+    this.renderer.setSelected?.(sel?.type === 'entity' ? sel.entity.id : null);
   }
 
   // ---- pointer interaction ----
@@ -614,7 +661,9 @@ export class EditorApp {
       if (this.running && !this.draggingId) {
         const dt = Math.min(0.05, (now - this.lastTime) / 1000);
         this.lastTime = now;
-        this.engine.step(dt * this.speed);
+        const simDt = dt * this.speed;
+        this.engine.step(simDt);
+        this.autoEmergeTick(simDt);
         this.refreshInspectorReadout();
       } else {
         this.lastTime = now;
