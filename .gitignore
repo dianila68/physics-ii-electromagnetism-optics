@@ -28,3 +28,6 @@ packages/
 
 # Design assets (large binaries)
 *.zip
+
+# Claude Code local worktrees / settings
+.claude/

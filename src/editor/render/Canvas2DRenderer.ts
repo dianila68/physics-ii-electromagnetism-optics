@@ -18,6 +18,7 @@ export class Canvas2DRenderer implements Renderer {
   private worldW = 12;
   private worldH = 8;
   private fieldOverlay = false;
+  private selectedId: string | null = null;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -61,6 +62,10 @@ export class Canvas2DRenderer implements Renderer {
     this.fieldOverlay = visible;
   }
 
+  setSelected(id: string | null): void {
+    this.selectedId = id;
+  }
+
   render(world: World): void {
     // Keep the transform in sync with the world's bounds.
     if (world.params.bounds.w !== this.worldW || world.params.bounds.h !== this.worldH) {
@@ -80,6 +85,7 @@ export class Canvas2DRenderer implements Renderer {
     if (this.fieldOverlay) this.drawFieldOverlay(world);
     this.drawLinks(world);
     this.drawEntities(world);
+    this.drawSelectionCue(world);
 
     ctx.restore();
   }
@@ -212,7 +218,12 @@ export class Canvas2DRenderer implements Renderer {
       const p = this.worldToScreen(e.pos);
       const r = Math.max(5, e.radius * this.scale);
 
-      if (e.fixed) {
+      if (e.render === 'cloud') {
+        // Probability cloud: a soft radial gradient with no hard edge — the
+        // modern depiction of a quantum object (e.g. an electron), rather
+        // than a ball on an orbit.
+        this.drawCloud(p, r, e.color);
+      } else if (e.kind === 'anchor') {
         // Anchors drawn as squares to read as "pinned to the world".
         ctx.fillStyle = e.color;
         ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
@@ -230,8 +241,9 @@ export class Canvas2DRenderer implements Renderer {
       }
 
       if (e.label) {
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 11px sans-serif';
+        // Clouds get a dim, centered label so they stay diffuse.
+        ctx.fillStyle = e.render === 'cloud' ? 'rgba(255,255,255,0.85)' : '#fff';
+        ctx.font = `${e.render === 'cloud' ? '' : 'bold '}11px sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(e.label, p.x, p.y);
@@ -239,7 +251,75 @@ export class Canvas2DRenderer implements Renderer {
     }
   }
 
+  // Selection cue: a faint velocity vector from the selected body, so its
+  // motion is legible while paused or stepping. Scaled so typical speeds read
+  // without dominating; hidden when essentially at rest.
+  private drawSelectionCue(world: World): void {
+    if (!this.selectedId) return;
+    const e = world.entities.get(this.selectedId);
+    if (!e) return;
+    const speed = Math.hypot(e.vel.x, e.vel.y);
+    if (speed < 0.05) return;
+
+    const ctx = this.ctx;
+    const p = this.worldToScreen(e.pos);
+    // 0.25 s of travel, in screen pixels, capped so fast bodies stay tidy.
+    const len = Math.min(120, speed * 0.25 * this.scale);
+    const ux = e.vel.x / speed;
+    const uy = e.vel.y / speed;
+    const tipX = p.x + ux * len;
+    const tipY = p.y + uy * len;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(41,128,185,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(tipX, tipY);
+    ctx.stroke();
+
+    const ah = 7;
+    const angle = Math.atan2(uy, ux);
+    ctx.beginPath();
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX - ah * Math.cos(angle - 0.5), tipY - ah * Math.sin(angle - 0.5));
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX - ah * Math.cos(angle + 0.5), tipY - ah * Math.sin(angle + 0.5));
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // A diffuse probability cloud: a dense centre fading to fully transparent,
+  // with a couple of fainter shells so it reads as a distribution, not a disc.
+  private drawCloud(p: { x: number; y: number }, r: number, color: string): void {
+    const ctx = this.ctx;
+    const R = r * 1.7; // clouds extend beyond their nominal radius
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R);
+    grad.addColorStop(0, hexToRgba(color, 0.55));
+    grad.addColorStop(0.45, hexToRgba(color, 0.28));
+    grad.addColorStop(0.8, hexToRgba(color, 0.08));
+    grad.addColorStop(1, hexToRgba(color, 0));
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, R, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
   dispose(): void {
     this.canvas.remove();
   }
+}
+
+// Convert a #rgb / #rrggbb hex string to an rgba() string at the given alpha.
+// Falls back to the raw color (assumed already rgba/named) on a non-hex input.
+function hexToRgba(hex: string, alpha: number): string {
+  let h = hex.trim();
+  if (h[0] !== '#') return hex;
+  h = h.slice(1);
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  if (h.length !== 6) return hex;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

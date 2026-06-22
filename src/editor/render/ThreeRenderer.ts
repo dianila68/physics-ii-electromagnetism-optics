@@ -135,9 +135,25 @@ export class ThreeRenderer implements Renderer {
     }
     for (const e of world.entities.values()) {
       if (this.meshes.has(e.id)) continue;
-      const geo = e.fixed ? this.boxGeo : this.sphereGeo;
-      const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(e.color), roughness: 0.45, metalness: 0.1 });
+      const isCloud = e.render === 'cloud';
+      // Anchors are boxes; everything else (including clouds) is a sphere.
+      const geo = (!isCloud && e.kind === 'anchor') ? this.boxGeo : this.sphereGeo;
+      const mat = isCloud
+        // Probability cloud: translucent, self-lit, no depth write so it
+        // reads as a diffuse glow rather than a glassy ball.
+        ? new THREE.MeshStandardMaterial({
+            color: new THREE.Color(e.color),
+            emissive: new THREE.Color(e.color),
+            emissiveIntensity: 0.6,
+            transparent: true,
+            opacity: 0.22,
+            depthWrite: false,
+            roughness: 1,
+            metalness: 0,
+          })
+        : new THREE.MeshStandardMaterial({ color: new THREE.Color(e.color), roughness: 0.45, metalness: 0.1 });
       const mesh = new THREE.Mesh(geo, mat);
+      if (isCloud) mesh.renderOrder = 2; // blend over solids
       this.scene.add(mesh);
       this.meshes.set(e.id, mesh);
     }
@@ -165,7 +181,11 @@ export class ThreeRenderer implements Renderer {
       const mesh = this.meshes.get(e.id);
       if (!mesh) continue;
       mesh.position.set(e.pos.x, -e.pos.y, 0);
-      const s = e.fixed ? e.radius * 2 : e.radius;
+      const s = e.render === 'cloud'
+        ? e.radius * 1.7              // clouds extend beyond their nominal radius
+        : e.kind === 'anchor'
+          ? e.radius * 2             // box anchors
+          : e.radius;                // solid spheres
       mesh.scale.set(s, s, s);
       (mesh.material as THREE.MeshStandardMaterial).color.set(e.color);
     }

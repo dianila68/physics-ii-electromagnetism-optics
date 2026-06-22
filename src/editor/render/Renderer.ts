@@ -23,5 +23,10 @@ export interface Renderer {
   // Toggle the electric-field vector overlay (EM scale visualization).
   setFieldOverlay(visible: boolean): void;
 
+  // Optionally tell the renderer which entity is selected, so it can add a
+  // selection cue (e.g. a faint velocity vector). Renderers that don't draw
+  // a cue may omit this; the editor calls it only if present.
+  setSelected?(id: string | null): void;
+
   dispose(): void;
 }

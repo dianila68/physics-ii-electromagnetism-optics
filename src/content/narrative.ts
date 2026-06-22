@@ -25,57 +25,57 @@ export const OPENERS: Record<string, Narrative> = {
   '00-matter': {
     title: { en: 'Why start here?', it: 'Perché partire da qui?' },
     text: {
-      en: 'Every wire, field and signal in this book rests on one thing: electric charge. Physics works by hunting for the smallest invariant building blocks, so before we move charge around we ask what it even *is*. Why does charge come in indivisible lumps, and where does it live inside matter?',
-      it: 'Ogni filo, campo e segnale di questo libro poggia su una cosa: la carica elettrica. La fisica procede cercando i più piccoli mattoni invarianti, quindi prima di spostare la carica chiediamoci cosa *sia*. Perché la carica esiste solo in grumi indivisibili, e dove risiede dentro la materia?',
+      en: 'Every wire, field and signal in this book rests on one thing: [[electric-charge|electric charge]]. Physics works by hunting for the smallest invariant building blocks, so before we move charge around we ask what it even *is*. Why does charge come in indivisible lumps, carried by the [[electron]] and the [[proton]], and where does it live inside matter?',
+      it: 'Ogni filo, campo e segnale di questo libro poggia su una cosa: la [[electric-charge|carica elettrica]]. La fisica procede cercando i più piccoli mattoni invarianti, quindi prima di spostare la carica chiediamoci cosa *sia*. Perché la carica esiste solo in grumi indivisibili, portati dall\'[[electron|elettrone]] e dal [[proton|protone]], e dove risiede dentro la materia?',
     },
   },
   '01-electrostatics': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'Control the force between charges and you can hold matter together and build technology. But cataloguing every pair of charges is hopeless — the physicist\'s move is to find one object that carries the force everywhere: the field. How does one charge "know" another is there across empty space?',
-      it: 'Controlla la forza tra le cariche e potrai tenere insieme la materia e costruire tecnologia. Ma catalogare ogni coppia di cariche è impossibile: la mossa del fisico è trovare un oggetto che trasporti la forza ovunque — il campo. Come fa una carica a "sapere" che un\'altra è presente attraverso lo spazio vuoto?',
+      en: 'Control the force between charges and you can hold matter together and build technology. But cataloguing every pair with [[coulombs-law|Coulomb\'s law]] is hopeless — the physicist\'s move is to find one object that carries the force everywhere: the [[electric-field|field]]. How does one charge "know" another is there across empty space?',
+      it: 'Controlla la forza tra le cariche e potrai tenere insieme la materia e costruire tecnologia. Ma catalogare ogni coppia con la [[coulombs-law|legge di Coulomb]] è impossibile: la mossa del fisico è trovare un oggetto che trasporti la forza ovunque — il [[electric-field|campo]]. Come fa una carica a "sapere" che un\'altra è presente attraverso lo spazio vuoto?',
     },
   },
   '02-circuits': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'Every device you use runs on a sustained flow of charge, not on static charge sitting still. So we shift our question from equilibrium to flow. A charged conductor settles until the field inside vanishes — so what keeps charge moving in a steady, unending stream?',
-      it: 'Ogni dispositivo che usi funziona grazie a un flusso continuo di carica, non a carica statica ferma. Spostiamo quindi la domanda dall\'equilibrio al flusso. Un conduttore carico si assesta finché il campo interno svanisce — cosa mantiene allora la carica in un flusso costante e ininterrotto?',
+      en: 'Every device you use runs on a sustained [[electric-current|flow of charge]], not on static charge sitting still. So we shift our question from equilibrium to flow. A charged [[conductor]] settles until the field inside vanishes — so what keeps charge moving in a steady, unending stream, and what holds it back?',
+      it: 'Ogni dispositivo che usi funziona grazie a un [[electric-current|flusso continuo di carica]], non a carica statica ferma. Spostiamo quindi la domanda dall\'equilibrio al flusso. Un [[conductor|conduttore]] carico si assesta finché il campo interno svanisce — cosa mantiene allora la carica in un flusso costante e ininterrotto, e cosa la frena?',
     },
   },
   '03-magnetism': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'Motors, generators and data storage all live here. The guiding question is one of symmetry: what changes when charge starts to move? Hold a compass near a current-carrying wire and the needle swings. Why do *moving* charges create — and feel — a force that electrostatics never predicted?',
-      it: 'Motori, generatori e memorie vivono qui. La domanda guida è di simmetria: cosa cambia quando la carica si muove? Avvicina una bussola a un filo percorso da corrente e l\'ago ruota. Perché le cariche *in moto* creano — e sentono — una forza che l\'elettrostatica non prevedeva?',
+      en: 'Motors, generators and data storage all live here. The guiding question is one of symmetry: what changes when charge starts to move? Hold a compass near a [[electric-current|current]]-carrying wire and the needle swings. Why do *moving* charges create — and feel — a [[magnetic-field|magnetic force]] that [[chapter:01-electrostatics|electrostatics]] never predicted?',
+      it: 'Motori, generatori e memorie vivono qui. La domanda guida è di simmetria: cosa cambia quando la carica si muove? Avvicina una bussola a un filo percorso da [[electric-current|corrente]] e l\'ago ruota. Perché le cariche *in moto* creano — e sentono — una [[magnetic-field|forza magnetica]] che l\'[[chapter:01-electrostatics|elettrostatica]] non prevedeva?',
     },
   },
   '04-induction': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'This is how nearly all our electricity is generated. The lead is symmetry again: if currents make magnetism, can magnetism make currents? Hold a charge perfectly still and move a magnet past it instead — a current appears, yet the velocity is zero. What drives it?',
-      it: 'È così che si genera quasi tutta la nostra elettricità. Il filo conduttore è di nuovo la simmetria: se le correnti creano magnetismo, il magnetismo può creare correnti? Tieni una carica perfettamente ferma e muovi invece un magnete — appare una corrente, eppure la velocità è zero. Cosa la produce?',
+      en: 'This is how nearly all our electricity is generated. The lead is symmetry again: if currents make [[magnetic-field|magnetism]], can magnetism make currents? Hold a charge perfectly still and move a magnet past it instead — a current appears, yet the velocity is zero, so the [[lorentz-force]] cannot be the cause. What drives it?',
+      it: 'È così che si genera quasi tutta la nostra elettricità. Il filo conduttore è di nuovo la simmetria: se le correnti creano [[magnetic-field|magnetismo]], il magnetismo può creare correnti? Tieni una carica perfettamente ferma e muovi invece un magnete — appare una corrente, eppure la velocità è zero, perciò la [[lorentz-force|forza di Lorentz]] non può esserne la causa. Cosa la produce?',
     },
   },
   '05-maxwell': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'Here four separate laws snap together and, astonishingly, predict light itself. The lever is pure consistency: the equations must not contradict each other. Apply Ampère\'s law to a charging capacitor and it gives two different answers. What is missing?',
-      it: 'Qui quattro leggi separate si incastrano e, sorprendentemente, predicono la luce stessa. La leva è la pura coerenza: le equazioni non devono contraddirsi. Applica la legge di Ampère a un condensatore in carica e otterrai due risposte diverse. Cosa manca?',
+      en: 'Here four separate laws snap together into the [[maxwell-equations|Maxwell equations]] and, astonishingly, predict light itself. The lever is pure consistency: the equations must not contradict each other. Apply [[ampere-law|Ampère\'s law]] to a charging capacitor and it gives two different answers. What is missing?',
+      it: 'Qui quattro leggi separate si incastrano nelle [[maxwell-equations|equazioni di Maxwell]] e, sorprendentemente, predicono la luce stessa. La leva è la pura coerenza: le equazioni non devono contraddirsi. Applica la [[ampere-law|legge di Ampère]] a un condensatore in carica e otterrai due risposte diverse. Cosa manca?',
     },
   },
   '06-geo-optics': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'Lenses, eyes, cameras and optical fibre all obey the rules here. When the wavelength is tiny compared to the obstacles, we can forget the wave and simply follow rays. Maxwell\'s equations in vacuum give a self-sustaining wave at speed c — if light is that wave, how does it travel and bend?',
-      it: 'Lenti, occhi, fotocamere e fibre ottiche obbediscono alle regole di qui. Quando la lunghezza d\'onda è minuscola rispetto agli ostacoli, possiamo dimenticare l\'onda e seguire semplicemente i raggi. Le equazioni di Maxwell nel vuoto danno un\'onda autosostenuta alla velocità c — se la luce è quell\'onda, come viaggia e come si piega?',
+      en: 'Lenses, eyes, cameras and optical fibre all obey the rules here. When the wavelength is tiny compared to the obstacles, we can forget the wave and simply follow rays. The [[chapter:05-maxwell|Maxwell equations]] in vacuum give a self-sustaining [[em-wave|electromagnetic wave]] at speed $c$ — if light is that wave, how does it travel, bend and bounce?',
+      it: 'Lenti, occhi, fotocamere e fibre ottiche obbediscono alle regole di qui. Quando la lunghezza d\'onda è minuscola rispetto agli ostacoli, possiamo dimenticare l\'onda e seguire semplicemente i raggi. Le [[chapter:05-maxwell|equazioni di Maxwell]] nel vuoto danno un\'[[em-wave|onda elettromagnetica]] autosostenuta alla velocità $c$ — se la luce è quell\'onda, come viaggia, si piega e rimbalza?',
     },
   },
   '07-wave-optics': {
     title: { en: 'Why this chapter?', it: 'Perché questo capitolo?' },
     text: {
-      en: 'This is why we can measure atoms with light and why every lens and screen has a sharpness limit. We drop the ray approximation and treat light as the wave it truly is. Narrow a slit until rays predict a crisp shadow — but the edges shimmer with bright and dark fringes. Why?',
-      it: 'È per questo che possiamo misurare gli atomi con la luce e perché ogni lente e schermo ha un limite di nitidezza. Abbandoniamo l\'approssimazione dei raggi e trattiamo la luce come l\'onda che è davvero. Restringi una fenditura finché i raggi prevedono un\'ombra netta — ma i bordi brillano di frange chiare e scure. Perché?',
+      en: 'This is why we can measure atoms with light and why every lens and screen has a sharpness limit. We drop the ray approximation and treat light as the [[em-wave|wave]] it truly is. Narrow a slit until rays predict a crisp shadow — but the edges shimmer with bright and dark [[interference|fringes]]. Why?',
+      it: 'È per questo che possiamo misurare gli atomi con la luce e perché ogni lente e schermo ha un limite di nitidezza. Abbandoniamo l\'approssimazione dei raggi e trattiamo la luce come l\'[[em-wave|onda]] che è davvero. Restringi una fenditura finché i raggi prevedono un\'ombra netta — ma i bordi brillano di [[interference|frange]] chiare e scure. Perché?',
     },
   },
 };

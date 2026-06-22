@@ -30,9 +30,19 @@ export interface Entity {
   // participate at their own `layer` as a single body.
   composite?: boolean;
   composedOf?: string[];
+
+  // --- Representation (Phase 7) ---
+  // How the renderers should depict this body. 'solid' is a hard sphere
+  // (mechanical objects, nuclei). 'cloud' is a semi-transparent probability
+  // cloud — the state-of-the-art depiction of quantum objects such as
+  // electrons, which are NOT little balls on orbits. Optional: defaults by
+  // kind (electrons → cloud) in world.ts.
+  render?: RenderStyle;
 }
 
-export type EntityKind = 'mass' | 'anchor' | 'atom' | 'quark';
+export type RenderStyle = 'solid' | 'cloud';
+
+export type EntityKind = 'mass' | 'anchor' | 'atom' | 'quark' | 'electron';
 
 // The ordered matter scales. Emergence may only couple ADJACENT layers
 // (subatomic↔atomic OR atomic↔molecular), never skip one. The numeric

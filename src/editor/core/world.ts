@@ -8,7 +8,14 @@ export function entityDefaultColor(kind: EntityKind): string {
   if (kind === 'anchor') return '#94a3b8';
   if (kind === 'atom') return '#27ae60';
   if (kind === 'quark') return '#9b59b6';
+  if (kind === 'electron') return '#5e7df2';
   return '#e74c3c';
+}
+
+// The default representation for a kind. Electrons are quantum objects and
+// are drawn as a semi-transparent probability cloud, not a hard ball.
+export function renderForKind(kind: EntityKind): 'solid' | 'cloud' {
+  return kind === 'electron' ? 'cloud' : 'solid';
 }
 
 // The default scale layer implied by a body's kind, used when an entity
@@ -88,7 +95,7 @@ export class World {
       pos: partial.pos ? clone(partial.pos) : zero(),
       vel: partial.vel ? clone(partial.vel) : zero(),
       mass: partial.mass ?? 1,
-      radius: partial.radius ?? (partial.kind === 'atom' ? 0.3 : 0.25),
+      radius: partial.radius ?? (partial.kind === 'atom' ? 0.3 : partial.kind === 'electron' ? 0.5 : 0.25),
       fixed: partial.fixed ?? partial.kind === 'anchor',
       charge: partial.charge ?? 0,
       color: partial.color ?? entityDefaultColor(partial.kind),
@@ -96,6 +103,7 @@ export class World {
       layer: partial.layer ?? layerForKind(partial.kind),
       composite: partial.composite,
       composedOf: partial.composedOf ? [...partial.composedOf] : undefined,
+      render: partial.render ?? renderForKind(partial.kind),
     };
     this.entities.set(e.id, e);
     this.structureRevision++;

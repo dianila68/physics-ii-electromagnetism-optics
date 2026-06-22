@@ -173,6 +173,19 @@ const confinement = (): SceneData => ({
   links: [],
 });
 
+// Modern atom: a tiny nucleus sitting inside a static electron probability
+// cloud — the state-of-the-art picture, NOT an electron ball on an orbit.
+// Both bodies are fixed, so the cloud is a stationary distribution.
+const hydrogenCloud = (): SceneData => ({
+  version: 1,
+  params: { ...baseParams(), gravity: { x: 0, y: 0 }, linearDamping: 0.05, coulombK: 5 },
+  entities: [
+    { id: 'e1', kind: 'mass', pos: { x: 6, y: 4 }, vel: { x: 0, y: 0 }, mass: 10, radius: 0.2, fixed: true, charge: 1, color: '#e74c3c', label: 'p⁺', render: 'solid', layer: 'atomic' },
+    { id: 'e2', kind: 'electron', pos: { x: 6, y: 4 }, vel: { x: 0, y: 0 }, mass: 0.2, radius: 1.3, fixed: true, charge: -1, color: '#5e7df2', render: 'cloud', layer: 'atomic' },
+  ],
+  links: [],
+});
+
 // --- Layered emergence (Phase 6) ---
 
 // Subatomic → atomic: three triplets of confined quarks. Run the sim so each
@@ -241,6 +254,7 @@ export const PRESETS: Preset[] = [
   { id: 'cyclotron', nameEn: 'Cyclotron (B field)', nameIt: 'Ciclotrone (campo B)', build: cyclotron },
   { id: 'lj-cluster', nameEn: 'Atomic Cluster (LJ)', nameIt: 'Cluster Atomico (LJ)', build: ljCluster },
   { id: 'diatomic', nameEn: 'Diatomic Molecule', nameIt: 'Molecola Biatomica', build: diatomic },
+  { id: 'hydrogen-cloud', nameEn: 'Atom (electron cloud)', nameIt: 'Atomo (nube elettronica)', build: hydrogenCloud },
   { id: 'proton', nameEn: 'Proton (3 quarks)', nameIt: 'Protone (3 quark)', build: proton },
   { id: 'confinement', nameEn: 'Quark Confinement', nameIt: 'Confinamento Quark', build: confinement },
   { id: 'emerge-nucleons', nameEn: 'Emergence: quarks → nucleons', nameIt: 'Emergenza: quark → nucleoni', build: emergeNucleons },
