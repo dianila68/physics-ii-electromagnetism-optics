@@ -13,6 +13,8 @@ import { downloadScene, parseScene } from '../core/serialize.js';
 import { PRESETS, defaultScene } from '../presets.js';
 import { t } from '../../utils/lang.js';
 import { makeTabs, makeSwitch } from '../../ui/components.js';
+import type { EmergenceBoundary } from '../core/types.js';
+import { runEmergence } from '../engine/Emergence.js';
 
 // Top-level controller for the physics Lab. Owns the World, the active
 // PhysicsEngine and Renderer (both swappable via their interfaces), the
@@ -50,6 +52,8 @@ export class EditorApp {
   private fieldOn = false;
   private engineTabsHost!: HTMLElement;
   private viewTabsHost!: HTMLElement;
+  private boundaryHost!: HTMLElement;
+  private emergeBtn!: HTMLButtonElement;
 
   // Stable pointer-handler refs so listeners can be moved when the
   // renderer (and thus its canvas) is swapped.
@@ -92,7 +96,7 @@ export class EditorApp {
     topbar.className = 'editor-topbar';
     const leftControls = document.createElement('div');
     leftControls.className = 'editor-topbar-group';
-    leftControls.append(this.buildPresetSelect(), this.buildEngineSelect(), this.buildViewSelect());
+    leftControls.append(this.buildPresetSelect(), this.buildEngineSelect(), this.buildViewSelect(), this.buildEmergenceControl());
     topbar.append(leftControls, this.buildFileControls());
 
     const body = document.createElement('div');
@@ -245,6 +249,74 @@ export class EditorApp {
     this.renderer.render(this.world);
   }
 
+  // Emergence boundary selector — the "facing the decision" surface. The
+  // user picks the ONE adjacent layer pair across which bound clusters are
+  // promoted into composites. Because it is a single selector (None / one
+  // adjacent pair / the other), the one-level rule is enforced in the UI:
+  // there is no way to activate two boundaries at once or a skip-level pair.
+  private buildEmergenceControl(): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'editor-control';
+    const label = document.createElement('span');
+    label.className = 'eyebrow';
+    label.textContent = t('Emergence boundary', 'Confine di emergenza');
+
+    this.boundaryHost = document.createElement('div');
+
+    this.emergeBtn = document.createElement('button');
+    this.emergeBtn.type = 'button';
+    this.emergeBtn.className = 'btn btn-secondary btn-sm';
+    this.emergeBtn.textContent = t('Emerge ▲', 'Emergi ▲');
+    this.emergeBtn.title = t(
+      'Aggregate bound clusters into composites at the next layer up.',
+      'Aggrega i cluster legati in compositi al livello superiore.',
+    );
+    this.emergeBtn.addEventListener('click', () => this.doEmerge());
+
+    const row = document.createElement('div');
+    row.className = 'editor-topbar-group';
+    row.append(this.boundaryHost, this.emergeBtn);
+    wrap.append(label, row);
+    this.renderBoundaryTabs();
+    return wrap;
+  }
+
+  private renderBoundaryTabs(): void {
+    const active = this.world.params.activeBoundary ?? 'none';
+    this.boundaryHost.innerHTML = '';
+    this.boundaryHost.appendChild(makeTabs({
+      items: [
+        { label: t('None', 'Nessuno'), value: 'none' },
+        { label: t('sub→atom', 'sub→atom'), value: 'subatomic-atomic' },
+        { label: t('atom→mol', 'atom→mol'), value: 'atomic-molecular' },
+      ],
+      active,
+      accent: 'blue',
+      onChange: v => {
+        // Single value -> only one adjacent boundary can ever be active.
+        this.world.params.activeBoundary = v === 'none' ? null : (v as EmergenceBoundary);
+        if (this.emergeBtn) this.emergeBtn.disabled = v === 'none';
+        this.updateStatus();
+      },
+    }));
+    if (this.emergeBtn) this.emergeBtn.disabled = active === 'none';
+  }
+
+  // Trigger one aggregation pass across the active boundary.
+  private doEmerge(): void {
+    const result = runEmergence(this.world);
+    this.engine.sync();
+    this.select(null);
+    this.updateStatus();
+    this.requestRender();
+    if (result.composedCount === 0) {
+      this.statusBar.textContent = t(
+        'No bound cluster ready to emerge — let constituents settle, or widen the bind radius.',
+        'Nessun cluster legato pronto a emergere — lascia assestare i costituenti o allarga il raggio di legame.',
+      );
+    }
+  }
+
   private buildFileControls(): HTMLElement {
     const wrap = document.createElement('div');
     wrap.className = 'editor-file';
@@ -311,6 +383,7 @@ export class EditorApp {
     this.resetSnapshot = this.world.toScene();
     this.engine.reset();
     this.select(null);
+    this.renderBoundaryTabs();
     this.updateStatus();
     this.requestRender();
   }
@@ -320,6 +393,7 @@ export class EditorApp {
     this.world.loadScene(this.resetSnapshot);
     this.engine.reset();
     this.select(null);
+    this.renderBoundaryTabs();
     this.updateStatus();
     this.requestRender();
   }

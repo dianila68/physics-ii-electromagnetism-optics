@@ -15,6 +15,9 @@ const baseParams = () => ({
   ljSigma: 0.8,
   strongTension: 0,
   strongCore: 0.5,
+  activeBoundary: null,
+  emergenceBindRadius: 0.9,
+  emergenceMinCluster: 3,
 });
 
 export interface Preset {

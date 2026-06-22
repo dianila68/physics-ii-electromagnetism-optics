@@ -15,6 +15,16 @@ import type { World } from '../../core/world.js';
 // Position/velocity readback is async too: `step` is fire-and-forget and
 // the World is updated when the copy resolves (≈one frame of latency),
 // which the Canvas2D renderer tolerates fine.
+//
+// TODO (layered emergence, Phase 6): the kernel keys pairwise forces off
+// `kind` only and does not yet read an entity's `layer`. As a result it
+// does not honour the per-layer gating that the CPU engine applies (e.g. a
+// molecular composite — a `kind:'atom'` body at the molecular layer — would
+// still feel Lennard-Jones from atomic atoms on the GPU). To match the CPU
+// engine, pack the layer into the attr vec4 and gate LJ/strong by it. The
+// `runEmergence` aggregation itself is engine-agnostic (it mutates the
+// World, which both engines re-sync from), so emergence still works on GPU;
+// only the post-aggregation force gating is approximate there.
 
 const WORKGROUP = 64;
 const FIXED_DT = 1 / 240;

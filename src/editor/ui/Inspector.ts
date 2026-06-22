@@ -1,4 +1,5 @@
 import type { World } from '../core/world.js';
+import { entityLayer } from '../core/world.js';
 import type { Entity, Link } from '../core/types.js';
 import { t } from '../../utils/lang.js';
 import { makeSwitch } from '../../ui/components.js';
@@ -116,6 +117,19 @@ export class Inspector {
       if (v) { e.vel.x = 0; e.vel.y = 0; }
     });
     this.colorField(t('Color', 'Colore'), e.color, v => (e.color = v));
+
+    const layerNote = document.createElement('div');
+    layerNote.className = 'insp-note';
+    const layerName = {
+      subatomic: t('subatomic', 'subatomico'),
+      atomic: t('atomic', 'atomico'),
+      molecular: t('molecular', 'molecolare'),
+    }[entityLayer(e)];
+    layerNote.textContent = e.composite
+      ? t(`composite · ${layerName} layer · ${e.composedOf?.length ?? 0} constituents`,
+          `composito · livello ${layerName} · ${e.composedOf?.length ?? 0} costituenti`)
+      : t(`layer: ${layerName}`, `livello: ${layerName}`);
+    this.element.appendChild(layerNote);
 
     const pos = document.createElement('div');
     pos.className = 'insp-note';
